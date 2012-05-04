@@ -1,0 +1,30 @@
+From e271eb9c6a06e98da1119fe2b50cdc8c2db90f1f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmx.de>
+Date: Wed, 21 Dec 2011 20:10:52 +0100
+Subject: [PATCH] move CFG_LOADADDR to 0x80100000 to match u-boot SPL change
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmx.de>
+---
+ include/configs/overo.h |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/include/configs/overo.h b/include/configs/overo.h
+index 70e3683..390b52d 100644
+--- a/include/configs/overo.h
++++ b/include/configs/overo.h
+@@ -110,7 +110,7 @@
+ /*
+  * Miscellaneous configurable options
+  */
+-#define CFG_LOADADDR		0x80008000
++#define CFG_LOADADDR		0x80100000
+ 
+ #undef	CFG_CLKS_IN_HZ		/* everything, incl board info, in Hz */
+ 
+-- 
+1.7.6.4
+

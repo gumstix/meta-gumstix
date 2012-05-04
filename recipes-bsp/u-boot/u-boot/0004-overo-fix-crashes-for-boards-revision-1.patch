@@ -1,0 +1,30 @@
+From 697723cbcc7b81b205c653da5843eee752a95df7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmx.de>
+Date: Fri, 20 Jan 2012 15:19:20 +0100
+Subject: [PATCH] overo: fix crashes for boards revision 1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmx.de>
+---
+ board/overo/overo.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/board/overo/overo.c b/board/overo/overo.c
+index 7b4064c..2d841c3 100644
+--- a/board/overo/overo.c
++++ b/board/overo/overo.c
+@@ -169,7 +169,7 @@ void get_board_mem_timings(u32 *mcfg, u32 *ctrla, u32 *ctrlb, u32 *rfr_ctrl,
+ 		*rfr_ctrl = SDP_3430_SDRC_RFR_CTRL_165MHz;
+ 		break;
+ 	case REVISION_1: /* Micron 256MB/512MB, 1/2 banks of 256MB */
+-		*mcfg = MICRON_V_MCFG_165(256 << 20);
++		*mcfg = MICRON_V_MCFG_200(256 << 20);
+ 		*ctrla = MICRON_V_ACTIMA_165;
+ 		*ctrlb = MICRON_V_ACTIMB_165;
+ 		*rfr_ctrl = SDP_3430_SDRC_RFR_CTRL_165MHz;
+-- 
+1.7.4.4
+

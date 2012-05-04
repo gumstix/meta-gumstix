@@ -1,0 +1,24 @@
+based on http://www.gumstix.org/how-to/70-writing-images-to-flash.html
+
+nand erase.chip
+mmc rescan 0
+
+# write MLO
+fatload mmc 0 $loadaddr MLO
+nandecc hw
+nand write $loadaddr 0 ${filesize}
+
+# write u-boot
+fatload mmc 0 ${loadaddr} u-boot.img
+nand write ${loadaddr} 80000 ${filesize}
+
+# write the kernel
+fatload mmc 0 ${loadaddr} uImage
+nandecc sw
+nand write ${loadaddr} 280000 ${filesize}
+
+# write the filesystem
+# TODO untested 
+fatload mmc 0 ${loadaddr} rootfs.ubi
+nand write ${loadaddr} 0x00680000 ${filesize}
+

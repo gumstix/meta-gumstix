@@ -1,0 +1,7 @@
+OE Board support layer for Gumstix Overo
+
+This layer depends on:
+
+URI: git://git.yoctoproject.org/poky.git
+branch: master
+revision: HEAD
