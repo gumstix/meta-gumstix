@@ -11,6 +11,7 @@ inherit allarch
 
 do_unpack_append() {
 	bb.build.exec_func('do_cp_lic', d)
+
 }
 
 do_cp_lic() {

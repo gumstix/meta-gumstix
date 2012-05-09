@@ -1,0 +1,88 @@
+#!/bin/sh
+
+I2C_APP="/usr/bin/bus3-i2c"
+WORD_ON="0xf0000000"
+WORD_OFF="0x00000001"
+PICO_ADDRESS="0x1b"
+
+PICO_OPTION="$1"
+PICO_OPTION_VALUE="$2"
+
+# Reading a register needs something like:
+#   bus3-i2c 0x1b wb 0x15 0x08
+#   bus3-i2c 0x1b vb4
+
+case ${PICO_OPTION_VALUE} in
+"0")
+			;;
+"1")
+			;;
+*)
+			echo "Invalid value" ; PICO_OPTION="invalid-as-well";;
+esac
+
+case ${PICO_OPTION} in
+"hflip")
+			if [ $2 -gt 0 ] ; then
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x08 ${WORD_ON}
+			else
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x08 ${WORD_OFF}
+			fi;;
+
+"vflip")
+			if [ $2 -gt 0 ] ; then
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x09 ${WORD_ON}
+			else
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x09 ${WORD_OFF}
+			fi;;
+
+"temporal-enhance")
+			if [ $2 -gt 0 ] ; then
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x26 ${WORD_ON}
+			else
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x26 ${WORD_OFF}
+			fi;;
+
+"rled")
+			if [ $2 -gt 0 ] ; then
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x11 ${WORD_ON}
+			else
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x11 ${WORD_OFF}
+			fi;;
+
+"gled")
+			if [ $2 -gt 0 ] ; then
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x12 ${WORD_ON}
+			else
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x12 ${WORD_OFF}
+			fi;;
+
+"bled")
+			if [ $2 -gt 0 ] ; then
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x13 ${WORD_ON}
+			else
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x13 ${WORD_OFF}
+			fi;;	
+
+"itp")
+			if [ $2 -gt 0 ] ; then
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x0B ${WORD_OFF}
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x04 ${WORD_ON}
+				#Parallel RGB Setting
+			else
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x0B $3
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x04 ${WORD_OFF}
+				#Test Pattern
+			fi;;	
+"ledc")
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x0E $4
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x0F $5
+				${I2C_APP} ${PICO_ADDRESS} wb4 0x10 $6
+			;;
+
+*)
+			echo "Usage: $0 vflip|hflip|temporal-enhance|rled|gled|bled|itp|ledc 0/1 0x";;
+esac
+
+
+
