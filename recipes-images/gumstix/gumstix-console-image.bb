@@ -18,7 +18,7 @@ AUDIO_INSTALL = " \
 #  angstrom-zeroconf-audio \
 
 FIRMWARE_INSTALL = " \
-  libertas-sd-firmware \
+  marvell-sdio-fw \
   rt73-firmware \
   zd1211-firmware \
   linux-firmware \

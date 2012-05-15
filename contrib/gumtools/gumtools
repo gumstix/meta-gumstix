@@ -1,0 +1,8 @@
+#! /usr/bin/env python
+if __name__ == '__main__':
+	import os
+	if os.geteuid()==0:
+		import main_menu
+	else:
+		print "You must be root to run this application, please use sudo and try again."
+	
