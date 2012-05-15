@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo ln -s /home/tyler/yocto/meta-gumstix/contrib/gumtools/gumtools /usr/bin/gumtools
+sudo ln -s ~/yocto/meta-gumstix/contrib/gumtools/gumtools /usr/bin/gumtools
