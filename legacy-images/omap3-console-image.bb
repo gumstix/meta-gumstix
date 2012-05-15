@@ -1,15 +1,8 @@
-DESCRIPTION = "The Gumstix console image."
-LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
+# console image for omap3
 
-#PACKAGE_CLASSES = "package_deb"
-EXTRA_IMAGE_FEATURES += "package-management"
+inherit image
 
-IMAGE_INSTALL = "task-core-boot ${ROOTFS_PKGMANAGE_BOOTSTRAP} ${CORE_IMAGE_EXTRA_INSTALL}"
-
-inherit core-image
-
-IMAGE_ROOTFS_SIZE = "8192"
+DEPENDS = "task-base"
 
 IMAGE_EXTRA_INSTALL ?= ""
 
@@ -17,19 +10,23 @@ AUDIO_INSTALL = " \
   alsa-utils \
   alsa-utils-aplay \
   alsa-utils-amixer \
+  angstrom-zeroconf-audio \
  "
-#  angstrom-zeroconf-audio \
+
+BASE_INSTALL = " \
+  task-base-extended \
+ "
 
 FIRMWARE_INSTALL = " \
-  marvell-sdio-fw \
+#  linux-firmware \
+  libertas-sd-firmware \
   rt73-firmware \
   zd1211-firmware \
-  linux-firmware \
  "
 
 GLES_INSTALL = " \
- "
 #  libgles-omap3 \
+ "
 
 TOOLS_INSTALL = " \
   bash \
@@ -42,6 +39,7 @@ TOOLS_INSTALL = " \
   fbset \
   fbset-modes \
   i2c-tools \
+#  ksymoops \
   mkfs-jffs2 \
   mtd-utils \
   nano \
@@ -57,10 +55,10 @@ TOOLS_INSTALL = " \
   syslog-ng \
   task-proper-tools \
   u-boot-utils \
-  wpa-supplicant \
  "
 
 IMAGE_INSTALL += " \
+  ${BASE_INSTALL} \
   ${AUDIO_INSTALL} \
   ${FIRMWARE_INSTALL} \
   ${GLES_INSTALL} \
@@ -68,5 +66,8 @@ IMAGE_INSTALL += " \
   ${TOOLS_INSTALL} \
  "
 
-# remove not needed ipkg informations
-ROOTFS_POSTPROCESS_COMMAND += "remove_packaging_data_files ; "
+IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
+
+#ROOTFS_POSTPROCESS_COMMAND += '${@base_conditional("DISTRO_TYPE", "release", "zap_root_password; ", "",d)}'
+
+
