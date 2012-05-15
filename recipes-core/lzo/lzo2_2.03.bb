@@ -1,7 +1,7 @@
 DESCRIPTION = "Lossless data compression library"
 HOMEPAGE = "http://www.oberhumer.com/opensource/lzo/"
 LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
+LIC_FILES_CHKSUM = "file://COPYING;md5=8cad52263e636e25377bc18420118101"
 SECTION = "libs"
 PRIORITY = "optional"
 

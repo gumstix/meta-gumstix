@@ -4,8 +4,9 @@ SECTION = "network"
 LICENSE = "PD"
 LIC_FILES_CHKSUM = "file://../license-destdir/tftp-hpa/generic_PD;md5=b3597d12946881e13cb3b548d1173851"
 PR = "r1"
-
-SRC_URI = "${KERNELORG_MIRROR}/pub/software/network/tftp/tftp-hpa-${PV}.tar.bz2 \
+# __DEBUG__
+# SRC_URI = "${KERNELORG_MIRROR}/pub/software/network/tftp/tftp-hpa-${PV}.tar.bz2 \
+SRC_URI = "${KERNELORG_MIRROR}/software/network/tftp/tftp-hpt/tftp-hpa-${PV}.tar.bz2 \
            file://default \
 	   file://init"
 

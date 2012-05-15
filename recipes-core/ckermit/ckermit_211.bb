@@ -5,6 +5,7 @@ sessions, file transfer, character-set translation, and automation \
 of communication tasks."
 LICENSE = "Kermit"
 LIC_FILES_CHKSUM = "file://COPYING.TXT;md5=17dabbd2543933464b6d32083c3a3596"
+#DEPENDS = "kermit"
 HOMEPAGE = "http://www.columbia.edu/kermit/"
 SECTION = "console/network"
 SRC_URI = "ftp://kermit.columbia.edu/kermit/archives/cku${PV}.tar.gz"
@@ -89,11 +90,18 @@ do_compile () {
 }
 
 do_install () {
-	install -d ${D}${BINDIR} ${D}${MANDIR} ${D}${INFODIR}
-	oe_runmake 'DESTDIR=${D}' 'MANDIR=${D}${MANDIR}' install
-	# Fix up dangling symlink
-	rm ${D}${BINDIR}/kermit-sshsub
-	(cd ${D}${BINDIR} && ln -s ${BINDIR}/kermit kermit-sshusb)
+#	install -d ${D}${BINDIR} ${D}${MANDIR} ${D}${INFODIR}
+#	oe_runmake 'DESTDIR=${D}' 'MANDIR=${D}${MANDIR}' install
+#	# Fix up dangling symlink
+#	rm ${D}${BINDIR}/kermit-sshsub
+#	(cd ${D}${BINDIR} && ln -s ${BINDIR}/kermit kermit-sshusb)
+ 	install -d ${D}${BINDIR} ${D}${MANDIR} ${D}${INFODIR}
+        oe_runmake 'DESTDIR=${D}' 'MANDIR=${D}${MANDIR}' install
+        # Fix up dangling symlink
+        rm ${D}${BINDIR}/kermit-sshsub
+        (cd ${D}${BINDIR} && ln -s ${BINDIR}/kermit kermit-sshusb)
+ 
+        sed -e "s,${D},," -i ${D}/usr/bin/ckermit.ini
 }
 
 SRC_URI[md5sum] = "5767ec5e6ff0857cbfe2d3ec1ee0e2bc"
