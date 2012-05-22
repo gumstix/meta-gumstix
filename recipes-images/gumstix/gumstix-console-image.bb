@@ -21,10 +21,13 @@ AUDIO_INSTALL = " \
 #  angstrom-zeroconf-audio \
 
 FIRMWARE_INSTALL = " \
+  kmod \
   marvell-sdio-fw \
+  libertas-sd-firmware \
   rt73-firmware \
   zd1211-firmware \
   linux-firmware \
+  uim \
  "
 
 GLES_INSTALL = " \
@@ -32,6 +35,8 @@ GLES_INSTALL = " \
 #  libgles-omap3 \
 
 TOOLS_INSTALL = " \
+  wireless-tools \
+  udev \
   bash \
   bzip2 \
   ckermit \
@@ -70,3 +75,4 @@ IMAGE_INSTALL += " \
 
 # remove not needed ipkg informations
 ROOTFS_POSTPROCESS_COMMAND += "remove_packaging_data_files ; "
+IMAGE_INSTALL_append = "kernel-module-usb8xxx kernel-module-mac80211 kernel-module-lib80211 kernel-module-libertas-sdio marvell-sdio-fw"
