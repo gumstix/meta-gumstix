@@ -9,6 +9,6 @@ class Standard(Flasher):
 		bootloader.setup(self.sdcard)
 
 	def flash(self, tar_gz_file, uImage):
-		extract.tar_gz(tar_gz_file, self.sdcard.get_filesystem_dir())
+		extract.tar_gz(tar_gz_file, self.sdcard.filesystem_dir)
 		self.sdcard.copy_to_boot(uImage, 'uImage')
 		

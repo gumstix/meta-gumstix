@@ -10,7 +10,7 @@ class Linaro(Distro):
 	def get_description(self):
 		return 'Linaro'
 	def files_needed(self):
-		return ['image']
+		return {'i': 'image'}
 	def can_download(self):
 		return True
 	def download(self, files):

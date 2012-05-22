@@ -19,7 +19,7 @@ class Arch(StandardDistro):
 		return files
 
 	def files_needed(self):
-		return ['image']
+		return {'i': 'image'}
 
 	def do_install(self, files, sdcard):
 		files['uImage'] = path.join(sdcard.get_boot_dir(), 'boot/uImage')

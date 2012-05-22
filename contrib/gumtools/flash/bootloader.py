@@ -18,7 +18,7 @@ def aquire():
 			http_download(path.join(server, serv_file), path.join(temp, com_file))
 
 def copy(sdcard):
-	clear_dir(sdcard.get_boot_dir())
+	clear_dir(sdcard.boot_dir)
 	temp = get_temp_path()
 	for file in files:
 		sdcard.copy_to_boot(path.join(temp, file))
