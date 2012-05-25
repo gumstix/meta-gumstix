@@ -2,7 +2,6 @@ DESCRIPTION = "The Gumstix console image."
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
 
-#PACKAGE_CLASSES = "package_deb"
 EXTRA_IMAGE_FEATURES += "package-management"
 
 IMAGE_INSTALL = "task-core-boot ${ROOTFS_PKGMANAGE_BOOTSTRAP} ${CORE_IMAGE_EXTRA_INSTALL}"
@@ -23,11 +22,16 @@ AUDIO_INSTALL = " \
 FIRMWARE_INSTALL = " \
   kmod \
   marvell-sdio-fw \
-  libertas-sd-firmware \
   rt73-firmware \
   zd1211-firmware \
   linux-firmware \
-  uim \
+ "
+
+KERNEL_MODULE = " \
+  kernel-module-libertas-sdio \
+  kernel-module-usb8xxx \
+  kernel-module-mac80211 \
+  kernel-module-lib80211 \
  "
 
 GLES_INSTALL = " \
@@ -35,8 +39,6 @@ GLES_INSTALL = " \
 #  libgles-omap3 \
 
 TOOLS_INSTALL = " \
-  wireless-tools \
-  udev \
   bash \
   bzip2 \
   ckermit \
@@ -68,11 +70,8 @@ TOOLS_INSTALL = " \
 IMAGE_INSTALL += " \
   ${AUDIO_INSTALL} \
   ${FIRMWARE_INSTALL} \
+  ${KERNEL_MODULE} \
   ${GLES_INSTALL} \
   ${IMAGE_EXTRA_INSTALL} \
   ${TOOLS_INSTALL} \
  "
-
-# remove not needed ipkg informations
-ROOTFS_POSTPROCESS_COMMAND += "remove_packaging_data_files ; "
-IMAGE_INSTALL_append = "kernel-module-usb8xxx kernel-module-mac80211 kernel-module-lib80211 kernel-module-libertas-sdio marvell-sdio-fw"
