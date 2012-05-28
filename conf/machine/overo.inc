@@ -28,7 +28,7 @@ IMAGE_FSTYPES += "tar.bz2"
 # UBI: logical eraseblock size:    129024 bytes
 # from ubiattach stdout:
 # UBI device number 0, total 1996 LEBs
-MKUBIFS_ARGS = "-m 2048 -e 129024 -c 1996"
+MKUBIFS_ARGS = "-m 2048 -e 129024 -c 4044"
 
 # do ubiattach /dev/ubi_ctrl -m 4
 # from dmesg:
