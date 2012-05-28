@@ -2,13 +2,11 @@ DESCRIPTION = "HPA's tftp server"
 DEPENDS = "tcp-wrappers readline"
 SECTION = "network"
 LICENSE = "PD"
-LIC_FILES_CHKSUM = "file://../license-destdir/tftp-hpa/generic_PD;md5=b3597d12946881e13cb3b548d1173851"
+LIC_FILES_CHKSUM = "file://README;md5=b7954b490c6cc1228656351d47416153"
 PR = "r1"
-# __DEBUG__
-# SRC_URI = "${KERNELORG_MIRROR}/pub/software/network/tftp/tftp-hpa-${PV}.tar.bz2 \
-SRC_URI = "${KERNELORG_MIRROR}/software/network/tftp/tftp-hpt/tftp-hpa-${PV}.tar.bz2 \
+SRC_URI = "${KERNELORG_MIRROR}/software/network/tftp/tftp-hpa/tftp-hpa-${PV}.tar.bz2 \
            file://default \
-	   file://init"
+	         file://init"
 
 inherit autotools update-alternatives
 
