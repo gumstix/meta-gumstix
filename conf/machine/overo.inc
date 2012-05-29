@@ -5,7 +5,7 @@ PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
 UBOOT_MACHINE = "omap3_overo_config"
 PREFERRED_VERSION_pn-u-boot = "2011.12"
 
-PREFERRED_PROVIDER_virtual/kernel = "linux"
+PREFERRED_PROVIDER_virtual/kernel = "linux-omap3"
 
 PREFERRED_PROVIDER_virtual/xserver = "xserver-xorg"
 XSERVER = "xserver-xorg \
