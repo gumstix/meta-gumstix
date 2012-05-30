@@ -42,6 +42,7 @@ PACKAGE_GROUP_tools = " \
   openssh-misc \
   openssh-scp \
   openssh-ssh \
+  openssh-sshd \
   omap3-writeprom \
   procps \
   socat \
