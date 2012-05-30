@@ -1,0 +1,15 @@
+diff --git a/Makefile.am b/Makefile.modified.am
+index 728076a..5ba1c0d 100644
+--- a/Makefile.am
++++ b/Makefile.modified.am
+@@ -186,8 +186,8 @@ udevhomedir = $(libexecdir)
+ dist_udevhome_DATA = extras/rule_generator/rule_generator.functions
+ 
+ dist_udevrules_DATA += \
+-	extras/rule_generator/75-cd-aliases-generator.rules \
+-	extras/rule_generator/75-persistent-net-generator.rules
++	extras/rule_generator/75-cd-aliases-generator.rules
++#	extras/rule_generator/75-persistent-net-generator.rules
+ 
+ # ------------------------------------------------------------------------------
+ # firmware - firmware loading
