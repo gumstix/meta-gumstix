@@ -18,6 +18,7 @@ PACKAGE_GROUP_kernel_modules = " \
   kernel-module-usb8xxx \
   kernel-module-mac80211 \
   kernel-module-lib80211 \
+  omap3-pwm \
  "
 
 PACKAGE_GROUP_gles = " \
