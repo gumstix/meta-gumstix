@@ -14,7 +14,7 @@ BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 
 S = "${WORKDIR}/git"
 
-SRCREV = "33128932803c3f8c35fe8dae257901deb60db2aa"
+SRCREV = "513770d80c0cfb26cc406c9ca3916df2e7afe46d"
 SRC_URI = "git://www.sakoman.com/git/linux-omap-2.6.git;branch=omap-3.2;protocol=git \
 	   file://defconfig \
            file://${BOOT_SPLASH} \
