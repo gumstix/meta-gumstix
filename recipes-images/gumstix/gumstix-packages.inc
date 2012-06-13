@@ -1,4 +1,5 @@
 PACKAGE_GROUP_audio = " \
+  alsa-state \
   alsa-utils \
   alsa-utils-aplay \
   alsa-utils-amixer \
