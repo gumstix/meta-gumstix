@@ -37,10 +37,9 @@ MKUBIFS_ARGS = "-m 2048 -e 129024 -c 4044"
 # UBI: sub-page size:              512
 UBINIZE_ARGS = "-m 2048 -p 128KiB -s 512"
 UBI_VOLNAME = "rootfs"
-MACHINE_EXTRA_RDEPENDS = "marvell-sdio-fw libertas-sd-firmware"
-MACHINE_EXTRA_RRECOMMENDS = "kernel-modules libgles-omap3"
-#task-ti-drivers
+MACHINE_EXTRA_RDEPENDS = ""
+MACHINE_EXTRA_RRECOMMENDS = ""
 
-MACHINE_FEATURES = "kernel26 alsa apm ext2 screen usbgadget usbhost vfat wifi"
+MACHINE_FEATURES = "kernel32 alsa apm ext3 screen usbgadget usbhost vfat wifi"
 # touchscreen
 
