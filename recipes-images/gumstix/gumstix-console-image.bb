@@ -1,7 +1,5 @@
-require gumstix-core-image.bb
+include gumstix-core-image.bb
 
-DESCRIPTION = "The Gumstix console image."
+DESCRIPTION = "The Gumstix console image"
 
-IMAGE_INSTALL += " \
-  ${PACKAGE_GROUP_tools} \
- "
+IMAGE_INSTALL += "task-console-tools"

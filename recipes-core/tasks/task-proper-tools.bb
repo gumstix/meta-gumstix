@@ -1,9 +1,7 @@
 DESCRIPTION = "Full versions of tools provided by busybox"
-PR = "r16"
-LICENSE="MIT"
-LIC_FILES_CHKSUM = "file://../license-destdir/task-proper-tools/generic_MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+PR = "r1"
 
-inherit task
+inherit gumstix-task
 
 RDEPENDS_${PN} = "\
 		bash \
