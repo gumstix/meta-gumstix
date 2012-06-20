@@ -1,9 +1,9 @@
 DESCRIPTION = "Full versions of tools provided by busybox"
 PR = "r1"
 
-inherit gumstix-task
+inherit gumstix-package
 
-RDEPENDS_${PN} = "\
+INCLUDES = "\
 		bash \
 		bc \
 		bind-utils \

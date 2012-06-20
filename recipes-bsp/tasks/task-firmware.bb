@@ -1,9 +1,11 @@
 DESCRIPTION = "Firmware for attached devices"
 PR = "r1"
 
-inherit gumstix-task
+inherit gumstix-package
 
-RDEPENDS_${PN} = "\
+PACKAGE_ARCH = "all"
+
+INCLUDES = "\
   kmod \
   marvell-sdio-fw \
   rt73-firmware \

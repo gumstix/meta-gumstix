@@ -1,9 +1,9 @@
 DESCRIPTION = "Audio support"
 PR = "r1"
 
-inherit gumstix-task
+inherit gumstix-package
 
-RDEPENDS_${PN} = "\
+INCLUDES = "\
   alsa-state \
   alsa-utils \
   alsa-utils-aplay \

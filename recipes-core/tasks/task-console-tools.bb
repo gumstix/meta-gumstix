@@ -1,9 +1,9 @@
 DESCRIPTION = "Packages included in the gumstix console image"
 PR = "r1"
 
-inherit gumstix-task
+inherit gumstix-package
 
-RDEPENDS_${PN} = "\
+INCLUDES = "\
   bzip2 \
   ckermit \
   devmem2 \

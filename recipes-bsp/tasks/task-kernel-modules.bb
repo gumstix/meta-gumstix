@@ -1,9 +1,11 @@
 DESCRIPTION = "Kernel Modules"
 PR = "r1"
 
-inherit gumstix-task
+inherit gumstix-package
 
-RDEPENDS_${PN} = "\
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+INCLUDES = "\
   kernel-module-libertas-sdio \
   kernel-module-usb8xxx \
   kernel-module-mac80211 \

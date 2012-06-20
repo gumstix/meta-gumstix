@@ -1,8 +1,8 @@
 DESCRIPTION = "openGL Embedded Support"
 PR = "r1"
 
-inherit gumstix-task
+inherit gumstix-package
 
-RDEPENDS_${PN} = "\
+INCLUDES = "\
   libgles-omap3 \
  "
