@@ -5,7 +5,8 @@ inherit gumstix-image
 IMAGE_INSTALL += " \
   bash \
   task-proper-tools \
+  task-audio \
+  kmod \
+  task-firmware \
+  task-kernel-modules \
  "
-#  task-audio \
-#  task-firmware \
-#  task-kernel-modules \

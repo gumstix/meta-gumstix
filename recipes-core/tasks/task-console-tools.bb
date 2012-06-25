@@ -10,7 +10,7 @@ INCLUDES = "\
   dhcp-client \
   dosfstools \
   fbgrab \
-  fbset-modes \
+  fbset \
   i2c-tools \
   mkfs-jffs2 \
   mtd-utils \

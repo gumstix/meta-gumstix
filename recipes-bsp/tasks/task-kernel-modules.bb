@@ -10,5 +10,4 @@ INCLUDES = "\
   kernel-module-usb8xxx \
   kernel-module-mac80211 \
   kernel-module-lib80211 \
-  omap3-pwm \
  "
