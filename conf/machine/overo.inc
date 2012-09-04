@@ -1,10 +1,10 @@
 require conf/machine/include/omap3.inc
 
-EXTRA_IMAGEDEPENDS = "u-boot"
+EXTRA_IMAGEDEPENDS = "u-boot-sakoman"
 
-PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
+PREFERRED_PROVIDER_virtual/bootloader = "u-boot-sakoman"
 UBOOT_MACHINE = "omap3_overo_config"
-PREFERRED_VERSION_pn-u-boot = "2011.12"
+#PREFERRED_VERSION_pn-u-boot = "2011.12"
 
 PREFERRED_PROVIDER_virtual/kernel = "linux-omap3"
 PREFERRED_PROVIDER_ntp = "ntp"

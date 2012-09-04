@@ -1,21 +1,23 @@
 DESCRIPTION = "U-Boot - the Universal Boot Loader"
 HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
 SECTION = "bootloaders"
+PRIORITY = "optional"
 LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://COPYING;md5=4c6cde5df68eff615d36789dc18edd3b"
+LIC_FILES_CHKSUM = "file://COPYING;md5=1707d6db1d42237583f50183a5651ecb"
 
 PROVIDES = "virtual/bootloader"
 
 DEPENDS = "mtd-utils"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+PARALLEL_MAKE=""
 
 EXTRA_OEMAKE = "CROSS_COMPILE=${TARGET_PREFIX}"
 
 UBOOT_MACHINE ?= "${MACHINE}_config"
-UBOOT_BINARY ?= "u-boot.bin"
-UBOOT_IMAGE ?= "u-boot-${MACHINE}-${PV}-${PR}.bin"
-UBOOT_SYMLINK ?= "u-boot-${MACHINE}.bin"
+UBOOT_BINARY ?= "u-boot.img"
+UBOOT_IMAGE ?= "u-boot-${MACHINE}-${PV}-${PR}.img"
+UBOOT_SYMLINK ?= "u-boot-${MACHINE}.img"
 UBOOT_MAKE_TARGET ?= "all"
 
 do_configure () {
@@ -27,7 +29,7 @@ do_compile () {
 	unset CFLAGS
 	unset CPPFLAGS
 	oe_runmake ${UBOOT_MAKE_TARGET}
-	oe_runmake tools env
+	oe_runmake tools env HOSTCC="${CC}" HOSTSTRIP="${STRIP}"
 }
 
 do_install () {
@@ -39,8 +41,8 @@ do_install () {
 	    install -d ${D}${base_sbindir}
 		install -d ${D}${sysconfdir}
 		install -m 644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}/fw_env.config
-#		install -m 755 ${S}/tools/env/fw_printenv ${D}${base_sbindir}/fw_printenv
-#		install -m 755 ${S}/tools/env/fw_printenv ${D}${base_sbindir}/fw_setenv
+		install -m 755 ${S}/tools/env/fw_printenv ${D}${base_sbindir}/fw_printenv
+		install -m 755 ${S}/tools/env/fw_printenv ${D}${base_sbindir}/fw_setenv
 	fi
 
 }
@@ -51,6 +53,8 @@ INSANE_SKIP_${PN} = "True"
 
 PACKAGES += "${PN}-fw-utils"
 FILES_${PN}-fw-utils = "${sysconfdir} ${base_sbindir}"
+# u-boot doesn't use LDFLAGS for fw files, needs to get fixed, but until then:
+INSANE_SKIP_${PN}-fw-utils = "True"
 
 inherit deploy
 
@@ -61,7 +65,7 @@ do_deploy () {
 	install ${S}/${UBOOT_BINARY} ${DEPLOY_DIR_IMAGE}/${UBOOT_IMAGE}
 
 	cd ${DEPLOY_DIR_IMAGE}
-	rm -f ${UBOOT_BINARY} ${UBOOT_SYMLINK}
+	rm -f ${UBOOT_SYMLINK}
 	ln -sf ${UBOOT_IMAGE} ${UBOOT_SYMLINK}
 	ln -sf ${UBOOT_IMAGE} ${UBOOT_BINARY}
 

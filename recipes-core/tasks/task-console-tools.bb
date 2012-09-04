@@ -24,6 +24,5 @@ INCLUDES = "\
   socat \
   strace \
   sudo \
-  u-boot-utils \
   wpa-supplicant \
  "
