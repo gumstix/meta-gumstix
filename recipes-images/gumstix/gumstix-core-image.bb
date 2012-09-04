@@ -1,6 +1,6 @@
 DESCRIPTION = "The most basic Gumstix image"
 
-inherit gumstix-image
+inherit image
 
 IMAGE_INSTALL += " \
   bash \
