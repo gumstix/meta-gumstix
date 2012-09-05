@@ -1,0 +1,16 @@
+[connection]
+id=wifi
+uuid=@UUID@
+type=802-11-wireless
+
+[802-11-wireless]
+ssid=@SSID@
+mode=infrastructure
+
+[ipv6]
+method=ignore
+
+[ipv4]
+method=auto
+dhcp-send-hostname=false
+

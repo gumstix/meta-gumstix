@@ -1,0 +1,47 @@
+#!/bin/sh
+# this script attempts to provide automatic configuration for all detected open wifi networks
+
+# remove any previously generated NetworkManager auto files
+rm -f /etc/NetworkManager/system-connections/auto-*
+
+# make sure there is a wifi device available
+if ! iw dev; then
+  echo No wireless interface
+  exit 0
+fi
+
+# determine name of wifi interface
+# note: script currently assumes only one wifi interface
+let retries=0
+until [ -n "$IFACE" ] || [ $retries -ge 30 ]; do
+  IFACE=`iw dev | \
+    grep Interface | \
+    sed -e 's/^[[:blank:]]*Interface //'`
+  let retries=retries+1
+  sleep 10
+done
+
+touch /var/tmp/ap-setup-retries-$retries
+
+if [ -n "$IFACE" ]; then
+  ifconfig $IFACE up
+else
+  touch /var/tmp/ap-setup-failed
+  exit 0;
+fi
+
+# get a list of available access points
+AP_LIST=`iw dev $IFACE scan | \
+  grep '[^<]SSID[^>]' | \
+  sed -e 's/.*SSID: //'`
+
+# create an open wifi config file for each available access point
+for i in $AP_LIST
+do
+  CONFIG_FILE="/etc/NetworkManager/system-connections/auto-$i"
+  cp /etc/NetworkManager/system-connections-templates/open-wifi $CONFIG_FILE
+  sed -i -e "s/@SSID@/$i/" $CONFIG_FILE
+  UUID=`uuidgen`
+  sed -i -e "s/@UUID@/$UUID/" $CONFIG_FILE
+done
+

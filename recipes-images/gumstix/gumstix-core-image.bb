@@ -1,6 +1,9 @@
 DESCRIPTION = "The most basic Gumstix image"
 
 inherit image
+IMAGE_FEATURES += "package-management"
+IMAGE_EXTRA_INSTALL ?= ""
+
 
 BASE_INSTALL = " \
   ${MACHINE_EXTRA_RRECOMMENDS} \
@@ -28,11 +31,8 @@ BASE_INSTALL = " \
  "
 
 IMAGE_INSTALL += " \
-  bash \
   task-proper-tools \
   task-audio \
-  kmod \
-  task-firmware \
   ${BASE_INSTALL} \
   ${FIRMWARE_INSTALL} \
   ${NETWORK_INSTALL} \

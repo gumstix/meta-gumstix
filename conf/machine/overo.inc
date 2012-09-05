@@ -26,6 +26,6 @@ UBINIZE_ARGS = "-m 2048 -p 128KiB -s 512"
 UBI_VOLNAME = "rootfs"
 
 MACHINE_EXTRA_RDEPENDS = "omap3-writeprom"
-MACHINE_EXTRA_RRECOMMENDS = ""
+MACHINE_EXTRA_RRECOMMENDS = " kernel-modules"
 
 MACHINE_FEATURES = "kernel26 alsa apm ext3 screen usbgadget usbhost vfat wifi"

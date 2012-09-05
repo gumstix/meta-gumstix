@@ -1,0 +1,14 @@
+--- NetworkManager-0.9.2.0/src/settings/plugins/keyfile/Makefile.am-orig	2011-11-09 09:22:30.000000000 -0800
++++ NetworkManager-0.9.2.0/src/settings/plugins/keyfile/Makefile.am	2012-02-22 19:25:25.000000000 -0800
+@@ -5,9 +5,8 @@ INCLUDES = \
+ 	-I$(top_srcdir)/include \
+ 	-I$(top_srcdir)/libnm-util
+ 
+-noinst_LTLIBRARIES = \
+-	libkeyfile-io.la \
+-	libnm-settings-plugin-keyfile.la
++noinst_LTLIBRARIES = libkeyfile-io.la 
++pkglib_LTLIBRARIES = libnm-settings-plugin-keyfile.la
+ 
+ ##### I/O library for testcases #####
+ 
