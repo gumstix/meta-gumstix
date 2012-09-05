@@ -8,5 +8,4 @@ IMAGE_INSTALL += " \
   task-audio \
   kmod \
   task-firmware \
-  task-kernel-modules \
  "
