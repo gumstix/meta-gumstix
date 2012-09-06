@@ -6,8 +6,9 @@ PREFERRED_PROVIDER_virtual/bootloader = "u-boot-sakoman"
 UBOOT_MACHINE = "omap3_overo_config"
 #PREFERRED_VERSION_pn-u-boot = "2011.12"
 
-PREFERRED_PROVIDER_virtual/kernel = "linux-omap3"
+#PREFERRED_PROVIDER_virtual/kernel = "linux-omap3"
 PREFERRED_PROVIDER_ntp = "ntp"
+PREFERRED_PROVIDER_virtual/kernel = "linux-sakoman"  
 
 PREFERRED_PROVIDER_virtual/xserver = "xserver-xorg"
 XSERVER = "xserver-xorg \

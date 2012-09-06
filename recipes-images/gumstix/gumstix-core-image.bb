@@ -18,8 +18,11 @@ BASE_INSTALL = " \
   memtester \
   netbase \
   ntp-systemd \
+  net-tools \
+  openssh-ssh openssh-keygen openssh-scp openssh-sshd-systemd \
   rsyslog-systemd \
-  tinylogin \
+  sed \
+  shadow tinylogin \
   systemd systemd-compat-units \
   u-boot-mkimage \
   u-boot-sakoman-fw-utils \
@@ -31,12 +34,12 @@ BASE_INSTALL = " \
  "
 
 IMAGE_INSTALL += " \
-  task-proper-tools \
   task-audio \
   ${BASE_INSTALL} \
   ${FIRMWARE_INSTALL} \
   ${NETWORK_INSTALL} \
  "
+# task-proper-tools \
 # this section removes remnants of legacy sysvinit support
 # for packages installed above
 IMAGE_FILE_BLACKLIST += " \

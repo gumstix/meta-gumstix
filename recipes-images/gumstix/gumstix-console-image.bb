@@ -1,4 +1,4 @@
-include gumstix-core-image.bb
+require gumstix-core-image.bb
 
 DESCRIPTION = "The Gumstix console image"
 
