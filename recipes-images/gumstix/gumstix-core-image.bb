@@ -19,6 +19,7 @@ BASE_INSTALL = " \
   netbase \
   ntp-systemd \
   net-tools \
+  iputils \
   openssh-ssh openssh-keygen openssh-scp openssh-sshd-systemd \
   rsyslog-systemd \
   sed \
@@ -33,11 +34,46 @@ BASE_INSTALL = " \
   which \
  "
 
+FIRMWARE_INSTALL = " \
+  linux-firmware-sd8686 \
+  linux-firmware-rtl8192cu \
+  linux-firmware-rtl8192ce \
+  linux-firmware-rtl8192su \
+  linux-firmware-wl12xx \
+ "
+NETWORK_INSTALL = " \
+  networkmanager \
+  networkmanager-tests \
+  rfkill \
+  ${@base_contains("DISTRO_FEATURES", "wifi", "iw wpa-supplicant", "", d)} \
+ "
+
+TOOLS_INSTALL = " \
+  bzip2 \
+  cpufrequtils \
+  dosfstools \
+  e2fsprogs \
+  evtest \
+  grep \
+  gzip \
+  htop \
+  media-ctl yavta v4l-utils \
+  nano \
+  tar \
+  sudo \
+  systemd-analyze \
+  util-linux-mount util-linux-umount \
+  util-linux-sfdisk \
+  util-linux-swaponoff \
+  wget \
+  zip \
+ "
 IMAGE_INSTALL += " \
-  task-audio \
   ${BASE_INSTALL} \
   ${FIRMWARE_INSTALL} \
   ${NETWORK_INSTALL} \
+  ${ROOTFS_PKGMANAGE} \
+  ${TOOLS_INSTALL} \
  "
 # task-proper-tools \
 # this section removes remnants of legacy sysvinit support
@@ -53,21 +89,6 @@ IMAGE_FILE_BLACKLIST += " \
                         /etc/init.d/udev \
                         /etc/init.d/udev-cache \
                        "
-FIRMWARE_INSTALL = " \
-  linux-firmware-sd8686 \
-  linux-firmware-rtl8192cu \
-  linux-firmware-rtl8192ce \
-  linux-firmware-rtl8192su \
-  linux-firmware-wl12xx \
- "
-NETWORK_INSTALL = " \
-  networkmanager \
-  networkmanager-tests \
-  rfkill \
-  ${@base_contains("DISTRO_FEATURES", "wifi", "iw wpa-supplicant", "", d)} \
- "
-
-
 
 remove_blacklist_files() {
 	for i in ${IMAGE_FILE_BLACKLIST}; do
