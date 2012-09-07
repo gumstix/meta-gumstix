@@ -4,6 +4,15 @@ inherit image
 IMAGE_FEATURES += "package-management"
 IMAGE_EXTRA_INSTALL ?= ""
 
+AUDIO_INSTALL = " \
+  alsa-utils-aplay \
+  alsa-utils-alsactl \
+  alsa-utils-alsamixer \
+  alsa-utils-amixer \
+  alsa-utils-speakertest \
+  mplayer2 \
+ "
+
 
 BASE_INSTALL = " \
   ${MACHINE_EXTRA_RRECOMMENDS} \
@@ -26,7 +35,6 @@ BASE_INSTALL = " \
   shadow tinylogin \
   systemd systemd-compat-units \
   u-boot-mkimage \
-  u-boot-sakoman-fw-utils \
   udev \
   udisks udisks-systemd \
   upower \
@@ -54,28 +62,27 @@ TOOLS_INSTALL = " \
   dosfstools \
   e2fsprogs \
   evtest \
+  findutils \
   grep \
   gzip \
   htop \
-  media-ctl yavta v4l-utils \
   nano \
-  tar \
   sudo \
   systemd-analyze \
-  util-linux-mount util-linux-umount \
-  util-linux-sfdisk \
-  util-linux-swaponoff \
+  tar \
+  vim \
   wget \
   zip \
  "
 IMAGE_INSTALL += " \
   ${BASE_INSTALL} \
+  ${AUDIO_INSTALL} \
   ${FIRMWARE_INSTALL} \
   ${NETWORK_INSTALL} \
   ${ROOTFS_PKGMANAGE} \
   ${TOOLS_INSTALL} \
  "
-# task-proper-tools \
+
 # this section removes remnants of legacy sysvinit support
 # for packages installed above
 IMAGE_FILE_BLACKLIST += " \
