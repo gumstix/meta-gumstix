@@ -10,9 +10,7 @@ AUDIO_INSTALL = " \
   alsa-utils-alsamixer \
   alsa-utils-amixer \
   alsa-utils-speakertest \
-  mplayer2 \
  "
-
 
 BASE_INSTALL = " \
   ${MACHINE_EXTRA_RRECOMMENDS} \
@@ -56,31 +54,12 @@ NETWORK_INSTALL = " \
   ${@base_contains("DISTRO_FEATURES", "wifi", "iw wpa-supplicant", "", d)} \
  "
 
-TOOLS_INSTALL = " \
-  bzip2 \
-  cpufrequtils \
-  dosfstools \
-  e2fsprogs \
-  evtest \
-  findutils \
-  grep \
-  gzip \
-  htop \
-  nano \
-  sudo \
-  systemd-analyze \
-  tar \
-  vim \
-  wget \
-  zip \
- "
 IMAGE_INSTALL += " \
   ${BASE_INSTALL} \
   ${AUDIO_INSTALL} \
   ${FIRMWARE_INSTALL} \
   ${NETWORK_INSTALL} \
   ${ROOTFS_PKGMANAGE} \
-  ${TOOLS_INSTALL} \
  "
 
 # this section removes remnants of legacy sysvinit support
