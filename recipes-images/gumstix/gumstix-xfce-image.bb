@@ -11,17 +11,26 @@ XSERVER +=  "\
 XFCE_INSTALL = " \
   task-xfce-base \
   gdm-systemd \
-  gtk-tweak \
   "
 
 XFCE_APPS = "\
   epiphany \
+  network-manager-applet \
   xterm \
+ "
+
+XFCE_THEMES = " \
+  gnome-icon-theme \
+  gtk-engine-clearlooks \
+  gtk-theme-clearlooks \
+  gtk-tweak \
  "
 
 IMAGE_INSTALL += " \
   ${XSERVER} \
   ${XFCE_INSTALL} \
+  ${XFCE_THEMES} \
+  ${XFCE_APPS} \
  "
 
 # this section removes remnants of legacy sysvinit support

@@ -10,7 +10,6 @@ AUDIO_INSTALL = " \
   alsa-utils-alsamixer \
   alsa-utils-amixer \
   alsa-utils-speakertest \
-  mplayer2 \
  "
 
 
