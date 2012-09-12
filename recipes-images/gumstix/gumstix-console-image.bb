@@ -23,6 +23,7 @@ BASE_INSTALL = " \
   coreutils \
   dbus \
   devmem2 \
+  kernel-modules \
   memtester \
   netbase \
   ntp-systemd \
