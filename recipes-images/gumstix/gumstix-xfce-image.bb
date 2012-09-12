@@ -12,7 +12,6 @@ XFCE_INSTALL = " \
   task-xfce-base \
   gdm-systemd \
   gtk-tweak \
-  network-manager-applet \
   "
 
 XFCE_APPS = "\
@@ -23,7 +22,6 @@ XFCE_APPS = "\
 IMAGE_INSTALL += " \
   ${XSERVER} \
   ${XFCE_INSTALL} \
-  ${XFCE_APPS} \
  "
 
 # this section removes remnants of legacy sysvinit support

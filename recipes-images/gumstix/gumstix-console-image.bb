@@ -40,7 +40,7 @@ BASE_INSTALL = " \
   udev \
   udisks udisks-systemd \
   upower \
-  update-laternatives-cworth \
+  update-alternatives-cworth \
   util-linux \
   which \
  "
