@@ -56,6 +56,7 @@ NETWORK_INSTALL = " \
   networkmanager \
   networkmanager-tests \
   rfkill \
+  wireless-tools \
   ${@base_contains("DISTRO_FEATURES", "wifi", "iw wpa-supplicant", "", d)} \
  "
 

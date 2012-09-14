@@ -11,6 +11,7 @@ XSERVER +=  "\
 XFCE_INSTALL = " \
   task-xfce-base \
   gdm-systemd \
+  gtk-tweak \
   "
 
 XFCE_APPS = "\
@@ -29,7 +30,6 @@ XFCE_THEMES = " \
 IMAGE_INSTALL += " \
   ${XSERVER} \
   ${XFCE_INSTALL} \
-  ${XFCE_THEMES} \
   ${XFCE_APPS} \
  "
 
