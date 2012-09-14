@@ -28,10 +28,7 @@ BASE_INSTALL = " \
   netbase \
   ntp-systemd \
   net-tools \
-  iputils \
-  openssh-ssh openssh-keygen openssh-scp openssh-sshd-systemd \
   polkit \
-  psplash \
   rsyslog-systemd \
   sed \
   shadow tinylogin \
@@ -67,10 +64,12 @@ TOOLS_INSTALL = " \
   e2fsprogs \
   evtest \
   findutils \
+  iputils \
   grep \
   gzip \
   htop \
   nano \
+  openssh-ssh openssh-keygen openssh-scp openssh-sshd-systemd \
   sudo \
   systemd-analyze \
   tar \

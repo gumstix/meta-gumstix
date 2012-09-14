@@ -11,7 +11,6 @@ XSERVER +=  "\
 XFCE_INSTALL = " \
   task-xfce-base \
   gdm-systemd \
-  gtk-tweak \
   "
 
 XFCE_APPS = "\
@@ -31,6 +30,7 @@ IMAGE_INSTALL += " \
   ${XSERVER} \
   ${XFCE_INSTALL} \
   ${XFCE_APPS} \
+  ${XFCE_THEMES} \
  "
 
 # this section removes remnants of legacy sysvinit support
