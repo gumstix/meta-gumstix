@@ -15,6 +15,7 @@ XFCE_INSTALL = " \
 
 XFCE_APPS = "\
   epiphany \
+  web-webkit \
   network-manager-applet \
   xterm \
  "
@@ -26,11 +27,25 @@ XFCE_THEMES = " \
   gtk-tweak \
  "
 
+XFCE_DOCS = " \
+  exo-doc \
+  thunar-doc \
+  xfce4-clipman-plugin-doc \
+  xfce4-notifyd-doc \
+  xfce4-panel-doc \
+  xfce4-screenshooter-doc \
+  xfce4-session-doc \
+  xfce-terminal-doc \
+  xfce-utils-doc \
+  xfdesktop-doc \
+  xfwm4-doc \
+ "
 IMAGE_INSTALL += " \
   ${XSERVER} \
   ${XFCE_INSTALL} \
   ${XFCE_APPS} \
   ${XFCE_THEMES} \
+  ${XFCE_DOCS} \
  "
 
 # this section removes remnants of legacy sysvinit support
