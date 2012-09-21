@@ -53,7 +53,7 @@ SOURCE_MIRROR_URL = "http://feeds.sakoman.com/feeds/yocto/oe-source-cache"
 #MACHINE ?= "routerstationpro"
 #
 # This sets the default machine to be qemux86 if no other machine is selected:
-MACHINE ??= "omap3-multi"
+MACHINE ??= "overo"
 
 #
 # Where to place downloads

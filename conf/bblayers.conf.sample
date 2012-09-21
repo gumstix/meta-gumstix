@@ -9,5 +9,5 @@ BBLAYERS ?= " \
   ##COREBASE##/meta-openembedded/meta-gnome \
   ##COREBASE##/meta-openembedded/meta-oe \
   ##COREBASE##/meta-openembedded/meta-xfce \
-  ##COREBASE##/meta-gumstix-respin \
+  ##COREBASE##/meta-gumstix- \
   "
