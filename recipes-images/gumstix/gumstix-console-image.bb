@@ -3,6 +3,7 @@ DESCRIPTION = "The most basic Gumstix image"
 inherit image
 IMAGE_FEATURES += "package-management"
 IMAGE_EXTRA_INSTALL ?= ""
+DEPENDS = "virtual/kernel"
 
 DEPENDS = "virtual/kernel"
 
