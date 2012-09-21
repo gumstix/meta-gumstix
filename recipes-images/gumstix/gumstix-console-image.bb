@@ -5,6 +5,8 @@ IMAGE_FEATURES += "package-management"
 IMAGE_EXTRA_INSTALL ?= ""
 DEPENDS = "virtual/kernel"
 
+DEPENDS = "virtual/kernel"
+
 AUDIO_INSTALL = " \
   alsa-utils-aplay \
   alsa-utils-alsactl \
