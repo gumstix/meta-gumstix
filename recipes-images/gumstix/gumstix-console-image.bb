@@ -24,11 +24,11 @@ BASE_INSTALL = " \
   base-passwd \
   bash \
   coreutils \
-  cpufrequtils \
   dbus \
   devmem2 \
   kernel-modules \
-  man-pages \	
+  man \	
+  man-pages \
   memtester \
   netbase \
   ntp-systemd \
