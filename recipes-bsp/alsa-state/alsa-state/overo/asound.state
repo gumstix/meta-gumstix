@@ -1,4 +1,4 @@
-state.omap3beagle {
+state.overo {
 	control.1 {
 		iface MIXER
 		name 'Codec Operation Mode'

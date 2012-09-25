@@ -26,7 +26,6 @@ BASE_INSTALL = " \
   coreutils \
   dbus \
   devmem2 \
-  kernel-modules \
   man \	
   man-pages \
   memtester \
