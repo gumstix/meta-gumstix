@@ -175,7 +175,7 @@ USER_CLASSES ?= "buildstats image-mklibs image-prelink"
 # The build system can test booting virtual machine images under qemu (an emulator)
 # after any root filesystems are created and run tests against those images. To
 # enable this uncomment this line
-IMAGETEST = "qemu"
+# IMAGETEST = "qemu"
 #
 # This variable controls which tests are run against virtual images if enabled
 # above. The following would enable bat, boot the test case under the sanity suite
