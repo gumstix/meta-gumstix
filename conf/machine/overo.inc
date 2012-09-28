@@ -17,6 +17,9 @@ XSERVER = "xserver-xorg \
            xf86-video-omapfb \
            xf86-input-keyboard"
 
+PREFERRED_PROVIDER_jpeg = "libjpeg-turbo"
+PREFERRED_PROVIDER_jpeg-native = "libjpeg-turbo-native"
+
 SERIAL_CONSOLE = "115200 ttyO2"
 
 IMAGE_FSTYPES += "tar.bz2"
