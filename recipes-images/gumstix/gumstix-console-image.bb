@@ -73,6 +73,7 @@ TOOLS_INSTALL = " \
   gzip \
   htop \
   media-ctl yavta v4l-utils \
+  mplayer2 \
   nano \
   openssh-ssh openssh-keygen openssh-scp openssh-sshd-systemd \
   sudo \
