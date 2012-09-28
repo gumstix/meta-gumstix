@@ -72,6 +72,7 @@ TOOLS_INSTALL = " \
   grep \
   gzip \
   htop \
+  media-ctl yavta v4l-utils \
   nano \
   openssh-ssh openssh-keygen openssh-scp openssh-sshd-systemd \
   sudo \
