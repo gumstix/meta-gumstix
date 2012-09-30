@@ -7,7 +7,6 @@ IMAGE_EXTRA_INSTALL ?= ""
 DEPENDS = "virtual/kernel"
 
 AUDIO_INSTALL = " \
-  alsa-state \
   alsa-utils-aplay \
   alsa-utils-alsactl \
   alsa-utils-alsamixer \
