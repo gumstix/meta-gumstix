@@ -1,0 +1,10 @@
+--- NetworkManager-0.9.2.0/data/NetworkManager.service.in-orig	2011-11-09 09:22:29.000000000 -0800
++++ NetworkManager-0.9.2.0/data/NetworkManager.service.in	2012-02-22 19:40:15.000000000 -0800
+@@ -7,6 +7,7 @@ Before=network.target
+ [Service]
+ Type=dbus
+ BusName=org.freedesktop.NetworkManager
++ExecStartPre=@bindir@/ap-setup
+ ExecStart=@sbindir@/NetworkManager --no-daemon
+ 
+ [Install]

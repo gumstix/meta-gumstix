@@ -1,0 +1,13 @@
+# LAYER_CONF_VERSION is increased each time build/conf/bblayers.conf
+# changes incompatibly
+LCONF_VERSION = "4"
+
+BBFILES ?= ""
+BBLAYERS ?= " \
+  ##COREBASE##/meta \
+  ##COREBASE##/meta-yocto \
+  ##COREBASE##/meta-openembedded/meta-gnome \
+  ##COREBASE##/meta-openembedded/meta-oe \
+  ##COREBASE##/meta-openembedded/meta-xfce \
+  ##COREBASE##/meta-gumstix \
+  "

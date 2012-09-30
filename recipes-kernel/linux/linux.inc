@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 inherit kernel siteinfo
 
 # Try to build & install perf
-require recipes-kernel/linux/linux-tools.inc
+# require recipes-kernel/linux/linux-tools.inc
 
 RPSRC = "http://www.rpsys.net/openzaurus/patches/archive"
 
@@ -228,10 +228,6 @@ do_configure_append() {
 	fi
 }
 
-# bitbake.conf only prepends PARALLEL make in tasks called do_compile, which isn't the case for compile_modules
-# So explicitly enable it for that in here
-EXTRA_OEMAKE = "${PARALLEL_MAKE} "
-
 do_install_append() {
 	oe_runmake headers_install INSTALL_HDR_PATH=${D}${exec_prefix}/src/linux-${KERNEL_VERSION} ARCH=$ARCH
 }
@@ -264,19 +260,3 @@ pkg_postrm_kernel-devicetree () {
 	cd /${KERNEL_IMAGEDEST}; update-alternatives --remove devicetree devicetree-${KERNEL_VERSION} || true
 }
 
-# Automatically depend on lzop-native if CONFIG_KERNEL_LZO is enabled
-python () {
-    try:
-        defconfig = bb.fetch2.localpath('file://defconfig', d)
-    except bb.fetch2.FetchError:
-        return
-
-    try:
-        configfile = open(defconfig)
-    except IOError:
-        return
-
-    if 'CONFIG_KERNEL_LZO=y\n' in configfile.readlines():
-        depends = d.getVar('DEPENDS', False)
-        d.setVar('DEPENDS', depends + ' lzop-native')
-}
