@@ -14,7 +14,6 @@ AUDIO_INSTALL = " \
   alsa-utils-speakertest \
  "
 
-
 BASE_INSTALL = " \
   ${MACHINE_EXTRA_RRECOMMENDS} \
   ${@base_contains("DISTRO_FEATURES", "bluetooth", "bluez4", "", d)} \
