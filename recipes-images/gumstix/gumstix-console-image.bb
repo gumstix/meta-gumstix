@@ -7,7 +7,6 @@ IMAGE_EXTRA_INSTALL ?= ""
 DEPENDS = "virtual/kernel"
 
 AUDIO_INSTALL = " \
-  alsa-state \
   alsa-utils-aplay \
   alsa-utils-alsactl \
   alsa-utils-alsamixer \
@@ -72,8 +71,6 @@ TOOLS_INSTALL = " \
   grep \
   gzip \
   htop \
-  media-ctl yavta v4l-utils \
-  mplayer2 \
   nano \
   openssh-ssh openssh-keygen openssh-scp openssh-sshd-systemd \
   sudo \
