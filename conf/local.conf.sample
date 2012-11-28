@@ -1,8 +1,5 @@
 LICENSE_FLAGS_WHITELIST = "commercial"
 
-INHERIT += "own-mirrors"
-SOURCE_MIRROR_URL = "http://feeds.sakoman.com/feeds/yocto/oe-source-cache"
-
 #
 # This file is your local configuration file and is where all local user settings
 # are placed. The comments in this file give some guide to the options a new user
