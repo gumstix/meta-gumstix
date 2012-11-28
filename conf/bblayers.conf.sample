@@ -7,8 +7,5 @@ BBFILES ?= ""
 BBLAYERS ?= " \
   ##COREBASE##/meta \
   ##COREBASE##/meta-yocto \
-  ##COREBASE##/meta-openembedded/meta-gnome \
-  ##COREBASE##/meta-openembedded/meta-oe \
-  ##COREBASE##/meta-openembedded/meta-xfce \
   ##COREBASE##/meta-gumstix-bsp \
   "
