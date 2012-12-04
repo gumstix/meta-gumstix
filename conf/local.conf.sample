@@ -19,12 +19,12 @@ LICENSE_FLAGS_WHITELIST = "commercial"
 # These two options control how much parallelism BitBake should use. The first 
 # option determines how many tasks bitbake should run in parallel:
 #
-BB_NUMBER_THREADS = "4"
+BB_NUMBER_THREADS ?= "4"
 # 
 # The second option controls how many processes make should run in parallel when
 # running compile tasks:
 #
-PARALLEL_MAKE = "-j 4"
+PARALLEL_MAKE ?= "-j 4"
 #
 # For a quad-core machine, BB_NUMBER_THREADS = "4", PARALLEL_MAKE = "-j 4" would
 # be appropriate for example.
@@ -50,7 +50,7 @@ PARALLEL_MAKE = "-j 4"
 #MACHINE ?= "routerstationpro"
 #
 # This sets the default machine to be qemux86 if no other machine is selected:
-MACHINE ??= "overo"
+MACHINE ?= "overo"
 
 #
 # Where to place downloads
