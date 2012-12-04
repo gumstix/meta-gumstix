@@ -7,5 +7,5 @@ BBFILES ?= ""
 BBLAYERS ?= " \
   ##COREBASE##/meta \
   ##COREBASE##/meta-yocto \
-  ##COREBASE##/meta-gumstix-bsp \
+  ##COREBASE##/meta-gumstix \
   "
