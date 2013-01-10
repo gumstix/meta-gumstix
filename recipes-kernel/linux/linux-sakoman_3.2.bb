@@ -11,7 +11,7 @@ PV = "3.2"
 S = "${WORKDIR}/git"
 
 SRCREV = "${AUTOREV}"
-SRC_URI = "git://www.sakoman.com/git/linux-omap-2.6.git;branch=omap-3.2;protocol=git \
+SRC_URI = "git://www.sakoman.com/git/linux.git;branch=omap-3.2;protocol=git \
 	   file://defconfig \
            file://${BOOT_SPLASH} \
            "
