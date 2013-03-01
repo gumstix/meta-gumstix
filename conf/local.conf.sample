@@ -62,6 +62,8 @@ PARALLEL_MAKE ?= "-j 4"
 #
 # This sets the default machine to be qemux86 if no other machine is selected:
 MACHINE ?= "overo"
+#MACHINE ?= "pepper"
+#MACHINE ?= "duovero"
 
 #
 # Where to place downloads
