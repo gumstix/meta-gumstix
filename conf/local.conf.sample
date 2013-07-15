@@ -238,3 +238,43 @@ PATCHRESOLVE = "noop"
 # track the version of this file when it was generated. This can safely be ignored if
 # this doesn't mean anything to you.
 CONF_VERSION = "1"
+
+
+########################################################################################
+# Gumstix common board configuration
+#
+# These settings are shared between Gumstix COMs and SBCs.
+# Please take a look at conf/machine directory for machine specific features.
+#
+# Specify kernel recipe
+PREFERRED_PROVIDER_virtual/kernel = "linux-gumstix"
+
+# Increase this everytime you change something in the kernel
+MACHINE_KERNEL_PR = "r1"
+KERNEL_IMAGETYPE = "uImage"
+
+# Specify u-boot parameters
+PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
+EXTRA_IMAGEDEPENDS += " u-boot"
+
+# Specify xserver components for builds including X11
+PREFERRED_PROVIDER_virtual/xserver = "xserver-xorg"
+XSERVER ?= "xserver-xorg \
+           xf86-input-evdev \
+           xf86-input-mouse \
+           xf86-video-omapfb \
+           xf86-input-keyboard"
+
+# For kernels older than 2.6.37, use "115200 ttyS2" instead
+SERIAL_CONSOLE = "115200 ttyO2"
+
+# tar.bz2 for SD card, UBI for nand
+IMAGE_FSTYPES += "tar.bz2 ubi"
+UBI_VOLNAME = "rootfs"
+
+# Ship all kernel modules by default
+MACHINE_EXTRA_RRECOMMENDS = " kernel-modules"
+MACHINE_FEATURES = "kernel26 alsa apm ext3 screen usbgadget usbhost uboot  serial vfat wifi keyboard"
+DISTRO_FEATURES_append = " systemd"
+VIRTUAL-RUNTIME_init_manager = "systemd"
+DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
