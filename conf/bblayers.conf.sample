@@ -8,5 +8,4 @@ BBLAYERS ?= " \
   ##COREBASE##/meta \
   ##COREBASE##/meta-yocto \
   ##COREBASE##/meta-gumstix \
-  ##COREBASE##/meta-ros \
   "
