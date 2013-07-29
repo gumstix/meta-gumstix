@@ -1,5 +1,3 @@
-PRINC := "${@int(PRINC) + 1}"
-
 PACKAGES =+ "${PN}-sd8787"
 
 FILES_${PN}-sd8787 = " \
