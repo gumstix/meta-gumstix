@@ -14,8 +14,8 @@ LICENSE_FLAGS_WHITELIST = "commercial"
 # variable as required.
 
 # Set a few Preferred Providers that aren't specified elsewhere
-PREFERRED_PROVIDER_jpeg = "libjpeg-turbo"
-PREFERRED_PROVIDER_jpeg-native = "libjpeg-turbo-native"
+PREFERRED_PROVIDER_jpeg = "jpeg"
+PREFERRED_PROVIDER_jpeg-native = "jpeg-native"
 
 # Use Gumstix source mirror as default premirror
 SOURCE_MIRROR_URL ?= "http://source-cache.gumstix.org/"
