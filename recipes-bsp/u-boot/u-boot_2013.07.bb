@@ -1,12 +1,14 @@
 require u-boot.inc
 
 PV = "2013.07"
-PR = "r0"
+PR = "r2"
 
 COMPATIBLE_MACHINE = "overo"
 
-SRCREV = "${AUTOREV}"
-SRC_URI = "git://github.com/gumstix/u-boot.git;branch=v2013.07;protocol=git \
-           file://fw_env.config \
+SRCREV = "62c175fbb8a0f9a926c88294ea9f7e88eb898f6c"
+SRC_URI = "git://git.denx.de/u-boot.git;branch=master;protocol=git \
+          file://0001-omap-overo-update-support-for-Micron-1GB-POP.patch \
+          file://0002-omap-overo-Use-200MHz-SDRC-timings-for-revision-1-2-.patch \
+          file://fw_env.config \
           "
 SPL_BINARY = "MLO"
