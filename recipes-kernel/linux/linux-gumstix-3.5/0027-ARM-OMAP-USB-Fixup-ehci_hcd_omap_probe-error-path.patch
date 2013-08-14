@@ -1,0 +1,67 @@
+From c43c22d878ad2d35d609c4ac1c27b97bfc8a6ac6 Mon Sep 17 00:00:00 2001
+From: Russ Dill <Russ.Dill@ti.com>
+Date: Thu, 21 Jun 2012 03:44:31 -0700
+Subject: [PATCH 27/30] ARM: OMAP: USB: Fixup ehci_hcd_omap_probe error path
+
+A recent commit, [PATCH] Fix OMAP EHCI suspend/resume failure
+(i693) '354ab856' causes ehci probe to fail on omap3xxx. This
+exposed bugs in the ehci_hcd_omap_probe error path causing
+an oops.
+
+On the error path, call usb_remove_hcd if usb_add_hcd has been
+called, and call usb_put_hcd if usb_alloc_hcd has been called.
+
+Tested on BB-xM.
+
+Signed-off-by: Russ.Dill@ti.com
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/host/ehci-omap.c |   15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/host/ehci-omap.c b/drivers/usb/host/ehci-omap.c
+index c304354..0668418 100644
+--- a/drivers/usb/host/ehci-omap.c
++++ b/drivers/usb/host/ehci-omap.c
+@@ -329,11 +329,6 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
+ 	omap_ehci->hcs_params = readl(&omap_ehci->caps->hcs_params);
+ 
+ 	ehci_reset(omap_ehci);
+-	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
+-	if (ret) {
+-		dev_err(dev, "failed to add hcd with err %d\n", ret);
+-		goto err_add_hcd;
+-	}
+ 
+ 	if (pdata->phy_reset) {
+ 		/* Hold the PHY in RESET for enough time till
+@@ -348,6 +343,12 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
+ 			gpio_set_value_cansleep(pdata->reset_gpio_port[1], 1);
+ 	}
+ 
++	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
++	if (ret) {
++		dev_err(dev, "failed to add hcd with err %d\n", ret);
++		goto err_pm_runtime;
++	}
++
+ 	/* root ports should always stay powered */
+ 	ehci_port_power(omap_ehci, 1);
+ 
+@@ -422,8 +423,12 @@ err_utmi_p1_fck:
+ 	clk_put(utmi_p1_fck);
+ 
+ err_add_hcd:
++	usb_remove_hcd(hcd);
++
++err_pm_runtime:
+ 	disable_put_regulator(pdata);
+ 	pm_runtime_put_sync(dev);
++	usb_put_hcd(hcd);
+ 
+ err_io:
+ 	iounmap(regs);
+-- 
+1.7.9.5
+
