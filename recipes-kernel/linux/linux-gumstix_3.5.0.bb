@@ -10,7 +10,7 @@ BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 # Patches for all releases in linux-3.5.y but PV specifies upstream base.
 # Patches at: git://github.com/gumstix/linux.git;branch=omap-3.5
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.5:"
-#PR = "r0"
+PR = "r1"
 
 S = "${WORKDIR}/git"
 
@@ -47,6 +47,8 @@ SRC_URI = " \
     file://0027-ARM-OMAP-USB-Fixup-ehci_hcd_omap_probe-error-path.patch \
     file://0028-ARM-OMAP-USB-Fix-omap3xxx-EHCI-regression-caused-by-.patch \
     file://0029-drivers-rtc-rtc-twl.c-ensure-all-interrupts-are-disa.patch \
+    file://0030-Fix-sprz319-erratum-2.1.patch \
+    file://0031-OMAP2-3-clock-fix-sprz319-erratum-2.1.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
