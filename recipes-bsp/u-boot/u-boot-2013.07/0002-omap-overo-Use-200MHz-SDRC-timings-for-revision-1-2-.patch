@@ -7,7 +7,8 @@ Subject: [PATCH 2/2] omap: overo: Use 200MHz SDRC timings for revision 1, 2 &
 Gumstix uses 200Mhz RAM on revision 1, 2 & 3 COMs, so use 200MHz
 timings rather than 165MHz.  Based on 6cf8bf44b1f8550e12f7f2a16e01890e5de8443d
 
-Upstream-Status: Pending
+Upstream-Status: Submitted [http://patchwork.ozlabs.org/patch/261512/]
+
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
  board/overo/overo.c |   16 ++++++++--------
