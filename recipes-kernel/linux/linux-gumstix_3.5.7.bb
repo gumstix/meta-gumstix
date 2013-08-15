@@ -10,12 +10,12 @@ BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 # Patches for all releases in linux-3.5.y but PV specifies upstream base.
 # Patches at: git://github.com/gumstix/linux.git;branch=omap-3.5
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.5:"
-PR = "r1"
+PR = "r0"
 
 S = "${WORKDIR}/git"
 
-# v3.5 = 28a33cbc24e4256c143dce96c7d93bf423229f92
-SRCREV = "28a33cbc24e4256c143dce96c7d93bf423229f92"
+# v3.5.7 = f2b152564afdf9c9917c17d1c41c1082c82067bd
+SRCREV = "f2b152564afdf9c9917c17d1c41c1082c82067bd"
 SRC_URI = " \
     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;branch=linux-3.5.y \
     file://0001-Revert-omap2_mcspi-Flush-posted-writes.patch \
@@ -46,10 +46,12 @@ SRC_URI = " \
     file://0026-board-overo-Add-Caspa-camera-link-frequencies.patch \
     file://0027-ARM-OMAP-USB-Fixup-ehci_hcd_omap_probe-error-path.patch \
     file://0028-ARM-OMAP-USB-Fix-omap3xxx-EHCI-regression-caused-by-.patch \
-    file://0029-drivers-rtc-rtc-twl.c-ensure-all-interrupts-are-disa.patch \
     file://0030-Fix-sprz319-erratum-2.1.patch \
     file://0031-OMAP2-3-clock-fix-sprz319-erratum-2.1.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
 
+# Patches applied upstream since v3.5:
+# file://0029-drivers-rtc-rtc-twl.c-ensure-all-interrupts-are-disa.patch
+#   superseded by 1a63a2a60287396a16c43c844913f59e01e9e0ce at 3.5.5
