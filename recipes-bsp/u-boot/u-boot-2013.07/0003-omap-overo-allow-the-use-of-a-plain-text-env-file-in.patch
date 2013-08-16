@@ -29,6 +29,7 @@ Adapted from d70f5480 described below.
     will be started.
 
 Upstream-Status: Pending
+
 Signed-off-by: Peter A. Bigot <pab@pabigot.com>
 ---
  include/configs/omap3_overo.h |   10 ++++++++++
