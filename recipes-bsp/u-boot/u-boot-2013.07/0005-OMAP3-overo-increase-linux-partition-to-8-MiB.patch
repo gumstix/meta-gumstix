@@ -1,0 +1,40 @@
+From e015cb9e5398588c5786d0bc6c55038f4f85fde9 Mon Sep 17 00:00:00 2001
+From: "Peter A. Bigot" <pab@pabigot.com>
+Date: Fri, 16 Aug 2013 12:39:40 -0500
+Subject: [PATCH 5/5] OMAP3: overo: increase linux partition to 8 MiB
+
+Linux kernel at version 3.5 is about 3.5 MiB; test kernels for 3.10 exceed 4
+MiB.  Prepare for future upgrades by increasing the NAND partition now.
+
+Upstream-Status: Pending
+
+Signed-off-by: Peter A. Bigot <pab@pabigot.com>
+---
+ include/configs/omap3_overo.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
+index 8f16983..3224d44 100644
+--- a/include/configs/omap3_overo.h
++++ b/include/configs/omap3_overo.h
+@@ -127,7 +127,7 @@
+  *  xloader              4 * NAND_BLOCK_SIZE = 512 KiB
+  *  uboot               14 * NAND_BLOCK_SIZE = 1792 KiB
+  *  uboot environtment   2 * NAND_BLOCK_SIZE = 256 KiB
+- *  linux               32 * NAND_BLOCK_SIE = 4 MiB
++ *  linux               64 * NAND_BLOCK_SIE = 8 MiB
+  *  rootfs              remainder
+  */
+ #define MTDIDS_DEFAULT "nand0=omap2-nand.0"
+@@ -135,7 +135,7 @@
+ 	"512k(xloader),"				\
+ 	"1792k(u-boot),"				\
+ 	"256k(environ),"				\
+-	"4m(linux),"					\
++	"8m(linux),"					\
+ 	"-(rootfs)"
+ #else /* CONFIG_CMD_NAND */
+ #define MTDPARTS_DEFAULT
+--
+1.7.9.5
+
