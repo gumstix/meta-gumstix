@@ -1,10 +1,11 @@
 # Add required hciattach for optional on-board Wi2Wi bluetooth adapter
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-PRINC := "${@int(PRINC) + 1}"
+PRINC := "${@int(PRINC) + 2}"
 
 SRC_URI += " \
   file://bluetooth-ttyO1.service \
   file://bluetooth-ttyO1.conf \
+  file://network-fix-network-Connect-method-parameters.patch \
 "
 
 SYSTEMD_SERVICE_${PN} += "bluetooth-ttyO1.service"
