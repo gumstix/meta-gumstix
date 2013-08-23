@@ -10,7 +10,7 @@ BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 # Patches for all releases in linux-3.5.y but PV specifies upstream base.
 # Patches at: git://github.com/gumstix/linux.git;branch=omap-3.5
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.5:"
-PR = "r1"
+PR = "r2"
 
 S = "${WORKDIR}/git"
 
@@ -49,6 +49,7 @@ SRC_URI = " \
     file://0030-Fix-sprz319-erratum-2.1.patch \
     file://0031-OMAP2-3-clock-fix-sprz319-erratum-2.1.patch \
     file://0032-OMAP3-overo-increase-linux-partition-to-8-MiB.patch \
+    file://0033-v4l-Reset-subdev-v4l2_dev-field-to-NULL-if-registrat.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
