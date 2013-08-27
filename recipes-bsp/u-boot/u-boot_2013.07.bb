@@ -1,7 +1,7 @@
 require u-boot.inc
 
 PV = "2013.07"
-PR = "r5"
+PR = "r6"
 
 COMPATIBLE_MACHINE = "overo"
 
@@ -12,6 +12,7 @@ SRC_URI = "git://git.denx.de/u-boot.git;branch=master;protocol=git \
           file://0003-omap-overo-allow-the-use-of-a-plain-text-env-file-in.patch \
           file://0004-OMAP3-overo-add-command-support-for-mtd-and-ubi.patch \
           file://0005-OMAP3-overo-increase-linux-partition-to-8-MiB.patch \
+          file://0006-Correct-typo-in-comment-for-NAND_BLOCK_SIZE.patch \
           file://fw_env.config \
           "
 SPL_BINARY = "MLO"
