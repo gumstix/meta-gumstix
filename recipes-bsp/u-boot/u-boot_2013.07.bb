@@ -1,7 +1,7 @@
 require u-boot.inc
 
 PV = "2013.07"
-PR = "r7"
+PR = "r8"
 
 COMPATIBLE_MACHINE = "overo"
 
