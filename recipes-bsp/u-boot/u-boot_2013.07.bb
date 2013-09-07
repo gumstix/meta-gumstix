@@ -1,7 +1,7 @@
 require u-boot.inc
 
 PV = "2013.07"
-PR = "r8"
+PR = "r9"
 
 COMPATIBLE_MACHINE = "overo"
 
@@ -15,6 +15,8 @@ SRC_URI = "git://git.denx.de/u-boot.git;branch=master;protocol=git \
           file://0006-Correct-typo-in-comment-for-NAND_BLOCK_SIZE.patch \
           file://0007-OMAP3-overo-add-Alto35-expansion-board-support.patch \
           file://0008-OMAP3-overo-add-some-Gumstix-expansion-boards.patch \
+          file://0009-Change-NAND-offsets-for-8MB-kernel-partition.patch \
+          file://0010-OMAP3-overo-Work-around-HW-ECC-error.patch \
           file://fw_env.config \
           "
 SPL_BINARY = "MLO"
