@@ -1,15 +1,17 @@
-From b88ebeb328d57894a19330ddf0ef021d23f4066f Mon Sep 17 00:00:00 2001
+From dca9cbf13ff5b92f8729e28775d2ebad6383e04d Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 6 Sep 2013 19:08:36 -0700
-Subject: [PATCH 10/10] OMAP3: overo: Work around HW ECC error.
+Subject: [PATCH 09/10] OMAP3: overo: Work around HW ECC error.
 
 This is a workaround to disable subpage reads when the
 ECC mode is not NAND_ECC_SOFT as discussed:
 http://u-boot.10912.n7.nabble.com/NAND-write-error-with-HW-ECC-on-OMAP3-td162420.html
 
+Upstream-Status: Pending
+
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
- drivers/mtd/nand/nand_base.c |    2 ++
+ drivers/mtd/nand/nand_base.c | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/mtd/nand/nand_base.c b/drivers/mtd/nand/nand_base.c
@@ -26,5 +28,5 @@ index 9e05cef..7c4cd45 100644
  	/* Fill in remaining MTD driver data */
  	mtd->type = MTD_NANDFLASH;
 -- 
-1.7.10.4
+1.8.4
 

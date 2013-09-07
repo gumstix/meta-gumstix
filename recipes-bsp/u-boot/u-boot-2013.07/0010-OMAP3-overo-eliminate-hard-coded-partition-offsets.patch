@@ -1,0 +1,48 @@
+From 99889987209eb2276006361c2561d37fe125ce07 Mon Sep 17 00:00:00 2001
+From: "Peter A. Bigot" <pab@pabigot.com>
+Date: Sat, 7 Sep 2013 08:49:26 -0500
+Subject: [PATCH 10/10] OMAP3: overo: eliminate hard-coded partition offsets
+
+The linux kernel is at nand0,3 using the current layout, but is best
+accessed through the partition label "linux".  Since CONFIG_CMD_MTDPARTS is
+defined the CONFIG_JFFS2 settings are unreferenced; use "setenv partition
+rootfs" to set the default mtd partition for jffs2.
+
+Upstream-Status: Pending
+
+Signed-off-by: Peter A. Bigot <pab@pabigot.com>
+---
+ include/configs/omap3_overo.h | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
+index 231b429..2c399a2 100644
+--- a/include/configs/omap3_overo.h
++++ b/include/configs/omap3_overo.h
+@@ -168,14 +168,6 @@
+ 
+ #define CONFIG_SYS_MAX_NAND_DEVICE	1	/* Max number of NAND */
+ 						/* devices */
+-#define CONFIG_JFFS2_NAND
+-/* nand device jffs2 lives on */
+-#define CONFIG_JFFS2_DEV		"nand0"
+-/* start of jffs2 partition */
+-#define CONFIG_JFFS2_PART_OFFSET	0x680000
+-#define CONFIG_JFFS2_PART_SIZE		0xf980000	/* size of jffs2 */
+-							/* partition */
+-
+ /* Environment information */
+ #define CONFIG_BOOTDELAY		5
+ 
+@@ -221,7 +213,7 @@
+ 		"bootm ${loadaddr}\0" \
+ 	"nandboot=echo Booting from nand ...; " \
+ 		"run nandargs; " \
+-		"nand read ${loadaddr} 280000 400000; " \
++		"nand read ${loadaddr} linux; " \
+ 		"bootm ${loadaddr}\0" \
+ 
+ #define CONFIG_BOOTCOMMAND \
+-- 
+1.8.4
+
