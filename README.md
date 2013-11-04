@@ -7,3 +7,7 @@ branch: dylan
 revision: HEAD
 
 Layer maintainer: Adam Lee <adam@gumstix.com> for Gumstix, Inc.
+
+To Dos:
+
+- [ ] Add default time zone (tzdata package) 
