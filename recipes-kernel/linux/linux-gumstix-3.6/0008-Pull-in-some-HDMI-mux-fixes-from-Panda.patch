@@ -1,0 +1,35 @@
+From 82fec9d44531a6a9cdc63f28bfb35b287c6740dc Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 29 Jul 2013 13:36:25 -0700
+Subject: [PATCH 08/10] Pull in some HDMI mux fixes from Panda
+
+---
+ arch/arm/mach-omap2/board-duovero.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-omap2/board-duovero.c b/arch/arm/mach-omap2/board-duovero.c
+index bbdbe63..b8dd650 100644
+--- a/arch/arm/mach-omap2/board-duovero.c
++++ b/arch/arm/mach-omap2/board-duovero.c
+@@ -245,7 +245,7 @@ static int __init duovero_i2c_init(void)
+ 	omap4_pmic_init("twl6030", &duovero_twldata,
+ 			&twl6040_data, OMAP44XX_IRQ_SYS_2N);
+ 	omap_register_i2c_bus(2, 400, NULL, 0);
+-	omap_register_i2c_bus(3, 400, NULL, 0);
++	omap_register_i2c_bus(3, 100, NULL, 0);
+ 	omap_register_i2c_bus(4, 400, NULL, 0);
+ 	return 0;
+ }
+@@ -328,6 +328,9 @@ void duovero_display_init(void)
+ {
+ 	omap_display_init(&duovero_dss_data);
+ 	omap_hdmi_init(OMAP_HDMI_SDA_SCL_EXTERNAL_PULLUP);
++
++        omap_mux_init_gpio(HDMI_GPIO_LS_OE, OMAP_PIN_OUTPUT);
++        omap_mux_init_gpio(HDMI_GPIO_HPD, OMAP_PIN_INPUT_PULLDOWN);
+ }
+ 
+ static struct omap_abe_twl6040_data duovero_abe_audio_data = {
+-- 
+1.7.10.4
+

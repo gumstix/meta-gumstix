@@ -1,0 +1,126 @@
+From d400d774a302f40c42766dbb3e5777c3eee3c3dd Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Tue, 30 Apr 2013 10:19:30 -0700
+Subject: [PATCH 07/10] Support duovero zephyr
+
+---
+ arch/arm/mach-omap2/board-duovero.c |   39 +++++++++++++++++++++++++++++------
+ drivers/mmc/core/sdio.c             |    3 +++
+ 2 files changed, 36 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm/mach-omap2/board-duovero.c b/arch/arm/mach-omap2/board-duovero.c
+index 88b2f83..bbdbe63 100644
+--- a/arch/arm/mach-omap2/board-duovero.c
++++ b/arch/arm/mach-omap2/board-duovero.c
+@@ -196,7 +196,7 @@ static struct fixed_voltage_config duovero_vwlan = {
+ 	.supply_name = "vwlan",
+ 	.microvolts = 3000000, /* we lie here -- supply is actually 1.8V */
+ 	.gpio = 43,
+-	.startup_delay = 7000, /* 70msec */
++	.startup_delay = 70000, /* 70msec */
+ 	.enable_high = 1,
+ 	.enabled_at_boot = 1,
+ 	.init_data = &duovero_vmmc5,
+@@ -210,6 +210,7 @@ static struct platform_device omap_vwlan_device = {
+ 	},
+ };
+ 
++
+ static struct twl6040_codec_data twl6040_codec = {
+ 	/* single-step ramp for headset and handsfree */
+ 	.hs_left_step	= 0x0f,
+@@ -249,6 +250,34 @@ static int __init duovero_i2c_init(void)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_OMAP_MUX
++static struct omap_board_mux board_mux[] __initdata = {
++	/* WLAN IRQ - GPIO 53 */
++	OMAP4_MUX(GPMC_NCS3, OMAP_MUX_MODE3 | OMAP_PIN_INPUT),
++	/* WLAN POWER ENABLE - GPIO 43 */
++	OMAP4_MUX(GPMC_A19, OMAP_MUX_MODE3 | OMAP_PIN_OUTPUT),
++	/* WLAN SDIO: MMC5 CMD */
++	OMAP4_MUX(SDMMC5_CMD, OMAP_MUX_MODE0 | OMAP_PIN_INPUT_PULLUP),
++	/* WLAN SDIO: MMC5 CLK */
++	OMAP4_MUX(SDMMC5_CLK, OMAP_MUX_MODE0 | OMAP_PIN_INPUT_PULLUP),
++	/* WLAN SDIO: MMC5 DAT[0-3] */
++	OMAP4_MUX(SDMMC5_DAT0, OMAP_MUX_MODE0 | OMAP_PIN_INPUT_PULLUP),
++	OMAP4_MUX(SDMMC5_DAT1, OMAP_MUX_MODE0 | OMAP_PIN_INPUT_PULLUP),
++	OMAP4_MUX(SDMMC5_DAT2, OMAP_MUX_MODE0 | OMAP_PIN_INPUT_PULLUP),
++	OMAP4_MUX(SDMMC5_DAT3, OMAP_MUX_MODE0 | OMAP_PIN_INPUT_PULLUP),
++	/* User GPIOs */
++	OMAP4_MUX(ABE_DMIC_DIN2, OMAP_MUX_MODE3 | OMAP_PIN_OUTPUT),
++	OMAP4_MUX(ABE_DMIC_DIN3, OMAP_MUX_MODE3 | OMAP_PIN_OUTPUT),
++	/* NIRQ2 for twl6040 */
++	OMAP4_MUX(SYS_NIRQ2, OMAP_MUX_MODE0 |
++		  OMAP_PIN_INPUT_PULLUP | OMAP_PIN_OFF_WAKEUPENABLE),
++	{ .reg_offset = OMAP_MUX_TERMINATOR },
++};
++
++#else
++#define board_mux	NULL
++#endif
++
+ static struct gpio duovero_hdmi_gpios[] = {
+ 	{ HDMI_GPIO_LS_OE, GPIOF_OUT_INIT_HIGH, "hdmi_gpio_ls_oe" },
+ 	{ HDMI_GPIO_HPD, GPIOF_DIR_IN, "hdmi_gpio_hpd" },
+@@ -303,10 +332,7 @@ void duovero_display_init(void)
+ 
+ static struct omap_abe_twl6040_data duovero_abe_audio_data = {
+ 	.card_name	= "duovero",
+-	.has_hs		= ABE_TWL6040_LEFT | ABE_TWL6040_RIGHT,
+ 	.has_hf		= ABE_TWL6040_LEFT | ABE_TWL6040_RIGHT,
+-	.has_aux	= ABE_TWL6040_LEFT | ABE_TWL6040_RIGHT,
+-	.has_afm	= ABE_TWL6040_LEFT | ABE_TWL6040_RIGHT,
+ 	.jack_detection	= 0,
+ 	.mclk_freq	= 38400000,
+ 
+@@ -328,16 +354,17 @@ static struct platform_device duovero_hdmi_audio_codec = {
+ static struct platform_device *duovero_devices[] __initdata = {
+ 	&duovero_hdmi_audio_codec,
+ 	&duovero_abe_audio,
+-	&omap_vwlan_device,
+ };
+ 
++
+ static void __init duovero_init(void)
+ {
+ 	int package = OMAP_PACKAGE_CBS;
++	omap4_mux_init(board_mux, NULL, package);
+ 
+-	omap4_mux_init(NULL, NULL, package);
+ 	duovero_i2c_init();
+ 	platform_add_devices(duovero_devices, ARRAY_SIZE(duovero_devices));
++	platform_device_register(&omap_vwlan_device);
+ 	omap_serial_init();
+ 	omap_sdrc_init(NULL, NULL);
+ 	omap4_twl6030_hsmmc_init(mmc);
+diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
+index d4619e2..438eeda 100644
+--- a/drivers/mmc/core/sdio.c
++++ b/drivers/mmc/core/sdio.c
+@@ -1053,11 +1053,13 @@ int mmc_attach_sdio(struct mmc_host *host)
+ 	BUG_ON(!host);
+ 	WARN_ON(!host->claimed);
+ 
++        printk(KERN_ERR "OCR: %x\n", ocr);
+ 	err = mmc_send_io_op_cond(host, 0, &ocr);
+ 	if (err)
+ 		return err;
+ 
+ 	mmc_attach_bus(host, &mmc_sdio_ops);
++        printk(KERN_ERR "host->ocr_avail_sdio: %x\n", host->ocr_avail_sdio);
+ 	if (host->ocr_avail_sdio)
+ 		host->ocr_avail = host->ocr_avail_sdio;
+ 
+@@ -1073,6 +1075,7 @@ int mmc_attach_sdio(struct mmc_host *host)
+ 	}
+ 
+ 	host->ocr = mmc_select_voltage(host, ocr);
++        printk("Host: %x\tOCR: %x\n", host->ocr, ocr);
+ 
+ 	/*
+ 	 * Can we support the voltage(s) of the card(s)?
+-- 
+1.7.10.4
+

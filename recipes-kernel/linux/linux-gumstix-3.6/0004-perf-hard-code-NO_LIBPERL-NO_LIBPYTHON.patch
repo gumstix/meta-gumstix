@@ -1,0 +1,63 @@
+From 84145c23ab944411e6e22d2e7acde69d7b42050b Mon Sep 17 00:00:00 2001
+From: Steve Sakoman <steve@sakoman.com>
+Date: Fri, 16 Nov 2012 20:14:11 -0800
+Subject: [PATCH 04/10] perf: hard-code NO_LIBPERL/NO_LIBPYTHON
+
+Based on a similar patch from Bruce Ashfield
+
+ExtUtils::Embed ccopts is getting the host's -I/usr/local/include and
+using it to compile perf, which results in a compilation error that
+started appearing just recently.
+
+This turns the code that makes use of ExtUtils::Embed off and simply
+hard-codes NO_LIBPERL.
+
+It does the same for LIBPYTHON while we're at it, since it probably
+suffers from a similar underlying problem and just by chance hasn't
+broken anything yet.
+---
+ tools/perf/Makefile |   27 +++------------------------
+ 1 file changed, 3 insertions(+), 24 deletions(-)
+
+diff --git a/tools/perf/Makefile b/tools/perf/Makefile
+index 35655c3..0320373 100644
+--- a/tools/perf/Makefile
++++ b/tools/perf/Makefile
+@@ -544,31 +544,10 @@ else
+ 	endif
+ endif
+ 
+-ifdef NO_LIBPERL
+-	BASIC_CFLAGS += -DNO_LIBPERL
+-else
+-       PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+-       PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+-       PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+-	PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+-	FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+-
+-	ifneq ($(call try-cc,$(SOURCE_PERL_EMBED),$(FLAGS_PERL_EMBED)),y)
+-		BASIC_CFLAGS += -DNO_LIBPERL
+-	else
+-               ALL_LDFLAGS += $(PERL_EMBED_LDFLAGS)
+-               EXTLIBS += $(PERL_EMBED_LIBADD)
+-		LIB_OBJS += $(OUTPUT)util/scripting-engines/trace-event-perl.o
+-		LIB_OBJS += $(OUTPUT)scripts/perl/Perf-Trace-Util/Context.o
+-	endif
+-endif
++BASIC_CFLAGS += -DNO_LIBPERL
+ 
+-disable-python = $(eval $(disable-python_code))
+-define disable-python_code
+-  BASIC_CFLAGS += -DNO_LIBPYTHON
+-  $(if $(1),$(warning No $(1) was found))
+-  $(warning Python support won't be built)
+-endef
++BASIC_CFLAGS += -DNO_LIBPYTHON
++NO_LIBPYTHON=1
+ 
+ override PYTHON := \
+   $(call get-executable-or-default,PYTHON,python)
+-- 
+1.7.10.4
+

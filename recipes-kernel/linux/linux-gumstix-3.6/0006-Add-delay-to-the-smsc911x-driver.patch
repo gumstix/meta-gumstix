@@ -1,0 +1,28 @@
+From 74b9eebfb5d0bbb0d1378b97fba99cf8afef8b53 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Tue, 26 Feb 2013 12:20:03 -0800
+Subject: [PATCH 06/10] Add delay to the smsc911x driver
+
+---
+ drivers/net/ethernet/smsc/smsc911x.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/smsc/smsc911x.c b/drivers/net/ethernet/smsc/smsc911x.c
+index 69034e4..11bc24e 100644
+--- a/drivers/net/ethernet/smsc/smsc911x.c
++++ b/drivers/net/ethernet/smsc/smsc911x.c
+@@ -528,10 +528,8 @@ static int smsc911x_mii_read(struct mii_bus *bus, int phyaddr, int regidx)
+ 	spin_lock_irqsave(&pdata->mac_lock, flags);
+ 
+ 	/* Confirm MII not busy */
+-	if (unlikely(smsc911x_mac_read(pdata, MII_ACC) & MII_ACC_MII_BUSY_)) {
++	while (unlikely(smsc911x_mac_read(pdata, MII_ACC) & MII_ACC_MII_BUSY_)) {
+ 		SMSC_WARN(pdata, hw, "MII is busy in smsc911x_mii_read???");
+-		reg = -EIO;
+-		goto out;
+ 	}
+ 
+ 	/* Set the address, index & direction (read from PHY) */
+-- 
+1.7.10.4
+

@@ -1,0 +1,32 @@
+From 68c643a7d89350b294a01d4e03d8791093ff4bd2 Mon Sep 17 00:00:00 2001
+From: Steve Sakoman <steve@sakoman.com>
+Date: Thu, 4 Oct 2012 16:21:51 -0700
+Subject: [PATCH 02/10] HACK: temporary hack to use cold sw reset instead of
+ warm sw reset on OMAP4
+
+Current duovero protos do not warm reset properly
+---
+ arch/arm/mach-omap2/prminst44xx.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-omap2/prminst44xx.c b/arch/arm/mach-omap2/prminst44xx.c
+index c12320c..10418c9 100644
+--- a/arch/arm/mach-omap2/prminst44xx.c
++++ b/arch/arm/mach-omap2/prminst44xx.c
+@@ -166,10 +166,12 @@ void omap4_prminst_global_warm_sw_reset(void)
+ {
+ 	u32 v;
+ 
++	printk ("In omap4_prminst_global_warm_sw_reset\n");
++
+ 	v = omap4_prminst_read_inst_reg(OMAP4430_PRM_PARTITION,
+ 				    OMAP4430_PRM_DEVICE_INST,
+ 				    OMAP4_PRM_RSTCTRL_OFFSET);
+-	v |= OMAP4430_RST_GLOBAL_WARM_SW_MASK;
++	v |= OMAP4430_RST_GLOBAL_COLD_SW_MASK;
+ 	omap4_prminst_write_inst_reg(v, OMAP4430_PRM_PARTITION,
+ 				 OMAP4430_PRM_DEVICE_INST,
+ 				 OMAP4_PRM_RSTCTRL_OFFSET);
+-- 
+1.7.10.4
+

@@ -1,0 +1,36 @@
+From bbf4f0f05d4f7b954b258e2e5c3a2faccb34cc99 Mon Sep 17 00:00:00 2001
+From: Steve Sakoman <steve@sakoman.com>
+Date: Tue, 22 Jan 2013 15:16:14 -0800
+Subject: [PATCH 05/10] duovero: invert sense of card detect signal
+
+---
+ drivers/mfd/twl6030-irq.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/mfd/twl6030-irq.c b/drivers/mfd/twl6030-irq.c
+index b76902f..34f667f 100644
+--- a/drivers/mfd/twl6030-irq.c
++++ b/drivers/mfd/twl6030-irq.c
+@@ -31,6 +31,7 @@
+  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+  */
+ 
++#include <asm/mach-types.h>
+ #include <linux/init.h>
+ #include <linux/export.h>
+ #include <linux/interrupt.h>
+@@ -343,6 +344,11 @@ int twl6030_mmc_card_detect(struct device *dev, int slot)
+ 						TWL6030_MMCCTRL);
+ 	if (ret >= 0)
+ 		ret = read_reg & STS_MMC;
++
++	/* on duovero cd sense is inverted */
++	if (machine_is_duovero())
++		ret = (ret == 0) ? 1 : 0;
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL(twl6030_mmc_card_detect);
+-- 
+1.7.10.4
+
