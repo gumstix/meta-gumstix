@@ -1,25 +1,10 @@
-Backport patch required to allow mt9v032 module to be unloaded if
-the camera is not installed.
+From 00b191d2888812b36c8134a99af00cb821c47f97 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Sun, 25 Aug 2013 16:38:16 -0700
+Subject: [PATCH 32/35] Backport patch required to allow mt9v032 module to be
+ unloaded if the camera is not installed.
 
 Upstream-Status: Backport [317efce991620adc589b3005b9baed433dcb2a56]
-Signed-off-by: Peter A. Bigot <pab@pabigot.com>
-
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Date: Sat, 24 Nov 2012 21:35:48 -0300
-Subject: [PATCH 33/33] v4l: Reset subdev v4l2_dev field to NULL if
- registration fails
-
-When subdev registration fails the subdev v4l2_dev field is left to a
-non-NULL value. Later calls to v4l2_device_unregister_subdev() will
-consider the subdev as registered and will module_put() the subdev
-module without any matching module_get().
-Fix this by setting the subdev v4l2_dev field to NULL in
-v4l2_device_register_subdev() when the function fails.
-
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: stable@vger.kernel.org
-Acked-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@redhat.com>
 ---
  drivers/media/video/v4l2-device.c |   30 ++++++++++++++----------------
  1 file changed, 14 insertions(+), 16 deletions(-)
@@ -82,5 +67,5 @@ index 1f203b8..683ae99 100644
  EXPORT_SYMBOL_GPL(v4l2_device_register_subdev);
  
 -- 
-1.7.9.5
+1.7.10.4
 

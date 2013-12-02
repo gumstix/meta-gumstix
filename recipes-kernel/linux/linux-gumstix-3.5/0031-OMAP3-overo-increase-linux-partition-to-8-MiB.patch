@@ -1,7 +1,7 @@
-From f9921c6a782e18c0efd0d70f782921a706e9ebd0 Mon Sep 17 00:00:00 2001
+From 4cfaa631223804384dae60aa662abfc727a2f296 Mon Sep 17 00:00:00 2001
 From: "Peter A. Bigot" <pab@pabigot.com>
 Date: Fri, 16 Aug 2013 12:38:09 -0500
-Subject: [PATCH 32/32] OMAP3: overo: increase linux partition to 8 MiB
+Subject: [PATCH 31/35] OMAP3: overo: increase linux partition to 8 MiB
 
 Linux kernel at version 3.5 is about 3.5 MiB; test kernels for 3.10 exceed 4
 MiB.  Prepare for future upgrades by increasing the NAND partition now.
@@ -31,6 +31,6 @@ index 055e59e..460ae96 100644
  		.size           = MTDPART_SIZ_FULL,
  	},
  };
---
-1.7.9.5
+-- 
+1.7.10.4
 

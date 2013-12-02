@@ -10,7 +10,7 @@ BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 # Patches for all releases in linux-3.5.y but PV specifies upstream base.
 # Patches at: git://github.com/gumstix/linux.git;branch=omap-3.5
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.5:"
-PR = "r2"
+PR = "r3"
 
 S = "${WORKDIR}/git"
 
@@ -47,13 +47,11 @@ SRC_URI = " \
     file://0027-ARM-OMAP-USB-Fixup-ehci_hcd_omap_probe-error-path.patch \
     file://0028-ARM-OMAP-USB-Fix-omap3xxx-EHCI-regression-caused-by-.patch \
     file://0030-Fix-sprz319-erratum-2.1.patch \
-    file://0031-OMAP2-3-clock-fix-sprz319-erratum-2.1.patch \
-    file://0032-OMAP3-overo-increase-linux-partition-to-8-MiB.patch \
-    file://0033-v4l-Reset-subdev-v4l2_dev-field-to-NULL-if-registrat.patch \
+    file://0031-OMAP3-overo-increase-linux-partition-to-8-MiB.patch \
+    file://0032-Backport-patch-required-to-allow-mt9v032-module-to-b.patch \
+    file://0033-ARM-7668-1-fix-memset-related-crashes-caused-by-rece.patch \
+    file://0034-ARM-7670-1-fix-the-memset-fix.patch \
+    file://0035-OMAP2-3-clock-fix-sprz319-erratum-2.1.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
-
-# Patches applied upstream since v3.5:
-# file://0029-drivers-rtc-rtc-twl.c-ensure-all-interrupts-are-disa.patch
-#   superseded by 1a63a2a60287396a16c43c844913f59e01e9e0ce at 3.5.5

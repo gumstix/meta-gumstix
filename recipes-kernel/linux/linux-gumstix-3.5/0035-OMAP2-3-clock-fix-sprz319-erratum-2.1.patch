@@ -1,7 +1,7 @@
-From e61a4af8bcca71e1d24f92b09344715c878ebe59 Mon Sep 17 00:00:00 2001
+From 5c5f68351db6dac00ae2e8e79240e18ca4808b9a Mon Sep 17 00:00:00 2001
 From: "Peter A. Bigot" <pab@pabigot.com>
 Date: Wed, 14 Aug 2013 17:12:49 -0500
-Subject: [PATCH 31/31] OMAP2/3 clock: fix sprz319 erratum 2.1
+Subject: [PATCH 35/35] OMAP2/3 clock: fix sprz319 erratum 2.1
 
 The original patch misinterprets the tables; the N value is the divide value
 minus one, while the M value is correct as given.
@@ -35,5 +35,5 @@ index 6b611e1..600e218 100644
  
  	sys_clk = clk_get(NULL, "sys_ck");
 -- 
-1.7.9.5
+1.7.10.4
 
