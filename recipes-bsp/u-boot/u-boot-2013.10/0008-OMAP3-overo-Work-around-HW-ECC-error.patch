@@ -1,24 +1,20 @@
-From dca9cbf13ff5b92f8729e28775d2ebad6383e04d Mon Sep 17 00:00:00 2001
+From 2806cd7aafc1e3d338a68b230a6e48cc165ee26b Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 6 Sep 2013 19:08:36 -0700
-Subject: [PATCH 09/10] OMAP3: overo: Work around HW ECC error.
+Subject: [PATCH 8/8] OMAP3: overo: Work around HW ECC error.
 
 This is a workaround to disable subpage reads when the
 ECC mode is not NAND_ECC_SOFT as discussed:
 http://u-boot.10912.n7.nabble.com/NAND-write-error-with-HW-ECC-on-OMAP3-td162420.html
-
-Upstream-Status: Pending
-
-Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
- drivers/mtd/nand/nand_base.c | 2 ++
+ drivers/mtd/nand/nand_base.c |    2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/mtd/nand/nand_base.c b/drivers/mtd/nand/nand_base.c
-index 9e05cef..7c4cd45 100644
+index 1ce55fd..0762a19 100644
 --- a/drivers/mtd/nand/nand_base.c
 +++ b/drivers/mtd/nand/nand_base.c
-@@ -3344,6 +3344,8 @@ int nand_scan_tail(struct mtd_info *mtd)
+@@ -3354,6 +3354,8 @@ int nand_scan_tail(struct mtd_info *mtd)
  	/* Large page NAND with SOFT_ECC should support subpage reads */
  	if ((chip->ecc.mode == NAND_ECC_SOFT) && (chip->page_shift > 9))
  		chip->options |= NAND_SUBPAGE_READ;
@@ -28,5 +24,5 @@ index 9e05cef..7c4cd45 100644
  	/* Fill in remaining MTD driver data */
  	mtd->type = MTD_NANDFLASH;
 -- 
-1.8.4
+1.7.10.4
 

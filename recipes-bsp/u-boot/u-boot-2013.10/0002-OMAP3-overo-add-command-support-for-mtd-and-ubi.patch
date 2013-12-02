@@ -1,24 +1,23 @@
-From d6c48df2eeda19b11ecdf0ef23d759d19e05ab36 Mon Sep 17 00:00:00 2001
-From: "Peter A. Bigot" <pab@pabigot.com>
-Date: Fri, 16 Aug 2013 11:16:39 -0500
-Subject: [PATCH 4/4] OMAP3: overo: add command support for mtd and ubi
+From bd30d7bfbaba02b31de655a760d500acb5b377ac Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 23 Oct 2013 10:54:08 -0700
+Subject: [PATCH 2/8] OMAP3: overo: add command support for mtd and ubi
 
 The NAND linux partition format default was changed from jffs2 to ubi in
 254973e6df0e48f1a72b67905185c774dcd9f394 but the corresponding commands were
 not enabled.
 
-Upstream-Status: Pending
-
 Signed-off-by: Peter A. Bigot <pab@pabigot.com>
+Tested-by: Ash Charles <ash@gumstix.com>
 ---
  include/configs/omap3_overo.h |   40 +++++++++++++++++++++++++++++++++++++---
  1 file changed, 37 insertions(+), 3 deletions(-)
 
 diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
-index baa7564..8f16983 100644
+index 6855f36..33a4b2d 100644
 --- a/include/configs/omap3_overo.h
 +++ b/include/configs/omap3_overo.h
-@@ -54,9 +54,11 @@
+@@ -43,9 +43,11 @@
  /*
   * Size of malloc() pool
   */
@@ -33,7 +32,7 @@ index baa7564..8f16983 100644
  
  /*
   * Hardware drivers
-@@ -108,6 +110,37 @@
+@@ -97,6 +99,37 @@
  #undef CONFIG_CMD_NFS		/* NFS support			*/
  #define CONFIG_CMD_NET		/* bootp, tftpboot, rarpboot	*/
  
@@ -71,7 +70,7 @@ index baa7564..8f16983 100644
  #define CONFIG_SYS_NO_FLASH
  #define CONFIG_HARD_I2C
  #define CONFIG_SYS_I2C_SPEED		100000
-@@ -159,6 +192,7 @@
+@@ -148,6 +181,7 @@
  	"mmcrootfstype=ext3 rootwait\0" \
  	"nandroot=ubi0:rootfs ubi.mtd=4\0" \
  	"nandrootfstype=ubifs\0" \
@@ -80,5 +79,5 @@ index baa7564..8f16983 100644
  		"${optargs} " \
  		"mpurate=${mpurate} " \
 -- 
-1.7.9.5
+1.7.10.4
 

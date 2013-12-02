@@ -1,0 +1,625 @@
+From 411c8e846efc8ca07f13d0c5ea3cc08e07a5e3b5 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 23 Oct 2013 14:10:47 -0700
+Subject: [PATCH 6/8] omap4: duovero: Add DuoVero machine.
+
+This adds the Gumstix DuoVero machine.  This is a OMAP4430-based
+computer-on-module (COM aka SOM) that can be mounted on various
+expansion boards with different peripherals.
+
+Signed-off-by: Ash Charles <ash@gumstix.com>
+---
+ board/gumstix/duovero/Makefile           |   27 +++
+ board/gumstix/duovero/duovero.c          |  265 ++++++++++++++++++++++++++++++
+ board/gumstix/duovero/duovero_mux_data.h |  199 ++++++++++++++++++++++
+ boards.cfg                               |    1 +
+ include/configs/duovero.h                |   59 +++++++
+ include/configs/omap4_common.h           |    2 +
+ 6 files changed, 553 insertions(+)
+ create mode 100644 board/gumstix/duovero/Makefile
+ create mode 100644 board/gumstix/duovero/duovero.c
+ create mode 100644 board/gumstix/duovero/duovero_mux_data.h
+ create mode 100644 include/configs/duovero.h
+
+diff --git a/board/gumstix/duovero/Makefile b/board/gumstix/duovero/Makefile
+new file mode 100644
+index 0000000..c26139d
+--- /dev/null
++++ b/board/gumstix/duovero/Makefile
+@@ -0,0 +1,27 @@
++#
++# (C) Copyright 2000, 2001, 2002
++# Wolfgang Denk, DENX Software Engineering, wd@denx.de.
++#
++# SPDX-License-Identifier:      GPL-2.0+
++#
++
++include $(TOPDIR)/config.mk
++
++LIB	= $(obj)lib$(BOARD).o
++
++COBJS	:= duovero.o
++
++SRCS	:= $(COBJS:.o=.c)
++OBJS	:= $(addprefix $(obj),$(COBJS))
++
++$(LIB):	$(obj).depend $(OBJS)
++	$(call cmd_link_o_target, $(OBJS))
++
++#########################################################################
++
++# defines $(obj).depend target
++include $(SRCTREE)/rules.mk
++
++sinclude $(obj).depend
++
++#########################################################################
+diff --git a/board/gumstix/duovero/duovero.c b/board/gumstix/duovero/duovero.c
+new file mode 100644
+index 0000000..fd391fc
+--- /dev/null
++++ b/board/gumstix/duovero/duovero.c
+@@ -0,0 +1,265 @@
++/*
++ * (C) Copyright 2013
++ * Gumstix Inc. <www.gumstix.com>
++ * Maintainer: Ash Charles  <ash@gumstix.com>
++ *
++ * SPDX-License-Identifier:     GPL-2.0+
++ */
++#include <common.h>
++#include <asm/arch/sys_proto.h>
++#include <asm/arch/mmc_host_def.h>
++#include <twl6030.h>
++#include <asm/emif.h>
++#include <asm/arch/clock.h>
++#include <asm/arch/gpio.h>
++#include <asm/gpio.h>
++
++#include "duovero_mux_data.h"
++
++#define WIFI_EN	43
++
++#if defined(CONFIG_CMD_NET)
++#define SMSC_NRESET	45
++static void setup_net_chip(void);
++#endif
++
++#ifdef CONFIG_USB_EHCI
++#include <usb.h>
++#include <asm/arch/ehci.h>
++#include <asm/ehci-omap.h>
++#endif
++
++DECLARE_GLOBAL_DATA_PTR;
++
++const struct omap_sysinfo sysinfo = {
++	"Board: duovero\n"
++};
++
++struct omap4_scrm_regs *const scrm = (struct omap4_scrm_regs *)0x4a30a000;
++
++/**
++ * @brief board_init
++ *
++ * @return 0
++ */
++int board_init(void)
++{
++	gpmc_init();
++
++	gd->bd->bi_arch_number = MACH_TYPE_OMAP4_DUOVERO;
++	gd->bd->bi_boot_params = (0x80000000 + 0x100); /* boot param addr */
++
++	return 0;
++}
++
++/**
++ * @brief misc_init_r - Configure board specific configurations
++ * such as power configurations, ethernet initialization as phase2 of
++ * boot sequence
++ *
++ * @return 0
++ */
++int misc_init_r(void)
++{
++	int ret = 0;
++	u8 val;
++
++	/* wifi setup: first enable 32Khz clock from 6030 pmic */
++	val = 0xe1;
++	ret = i2c_write(TWL6030_CHIP_PM, 0xbe, 1, &val, 1);
++	if (ret)
++		printf("Failed to enable 32Khz clock to wifi module\n");
++
++	/* then setup WIFI_EN as an output pin and send reset pulse */
++	if (!gpio_request(WIFI_EN, "")) {
++		gpio_direction_output(WIFI_EN, 0);
++		gpio_set_value(WIFI_EN, 1);
++		udelay(1);
++		gpio_set_value(WIFI_EN, 0);
++		udelay(1);
++		gpio_set_value(WIFI_EN, 1);
++	}
++
++#if defined(CONFIG_CMD_NET)
++	setup_net_chip();
++#endif
++	return 0;
++}
++
++void set_muxconf_regs_essential(void)
++{
++	do_set_mux((*ctrl)->control_padconf_core_base,
++		   core_padconf_array_essential,
++		   sizeof(core_padconf_array_essential) /
++		   sizeof(struct pad_conf_entry));
++
++	do_set_mux((*ctrl)->control_padconf_wkup_base,
++		   wkup_padconf_array_essential,
++		   sizeof(wkup_padconf_array_essential) /
++		   sizeof(struct pad_conf_entry));
++}
++
++void set_muxconf_regs_non_essential(void)
++{
++	do_set_mux((*ctrl)->control_padconf_core_base,
++		   core_padconf_array_non_essential,
++		   sizeof(core_padconf_array_non_essential) /
++		   sizeof(struct pad_conf_entry));
++
++	do_set_mux((*ctrl)->control_padconf_wkup_base,
++		   wkup_padconf_array_non_essential,
++		   sizeof(wkup_padconf_array_non_essential) /
++		   sizeof(struct pad_conf_entry));
++}
++
++#if !defined(CONFIG_SPL_BUILD) && defined(CONFIG_GENERIC_MMC)
++int board_mmc_init(bd_t *bis)
++{
++	return omap_mmc_init(0, 0, 0, -1, -1);
++}
++#endif
++
++
++#if defined(CONFIG_CMD_NET)
++
++#define GPMC_SIZE_16M	0xF
++#define GPMC_BASEADDR_MASK	0x3F
++#define GPMC_CS_ENABLE		0x1
++
++void enable_gpmc_cs_config(const u32 *gpmc_config, struct gpmc_cs *cs, u32 base,
++			u32 size)
++{
++	writel(0, &cs->config7);
++	sdelay(1000);
++	/* Delay for settling */
++	writel(gpmc_config[0], &cs->config1);
++	writel(gpmc_config[1], &cs->config2);
++	writel(gpmc_config[2], &cs->config3);
++	writel(gpmc_config[3], &cs->config4);
++	writel(gpmc_config[4], &cs->config5);
++	writel(gpmc_config[5], &cs->config6);
++
++	/*
++	 * Enable the config.  size is the CS size and goes in
++	 * bits 11:8.  We set bit 6 to enable this CS and the base
++	 * address goes into bits 5:0.
++	 */
++	writel((size << 8) | (GPMC_CS_ENABLE << 6) |
++				 ((base >> 24) & GPMC_BASEADDR_MASK),
++				 &cs->config7);
++
++	sdelay(2000);
++}
++
++/* GPMC CS configuration for an SMSC LAN9221 ethernet controller */
++#define NET_LAN9221_GPMC_CONFIG1    0x2a001203
++#define NET_LAN9221_GPMC_CONFIG2    0x000a0a02
++#define NET_LAN9221_GPMC_CONFIG3    0x00020200
++#define NET_LAN9221_GPMC_CONFIG4    0x0a030a03
++#define NET_LAN9221_GPMC_CONFIG5    0x000a0a0a
++#define NET_LAN9221_GPMC_CONFIG6    0x8a070707
++#define NET_LAN9221_GPMC_CONFIG7    0x00000f6c
++
++/* GPMC definitions for LAN9221 chips on expansion boards */
++static const u32 gpmc_lan_config[] = {
++    NET_LAN9221_GPMC_CONFIG1,
++    NET_LAN9221_GPMC_CONFIG2,
++    NET_LAN9221_GPMC_CONFIG3,
++    NET_LAN9221_GPMC_CONFIG4,
++    NET_LAN9221_GPMC_CONFIG5,
++    NET_LAN9221_GPMC_CONFIG6,
++    /*CONFIG7- computed as params */
++};
++
++/*
++ * Routine: setup_net_chip
++ * Description: Setting up the configuration GPMC registers specific to the
++ *	      Ethernet hardware.
++ */
++static void setup_net_chip(void)
++{
++	enable_gpmc_cs_config(gpmc_lan_config, &gpmc_cfg->cs[5], 0x2C000000,
++			GPMC_SIZE_16M);
++
++	/* Make GPIO SMSC_NRESET as output pin and send reset pulse */
++	if (!gpio_request(SMSC_NRESET, "")) {
++		gpio_direction_output(SMSC_NRESET, 0);
++		gpio_set_value(SMSC_NRESET, 1);
++		udelay(1);
++		gpio_set_value(SMSC_NRESET, 0);
++		udelay(1);
++		gpio_set_value(SMSC_NRESET, 1);
++	}
++}
++#endif
++
++int board_eth_init(bd_t *bis)
++{
++	int rc = 0;
++#ifdef CONFIG_SMC911X
++	rc = smc911x_initialize(0, CONFIG_SMC911X_BASE);
++#endif
++	return rc;
++}
++
++#ifdef CONFIG_USB_EHCI
++
++static struct omap_usbhs_board_data usbhs_bdata = {
++	.port_mode[0] = OMAP_EHCI_PORT_MODE_PHY,
++	.port_mode[1] = OMAP_USBHS_PORT_MODE_UNUSED,
++	.port_mode[2] = OMAP_USBHS_PORT_MODE_UNUSED,
++};
++
++int ehci_hcd_init(int index, struct ehci_hccr **hccr, struct ehci_hcor **hcor)
++{
++	int ret;
++	unsigned int utmi_clk;
++	u32 auxclk, altclksrc;
++
++	/* Now we can enable our port clocks */
++	utmi_clk = readl((void *)CM_L3INIT_HSUSBHOST_CLKCTRL);
++	utmi_clk |= HSUSBHOST_CLKCTRL_CLKSEL_UTMI_P1_MASK;
++	sr32((void *)CM_L3INIT_HSUSBHOST_CLKCTRL, 0, 32, utmi_clk);
++
++	auxclk = readl(&scrm->auxclk3);
++	/* Select sys_clk */
++	auxclk &= ~AUXCLK_SRCSELECT_MASK;
++	auxclk |=  AUXCLK_SRCSELECT_SYS_CLK << AUXCLK_SRCSELECT_SHIFT;
++	/* Set the divisor to 2 */
++	auxclk &= ~AUXCLK_CLKDIV_MASK;
++	auxclk |= AUXCLK_CLKDIV_2 << AUXCLK_CLKDIV_SHIFT;
++	/* Request auxilary clock #3 */
++	auxclk |= AUXCLK_ENABLE_MASK;
++	writel(auxclk, &scrm->auxclk3);
++
++	altclksrc = readl(&scrm->altclksrc);
++
++	/* Activate alternate system clock supplier */
++	altclksrc &= ~ALTCLKSRC_MODE_MASK;
++	altclksrc |= ALTCLKSRC_MODE_ACTIVE;
++
++	/* enable clocks */
++	altclksrc |= ALTCLKSRC_ENABLE_INT_MASK | ALTCLKSRC_ENABLE_EXT_MASK;
++
++	writel(altclksrc, &scrm->altclksrc);
++
++	ret = omap_ehci_hcd_init(&usbhs_bdata, hccr, hcor);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++int ehci_hcd_stop(int index)
++{
++	return omap_ehci_hcd_stop();
++}
++#endif
++
++/*
++ * get_board_rev() - get board revision
++ */
++u32 get_board_rev(void)
++{
++	return 0x20;
++}
+diff --git a/board/gumstix/duovero/duovero_mux_data.h b/board/gumstix/duovero/duovero_mux_data.h
+new file mode 100644
+index 0000000..2dff5f1
+--- /dev/null
++++ b/board/gumstix/duovero/duovero_mux_data.h
+@@ -0,0 +1,199 @@
++/*
++ * (C) Copyright 2012
++ * Gumstix Incorporated, <www.gumstix.com>
++ * Maintainer: Ash Charles <ash@gumstix.com>
++ *
++ * SPDX-License-Identifier:     GPL-2.0+
++ */
++#ifndef _DUOVERO_MUX_DATA_H_
++#define _DUOVERO_MUX_DATA_H_
++
++#include <asm/arch/mux_omap4.h>
++
++const struct pad_conf_entry core_padconf_array_essential[] = {
++	{SDMMC1_CLK, (PTU | OFF_EN | OFF_OUT_PTD | M0)},	 /* sdmmc1_clk */
++	{SDMMC1_CMD, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)}, /* sdmmc1_cmd */
++	{SDMMC1_DAT0, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)}, /* sdmmc1_dat0 */
++	{SDMMC1_DAT1, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)}, /* sdmmc1_dat1 */
++	{SDMMC1_DAT2, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)}, /* sdmmc1_dat2 */
++	{SDMMC1_DAT3, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)}, /* sdmmc1_dat3 */
++	{I2C1_SCL, (PTU | IEN | M0)},				/* i2c1_scl */
++	{I2C1_SDA, (PTU | IEN | M0)},				/* i2c1_sda */
++	{I2C2_SCL, (PTU | IEN | M0)},				/* i2c2_scl */
++	{I2C2_SDA, (PTU | IEN | M0)},				/* i2c2_sda */
++	{I2C3_SCL, (PTU | IEN | M0)},				/* i2c3_scl */
++	{I2C3_SDA, (PTU | IEN | M0)},				/* i2c3_sda */
++	{I2C4_SCL, (PTU | IEN | M0)},				/* i2c4_scl */
++	{I2C4_SDA, (PTU | IEN | M0)},				/* i2c4_sda */
++	{UART3_CTS_RCTX, (PTU | IEN | M0)},			/* uart3_tx */
++	{UART3_RTS_SD, (M0)},					/* uart3_rts_sd */
++	{UART3_RX_IRRX, (PTU | IEN | M0)},			/* uart3_rx */
++	{UART3_TX_IRTX, (M0)}					/* uart3_tx */
++};
++
++const struct pad_conf_entry wkup_padconf_array_essential[] = {
++	{PAD1_SR_SCL, (PTU | IEN | M0)}, 			/* sr_scl */
++	{PAD0_SR_SDA, (PTU | IEN | M0)}, 			/* sr_sda */
++	{PAD1_SYS_32K, (IEN | M0)}	 			/* sys_32k */
++};
++
++const struct pad_conf_entry core_padconf_array_non_essential[] = {
++	{GPMC_AD0, (PTU | IEN | M0)},				/* gpmc_ad0 */
++	{GPMC_AD1, (PTU | IEN | M0)},				/* gpmc_ad1 */
++	{GPMC_AD2, (PTU | IEN | M0)},				/* gpmc_ad2 */
++	{GPMC_AD3, (PTU | IEN | M0)},				/* gpmc_ad3 */
++	{GPMC_AD4, (PTU | IEN | M0)},				/* gpmc_ad4 */
++	{GPMC_AD5, (PTU | IEN | M0)},				/* gpmc_ad5 */
++	{GPMC_AD6, (PTU | IEN | M0)},				/* gpmc_ad6 */
++	{GPMC_AD7, (PTU | IEN | M0)},				/* gpmc_ad7 */
++	{GPMC_AD8, (PTU | IEN | M0)},				/* gpmc_ad8 */
++	{GPMC_AD9, (PTU | IEN | M0)},				/* gpmc_ad9 */
++	{GPMC_AD10, (PTU | IEN | M0)},				/* gpmc_ad10 */
++	{GPMC_AD11, (PTU | IEN | M0)},				/* gpmc_ad11 */
++	{GPMC_AD12, (PTU | IEN | M0)},				/* gpmc_ad12 */
++	{GPMC_AD13, (PTU | IEN | M0)},				/* gpmc_ad13 */
++	{GPMC_AD14, (PTU | IEN | M0)},				/* gpmc_ad14 */
++	{GPMC_AD15, (PTU | IEN | M0)},				/* gpmc_ad15 */
++	{GPMC_A16, (PTU | IEN | M3)},				/* gpio_40 */
++	{GPMC_A17, (PTU | IEN | M3)},				/* gpio_41 - hdmi_ls_oe */
++	{GPMC_A18, (PTU | IEN | M3)},				/* gpio_42 */
++	{GPMC_A19, (PTU | IEN | M3)},				/* gpio_43 - wifi_en */
++	{GPMC_A20, (PTU | IEN | M3)},				/* gpio_44 - eth_irq */
++	{GPMC_A21, (PTU | IEN | M3)},				/* gpio_45 - eth_nreset */
++	{GPMC_A22, (PTU | IEN | M3)},				/* gpio_46 - eth_pme */
++	{GPMC_A23, (PTU | IEN | M3)},				/* gpio_47 */
++	{GPMC_A24, (PTU | IEN | M3)},				/* gpio_48 - eth_mdix */
++	{GPMC_A25, (PTU | IEN | M3)},				/* gpio_49 - bt_wakeup */
++	{GPMC_NCS0, (PTU | M0)},				/* gpmc_ncs0 */
++	{GPMC_NCS1, (PTU | M0)},				/* gpmc_ncs1 */
++	{GPMC_NCS2, (PTU | M0)},				/* gpmc_ncs2 */
++	{GPMC_NCS3, (PTU | IEN | M3)},				/* gpio_53  */
++	{C2C_DATA12, (PTU | M0)},				/* gpmc_ncs4 */
++	{C2C_DATA13, (PTU | M0)},				/* gpmc_ncs5 - eth_cs */
++	{GPMC_NWP, (PTU | IEN | M0)},				/* gpmc_nwp */
++	{GPMC_CLK, (PTU | IEN | M0)},				/* gpmc_clk */
++	{GPMC_NADV_ALE, (PTU | M0)},				/* gpmc_nadv_ale */
++	{GPMC_NBE0_CLE, (PTU | M0)},				/* gpmc_nbe0_cle */
++	{GPMC_NBE1, (PTU | M0)},				/* gpmc_nbe1 */
++	{GPMC_WAIT0, (PTU | IEN | M0)},				/* gpmc_wait0 */
++	{GPMC_WAIT1,  (PTU | IEN | M0)},			/* gpio_62 - usbh_nreset */
++	{GPMC_NOE, (PTU | M0)},					/* gpmc_noe */
++	{GPMC_NWE, (PTU | M0)},					/* gpmc_nwe */
++	{HDMI_HPD, (PTD | IEN | M3)},				/* gpio_63 - hdmi_hpd */
++	{HDMI_CEC, (PTU | IEN | M0)},				/* hdmi_cec */
++	{HDMI_DDC_SCL, (M0)},					/* hdmi_ddc_scl */
++	{HDMI_DDC_SDA, (IEN | M0)},				/* hdmi_ddc_sda */
++	{CSI21_DX0, (IEN | M0)},				/* csi21_dx0 */
++	{CSI21_DY0, (IEN | M0)},				/* csi21_dy0 */
++	{CSI21_DX1, (IEN | M0)},				/* csi21_dx1 */
++	{CSI21_DY1, (IEN | M0)},				/* csi21_dy1 */
++	{CSI21_DX2, (IEN | M0)},				/* csi21_dx2 */
++	{CSI21_DY2, (IEN | M0)},				/* csi21_dy2 */
++	{CSI21_DX3, (IEN | M0)},				/* csi21_dx3 */
++	{CSI21_DY3, (IEN | M0)},				/* csi21_dy3 */
++	{CSI21_DX4, (IEN | M0)},				/* csi21_dx4 */
++	{CSI21_DY4, (IEN | M0)},				/* csi21_dy4 */
++	{CSI22_DX0, (IEN | M0)},				/* csi22_dx0 */
++	{CSI22_DY0, (IEN | M0)},				/* csi22_dy0 */
++	{CSI22_DX1, (IEN | M0)},				/* csi22_dx1 */
++	{CSI22_DY1, (IEN | M0)},				/* csi22_dy1 */
++	{USBB1_ULPITLL_CLK, (PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M4)},/* usbb1_ulpiphy_clk */
++	{USBB1_ULPITLL_STP, (OFF_EN | OFF_OUT_PTD | M4)},		/* usbb1_ulpiphy_stp */
++	{USBB1_ULPITLL_DIR, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dir */
++	{USBB1_ULPITLL_NXT, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_nxt */
++	{USBB1_ULPITLL_DAT0, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dat0 */
++	{USBB1_ULPITLL_DAT1, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dat1 */
++	{USBB1_ULPITLL_DAT2, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dat2 */
++	{USBB1_ULPITLL_DAT3, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dat3 */
++	{USBB1_ULPITLL_DAT4, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dat4 */
++	{USBB1_ULPITLL_DAT5, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dat5 */
++	{USBB1_ULPITLL_DAT6, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dat6 */
++	{USBB1_ULPITLL_DAT7, (IEN | OFF_EN | OFF_PD | OFF_IN | M4)},	/* usbb1_ulpiphy_dat7 */
++	{USBB1_HSIC_DATA, (PTU | IEN | M3)},				/* gpio_96 - usbh_cpen */
++	{USBB1_HSIC_STROBE, (PTU | IEN | M3)},				/* gpio_97 - usbh_reset */
++	{ABE_MCBSP2_CLKX, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* abe_mcbsp2_clkx */
++	{ABE_MCBSP2_DR, (IEN | OFF_EN | OFF_OUT_PTD | M0)},		/* abe_mcbsp2_dr */
++	{ABE_MCBSP2_DX, (OFF_EN | OFF_OUT_PTD | M0)},			/* abe_mcbsp2_dx */
++	{ABE_MCBSP2_FSX, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* abe_mcbsp2_fsx */
++	{ABE_PDM_UL_DATA, (PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* abe_pdm_ul_data */
++	{ABE_PDM_DL_DATA, (PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* abe_pdm_dl_data */
++	{ABE_PDM_FRAME, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* abe_pdm_frame */
++	{ABE_PDM_LB_CLK, (PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* abe_pdm_lb_clk */
++	{ABE_CLKS, (PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* abe_clks */
++	{ABE_DMIC_CLK1, (M0)},						/* abe_dmic_clk1 */
++	{ABE_DMIC_DIN1, (IEN | M0)},					/* abe_dmic_din1 */
++	{ABE_DMIC_DIN2, (IEN | M0)},					/* abe_dmic_din2 */
++	{ABE_DMIC_DIN3, (IEN | M0)},					/* abe_dmic_din3 */
++	{UART2_CTS, (PTU | IEN | M0)},					/* uart2_cts */
++	{UART2_RTS, (M0)},						/* uart2_rts */
++	{UART2_RX, (PTU | IEN | M0)},					/* uart2_rx */
++	{UART2_TX, (M0)},						/* uart2_tx */
++	{HDQ_SIO, (M0)},						/* hdq-sio */
++	{MCSPI1_CLK, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},		/* mcspi1_clk */
++	{MCSPI1_SOMI, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},		/* mcspi1_somi */
++	{MCSPI1_SIMO, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},		/* mcspi1_simo */
++	{MCSPI1_CS0, (PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* mcspi1_cs0 */
++	{MCSPI1_CS1, (PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* mcspi1_cs1 */
++	{SDMMC5_CLK, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* sdmmc5_clk */
++	{SDMMC5_CMD, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* sdmmc5_cmd */
++	{SDMMC5_DAT0, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* sdmmc5_dat0 */
++	{SDMMC5_DAT1, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* sdmmc5_dat1 */
++	{SDMMC5_DAT2, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* sdmmc5_dat2 */
++	{SDMMC5_DAT3, (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* sdmmc5_dat3 */
++	{MCSPI4_CLK, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},		/* mcspi4_clk */
++	{MCSPI4_SIMO, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},		/* mcspi4_simo */
++	{MCSPI4_SOMI, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},		/* mcspi4_somi */
++	{MCSPI4_CS0, (PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0)},	/* mcspi4_cs0 */
++	{UART4_RX, (IEN | PTU | M0)},					/* uart4_rx */
++	{UART4_TX, (M0)},						/* uart4_tx */
++	{USBB2_ULPITLL_CLK, (PTU | IEN | M3)},				/* gpio_157 - start_adc */
++	{USBB2_ULPITLL_STP, (PTU | IEN | M3)},				/* gpio_158 - spi_nirq */
++	{USBB2_ULPITLL_DIR, (PTU | IEN | M3)},				/* gpio_159 - bt_nreset */
++	{USBB2_ULPITLL_NXT, (PTU | IEN | M3)},				/* gpio_160 - audio_pwron*/
++	{USBB2_ULPITLL_DAT0, (PTU | IEN | M3)},				/* gpio_161 - bid_0 */
++	{USBB2_ULPITLL_DAT1, (PTU | IEN | M3)},				/* gpio_162 - bid_1 */
++	{USBB2_ULPITLL_DAT2, (PTU | IEN | M3)},				/* gpio_163 - bid_2 */
++	{USBB2_ULPITLL_DAT3, (PTU | IEN | M3)},				/* gpio_164 - bid_3 */
++	{USBB2_ULPITLL_DAT4, (PTU | IEN | M3)},				/* gpio_165 - bid_4 */
++	{USBB2_ULPITLL_DAT5, (PTU | IEN | M3)},				/* gpio_166 - ts_irq*/
++	{USBB2_ULPITLL_DAT6, (PTU | IEN | M3)},				/* gpio_167 - gps_pps */
++	{USBB2_ULPITLL_DAT7, (PTU | IEN | M3)},				/* gpio_168 */
++	{USBB2_HSIC_DATA, (PTU | IEN | M3)},				/* gpio_169 */
++	{USBB2_HSIC_STROBE, (PTU | IEN | M3)},				/* gpio_170 */
++	{UNIPRO_TX1, (PTU | IEN | M3)},					/* gpio_173 */
++	{USBA0_OTG_CE, (PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M0)},	/* usba0_otg_ce */
++	{USBA0_OTG_DP, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},		/* usba0_otg_dp */
++	{USBA0_OTG_DM, (IEN | OFF_EN | OFF_PD | OFF_IN | M0)},		/* usba0_otg_dm */
++	{SYS_NIRQ1, (PTU | IEN | M0)},					/* sys_nirq1 */
++	{SYS_NIRQ2, (PTU | IEN | M0)},					/* sys_nirq2 */
++	{SYS_BOOT0, (M0)},						/* sys_boot0 */
++	{SYS_BOOT1, (M0)},						/* sys_boot1 */
++	{SYS_BOOT2, (M0)},						/* sys_boot2 */
++	{SYS_BOOT3, (M0)},						/* sys_boot3 */
++	{SYS_BOOT4, (M0)},						/* sys_boot4 */
++	{SYS_BOOT5, (M0)},						/* sys_boot5 */
++	{DPM_EMU0, (IEN | M0)},						/* dpm_emu0 */
++	{DPM_EMU1, (IEN | M0)},						/* dpm_emu1 */
++	{DPM_EMU16, (PTU | IEN | M3)},					/* gpio_27 */
++	{DPM_EMU17, (PTU | IEN | M3)},					/* gpio_28 */
++	{DPM_EMU18, (PTU | IEN | M3)},					/* gpio_29 */
++	{DPM_EMU19, (PTU | IEN | M3)},					/* gpio_30 */
++};
++
++const struct pad_conf_entry wkup_padconf_array_non_essential[] = {
++	{PAD1_FREF_XTAL_IN, (M0)},					/* fref_xtal_in  */
++	{PAD0_FREF_SLICER_IN, (M0)},					/* fref_slicer_in */
++	{PAD1_FREF_CLK_IOREQ, (M0)},					/* fref_clk_ioreq */
++	{PAD0_FREF_CLK0_OUT, (M7)},					/* safe mode */
++	{PAD1_FREF_CLK3_REQ, M7},					/* safe mode */
++	{PAD0_FREF_CLK3_OUT, (M0)},					/* fref_clk3_out */
++	{PAD0_SYS_NRESPWRON, (M0)},					/* sys_nrespwron */
++	{PAD1_SYS_NRESWARM, (M0)},					/* sys_nreswarm */
++	{PAD0_SYS_PWR_REQ, (PTU | M0)},					/* sys_pwr_req */
++	{PAD1_SYS_PWRON_RESET, (M3)},					/* gpio_wk29 */
++	{PAD0_SYS_BOOT6, (M0)},						/* sys_boot6 */
++	{PAD1_SYS_BOOT7, (M0)},						/* sys_boot7 */
++};
++
++
++#endif /* _DUOVERO_MUX_DATA_H_ */
+diff --git a/boards.cfg b/boards.cfg
+index aa2ee64..34b1e8a 100644
+--- a/boards.cfg
++++ b/boards.cfg
+@@ -331,6 +331,7 @@ Active  arm         armv7          omap3       ti              evm
+ Active  arm         armv7          omap3       ti              evm                 omap3_evm_quick_nand                 -                                                                                                                                 -
+ Active  arm         armv7          omap3       ti              sdp3430             omap3_sdp3430                        -                                                                                                                                 Nishanth Menon <nm@ti.com>
+ Active  arm         armv7          omap3       timll           devkit8000          devkit8000                           -                                                                                                                                 Thomas Weber <weber@corscience.de>
++Active  arm         armv7          omap4       gumstix         duovero             duovero                              -                                                                                                                                 Ash Charles <ash@gumstix.com>
+ Active  arm         armv7          omap4       ti              panda               omap4_panda                          -                                                                                                                                 Sricharan R <r.sricharan@ti.com>
+ Active  arm         armv7          omap4       ti              sdp4430             omap4_sdp4430                        -                                                                                                                                 Sricharan R <r.sricharan@ti.com>
+ Active  arm         armv7          omap5       ti              dra7xx              dra7xx_evm                           -                                                                                                                                 Lokesh Vutla <lokeshvutla@ti.com>
+diff --git a/include/configs/duovero.h b/include/configs/duovero.h
+new file mode 100644
+index 0000000..2e83bad
+--- /dev/null
++++ b/include/configs/duovero.h
+@@ -0,0 +1,59 @@
++/*
++ * (C) Copyright: 2013
++ * Gumstix, Inc - http://www.gumstix.com
++ * Maintainer: Ash Charles  <ash@gumstix.com>
++ *
++ * Configuration settings for the Gumstix DuoVero board.
++ * See omap4_common.h for OMAP4 common part
++ *
++ * SPDX-License-Identifier:     GPL-2.0+
++ */
++
++#ifndef __CONFIG_DUOVERO_H
++#define __CONFIG_DUOVERO_H
++
++/*
++ * High Level Configuration Options
++ */
++#define CONFIG_DUOVERO		1
++#define MACH_TYPE_OMAP4_DUOVERO              4097    /* Until the next sync */
++#define CONFIG_MACH_TYPE                MACH_TYPE_OMAP4_DUOVERO
++
++#include <configs/omap4_common.h>
++
++#undef CONFIG_SYS_EMIF_PRECALCULATED_TIMING_REGS
++#define CONFIG_SYS_AUTOMATIC_SDRAM_DETECTION
++#define CONFIG_SYS_DEFAULT_LPDDR2_TIMINGS
++
++#define CONFIG_SYS_ENABLE_PADS_ALL
++
++#define V_OSCK			38400000	/* Clock output from T2 */
++#define V_SCLK                   V_OSCK
++
++#define CONFIG_ENV_IS_NOWHERE
++#define CONFIG_SYS_PROMPT		"duovero # "
++
++#define CONFIG_CMD_NET		/* bootp, tftpboot, rarpboot	*/
++#define CONFIG_CMD_DHCP
++
++#if defined(CONFIG_CMD_NET)
++#define CONFIG_SMC911X
++#define CONFIG_SMC911X_32_BIT
++#define CONFIG_SMC911X_BASE		0x2C000000
++#endif /* (CONFIG_CMD_NET) */
++
++/* USB UHH support options */
++#define CONFIG_CMD_USB
++#define CONFIG_USB_HOST
++#define CONFIG_USB_EHCI
++#define CONFIG_USB_EHCI_OMAP
++#define CONFIG_USB_STORAGE
++#define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS 3
++
++#define CONFIG_OMAP_EHCI_PHY1_RESET_GPIO 1
++#define CONFIG_OMAP_EHCI_PHY2_RESET_GPIO 62
++
++#define CONFIG_USB_ULPI
++#define CONFIG_USB_ULPI_VIEWPORT_OMAP
++
++#endif /* __CONFIG_DUOVERO_H */
+diff --git a/include/configs/omap4_common.h b/include/configs/omap4_common.h
+index e9f2383..b5485c0 100644
+--- a/include/configs/omap4_common.h
++++ b/include/configs/omap4_common.h
+@@ -167,6 +167,8 @@
+ 			"setenv fdtfile omap4-panda-a4.dtb; fi;" \
+ 		"if test $board_name = panda-es; then " \
+ 			"setenv fdtfile omap4-panda-es.dtb; fi;" \
++		"if test $board_name = duovero; then " \
++			"setenv fdtfile omap4-duovero.dtb; fi;" \
+ 		"if test $fdtfile = undefined; then " \
+ 			"echo WARNING: Could not determine device tree to use; fi; \0" \
+ 	"loadfdt=load mmc ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}\0" \
+-- 
+1.7.10.4
+
