@@ -1,0 +1,74 @@
+From afd5db4cbac375ad3016ff8782538bc1bed33502 Mon Sep 17 00:00:00 2001
+From: Steve Sakoman <steve@sakoman.com>
+Date: Thu, 8 Dec 2011 13:38:00 -0800
+Subject: [PATCH 25/48] omap: beagle: Don't register madc twice
+
+Specifying TWL_COMMON_PDATA_MADC is adequate, don't also add
+platform device
+
+Otherwise:
+
+------------[ cut here ]------------
+WARNING: at fs/sysfs/dir.c:481 sysfs_add_one+0x6c/0x8c()
+sysfs: cannot create duplicate filename '/bus/platform/devices/twl4030_madc_hwmon'
+Modules linked in:
+[<c0012b48>] (unwind_backtrace+0x0/0x11c) from [<c0038450>] (warn_slowpath_common+0x4c/0x64)
+[<c0038450>] (warn_slowpath_common+0x4c/0x64) from [<c00384e8>] (warn_slowpath_fmt+0x2c/0x3c)
+[<c00384e8>] (warn_slowpath_fmt+0x2c/0x3c) from [<c01043d4>] (sysfs_add_one+0x6c/0x8c)
+[<c01043d4>] (sysfs_add_one+0x6c/0x8c) from [<c0104b50>] (sysfs_do_create_link+0xec/0x1cc)
+[<c0104b50>] (sysfs_do_create_link+0xec/0x1cc) from [<c025577c>] (bus_add_device+0xd4/0x158)
+[<c025577c>] (bus_add_device+0xd4/0x158) from [<c0253e08>] (device_add+0x378/0x560)
+[<c0253e08>] (device_add+0x378/0x560) from [<c0257a40>] (platform_device_add+0x140/0x1a4)
+[<c0257a40>] (platform_device_add+0x140/0x1a4) from [<c0265624>] (add_numbered_child+0x144/0x1a4)
+[<c0265624>] (add_numbered_child+0x144/0x1a4) from [<c02657cc>] (add_children+0xc4/0x808)
+[<c02657cc>] (add_children+0xc4/0x808) from [<c040df88>] (twl_probe+0x390/0x418)
+[<c040df88>] (twl_probe+0x390/0x418) from [<c02dbb9c>] (i2c_device_probe+0xa0/0xd4)
+[<c02dbb9c>] (i2c_device_probe+0xa0/0xd4) from [<c02561dc>] (driver_probe_device+0x144/0x29c)
+[<c02561dc>] (driver_probe_device+0x144/0x29c) from [<c0254f9c>] (bus_for_each_drv+0x4c/0x84)
+[<c0254f9c>] (bus_for_each_drv+0x4c/0x84) from [<c0255f80>] (device_attach+0x74/0xa0)
+[<c0255f80>] (device_attach+0x74/0xa0) from [<c0255824>] (bus_probe_device+0x24/0x40)
+[<c0255824>] (bus_probe_device+0x24/0x40) from [<c0253e5c>] (device_add+0x3cc/0x560)
+[<c0253e5c>] (device_add+0x3cc/0x560) from [<c02dc5a8>] (i2c_new_device+0x10c/0x1b0)
+[<c02dc5a8>] (i2c_new_device+0x10c/0x1b0) from [<c02dca04>] (i2c_register_adapter+0x160/0x218)
+[<c02dca04>] (i2c_register_adapter+0x160/0x218) from [<c02dcbe4>] (i2c_add_numbered_adapter+0x9c/0xb8)
+[<c02dcbe4>] (i2c_add_numbered_adapter+0x9c/0xb8) from [<c04106fc>] (omap_i2c_probe+0x2b8/0x384)
+[<c04106fc>] (omap_i2c_probe+0x2b8/0x384) from [<c025741c>] (platform_drv_probe+0x14/0x18)
+[<c025741c>] (platform_drv_probe+0x14/0x18) from [<c02561dc>] (driver_probe_device+0x144/0x29c)
+[<c02561dc>] (driver_probe_device+0x144/0x29c) from [<c0256394>] (__driver_attach+0x60/0x84)
+[<c0256394>] (__driver_attach+0x60/0x84) from [<c025525c>] (bus_for_each_dev+0x4c/0x78)
+[<c025525c>] (bus_for_each_dev+0x4c/0x78) from [<c02559c4>] (bus_add_driver+0xc0/0x240)
+[<c02559c4>] (bus_add_driver+0xc0/0x240) from [<c02568c0>] (driver_register+0xa0/0x120)
+[<c02568c0>] (driver_register+0xa0/0x120) from [<c000863c>] (do_one_initcall+0x90/0x160)
+[<c000863c>] (do_one_initcall+0x90/0x160) from [<c05f47b4>] (kernel_init+0x78/0x11c)
+[<c05f47b4>] (kernel_init+0x78/0x11c) from [<c000e918>] (kernel_thread_exit+0x0/0x8)
+---[ end trace 1b75b31a2719ed1c ]---
+dummy 1-004a: can't add twl4030_madc_hwmon dev
+
+Signed-off-by: Steve Sakoman <steve@sakoman.com>
+---
+ arch/arm/mach-omap2/board-omap3beagle.c |    6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/arch/arm/mach-omap2/board-omap3beagle.c b/arch/arm/mach-omap2/board-omap3beagle.c
+index 6d17537..5dadbb5 100644
+--- a/arch/arm/mach-omap2/board-omap3beagle.c
++++ b/arch/arm/mach-omap2/board-omap3beagle.c
+@@ -634,15 +634,9 @@ static struct platform_device keys_gpio = {
+ 	},
+ };
+ 
+-static struct platform_device madc_hwmon = {
+-	.name	= "twl4030_madc_hwmon",
+-	.id	= -1,
+-};
+-
+ static struct platform_device *omap3_beagle_devices[] __initdata = {
+ 	&leds_gpio,
+ 	&keys_gpio,
+-	&madc_hwmon,
+ };
+ 
+ static const struct usbhs_omap_board_data usbhs_bdata __initconst = {
+-- 
+1.7.10.4
+

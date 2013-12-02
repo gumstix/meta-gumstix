@@ -1,0 +1,34 @@
+From 6eef52dc22f41daca782a3b2a2630bc24b6fc57a Mon Sep 17 00:00:00 2001
+From: Steve Sakoman <steve@sakoman.com>
+Date: Fri, 16 Dec 2011 06:09:01 -0800
+Subject: [PATCH 39/48] ARM: OMAP3: hwmod data: add the ES3+ MMC hwmods to the
+ 3517/3505 and the 36xx hwmod lists
+
+---
+ arch/arm/mach-omap2/omap_hwmod_3xxx_data.c |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/mach-omap2/omap_hwmod_3xxx_data.c b/arch/arm/mach-omap2/omap_hwmod_3xxx_data.c
+index 699cc0e..4b13baf 100644
+--- a/arch/arm/mach-omap2/omap_hwmod_3xxx_data.c
++++ b/arch/arm/mach-omap2/omap_hwmod_3xxx_data.c
+@@ -3343,12 +3343,16 @@ static __initdata struct omap_hwmod *omap36xx_hwmods[] = {
+ 	&omap36xx_sr2_hwmod,
+ 	&omap3xxx_usbhsotg_hwmod,
+ 	&omap3xxx_mailbox_hwmod,
++	&omap3xxx_es3plus_mmc1_hwmod,
++	&omap3xxx_es3plus_mmc2_hwmod,
+ 	NULL
+ };
+ 
+ static __initdata struct omap_hwmod *am35xx_hwmods[] = {
+ 	&omap3xxx_dss_core_hwmod, /* XXX ??? */
+ 	&am35xx_usbhsotg_hwmod,
++	&omap3xxx_es3plus_mmc1_hwmod,
++	&omap3xxx_es3plus_mmc2_hwmod,
+ 	NULL
+ };
+ 
+-- 
+1.7.10.4
+

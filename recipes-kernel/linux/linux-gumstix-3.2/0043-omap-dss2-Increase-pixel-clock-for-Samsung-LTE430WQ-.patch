@@ -1,0 +1,30 @@
+From 07492de0657a9f792c76483b125d3d53d5445d70 Mon Sep 17 00:00:00 2001
+From: Steve Sakoman <steve@sakoman.com>
+Date: Fri, 24 Feb 2012 16:04:19 -0800
+Subject: [PATCH 43/48] omap: dss2: Increase pixel clock for Samsung
+ LTE430WQ-F0C driver
+
+Current pixel clock of 9.2 Mhz interferes with touchscreen controller
+Increase pixel clock to 15 Mhx, which is reported to minimize interference
+
+Signed-off-by: Steve Sakoman <steve@sakoman.com>
+---
+ drivers/video/omap2/displays/panel-generic-dpi.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/video/omap2/displays/panel-generic-dpi.c b/drivers/video/omap2/displays/panel-generic-dpi.c
+index 519c47d..fd7769e 100644
+--- a/drivers/video/omap2/displays/panel-generic-dpi.c
++++ b/drivers/video/omap2/displays/panel-generic-dpi.c
+@@ -140,7 +140,7 @@ static struct panel_config generic_dpi_panels[] = {
+ 			.x_res		= 480,
+ 			.y_res		= 272,
+ 
+-			.pixel_clock	= 9200,
++			.pixel_clock	= 15000,
+ 
+ 			.hfp		= 8,
+ 			.hsw		= 41,
+-- 
+1.7.10.4
+

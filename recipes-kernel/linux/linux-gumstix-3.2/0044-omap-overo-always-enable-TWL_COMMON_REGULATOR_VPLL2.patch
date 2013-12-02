@@ -1,0 +1,34 @@
+From a5b84f4b69f06e5acea88c2dd1d6a311b772c56e Mon Sep 17 00:00:00 2001
+From: Steve Sakoman <steve@sakoman.com>
+Date: Fri, 24 Feb 2012 16:32:55 -0800
+Subject: [PATCH 44/48] omap: overo: always enable TWL_COMMON_REGULATOR_VPLL2
+
+Otherwise there is a hang at boot when CONFIG_OMAP2_DSS is disabled
+---
+ arch/arm/mach-omap2/board-overo.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/arm/mach-omap2/board-overo.c b/arch/arm/mach-omap2/board-overo.c
+index 960993f..4adec7d 100644
+--- a/arch/arm/mach-omap2/board-overo.c
++++ b/arch/arm/mach-omap2/board-overo.c
+@@ -516,7 +516,7 @@ static struct twl4030_platform_data overo_twldata = {
+ static int __init overo_i2c_init(void)
+ {
+ 	u32 pdata_flags = 0;
+-	u32 regulators_flags = 0;
++	u32 regulators_flags = TWL_COMMON_REGULATOR_VPLL2;
+ 
+ #if defined(CONFIG_USB_MUSB_HDRC) || \
+ 	defined (CONFIG_USB_MUSB_HDRC_MODULE)
+@@ -533,7 +533,6 @@ static int __init overo_i2c_init(void)
+ 
+ #if defined(CONFIG_OMAP2_DSS) || defined(CONFIG_OMAP2_DSS_MODULE)
+ 	regulators_flags |= TWL_COMMON_REGULATOR_VDAC;
+-	regulators_flags |= TWL_COMMON_REGULATOR_VPLL2;
+ #endif
+ 
+ 	omap3_pmic_get_config(&overo_twldata, pdata_flags,
+-- 
+1.7.10.4
+
