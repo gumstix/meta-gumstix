@@ -1,7 +1,7 @@
 require u-boot.inc
 
 PV = "2013.10"
-PR = "r0"
+PR = "r1"
 
 LIC_FILES_CHKSUM = "file://README;beginline=1;endline=6;md5=157ab8408beab40cd8ce1dc69f702a6c"
 
@@ -17,6 +17,8 @@ SRC_URI = "git://git.denx.de/u-boot.git;branch=master;protocol=git \
           file://0006-omap4-duovero-Add-DuoVero-machine.patch \
           file://0007-am335x-pepper-Add-Pepper-AM335x-based-machine.patch \
           file://0008-OMAP3-overo-Work-around-HW-ECC-error.patch \
+          file://0009-Pepper-may-still-pass-ATAGS-to-the-kernel.patch \
+          file://0010-arm-omap-i2c-don-t-zero-cnt-in-i2c_write.patch \
           "
 SRC_URI_append_overo = "file://fw_env.config"
 
