@@ -1,7 +1,7 @@
-From 411c8e846efc8ca07f13d0c5ea3cc08e07a5e3b5 Mon Sep 17 00:00:00 2001
+From 3510ed4addc54c106ca792c7afeee427b100ba52 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
-Date: Wed, 23 Oct 2013 14:10:47 -0700
-Subject: [PATCH 6/8] omap4: duovero: Add DuoVero machine.
+Date: Tue, 11 Feb 2014 22:12:28 -0800
+Subject: [PATCH 7/8] omap4: duovero: Add DuoVero machine.
 
 This adds the Gumstix DuoVero machine.  This is a OMAP4430-based
 computer-on-module (COM aka SOM) that can be mounted on various
@@ -9,13 +9,13 @@ expansion boards with different peripherals.
 
 Signed-off-by: Ash Charles <ash@gumstix.com>
 ---
- board/gumstix/duovero/Makefile           |   27 +++
- board/gumstix/duovero/duovero.c          |  265 ++++++++++++++++++++++++++++++
- board/gumstix/duovero/duovero_mux_data.h |  199 ++++++++++++++++++++++
- boards.cfg                               |    1 +
- include/configs/duovero.h                |   59 +++++++
- include/configs/omap4_common.h           |    2 +
- 6 files changed, 553 insertions(+)
+ board/gumstix/duovero/Makefile           |   8 +
+ board/gumstix/duovero/duovero.c          | 265 +++++++++++++++++++++++++++++++
+ board/gumstix/duovero/duovero_mux_data.h | 199 +++++++++++++++++++++++
+ boards.cfg                               |   1 +
+ include/configs/duovero.h                |  60 +++++++
+ include/configs/omap4_common.h           |   9 ++
+ 6 files changed, 542 insertions(+)
  create mode 100644 board/gumstix/duovero/Makefile
  create mode 100644 board/gumstix/duovero/duovero.c
  create mode 100644 board/gumstix/duovero/duovero_mux_data.h
@@ -23,40 +23,21 @@ Signed-off-by: Ash Charles <ash@gumstix.com>
 
 diff --git a/board/gumstix/duovero/Makefile b/board/gumstix/duovero/Makefile
 new file mode 100644
-index 0000000..c26139d
+index 0000000..f738c58
 --- /dev/null
 +++ b/board/gumstix/duovero/Makefile
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,8 @@
 +#
 +# (C) Copyright 2000, 2001, 2002
 +# Wolfgang Denk, DENX Software Engineering, wd@denx.de.
 +#
-+# SPDX-License-Identifier:      GPL-2.0+
++# SPDX-License-Identifier:	GPL-2.0+
 +#
 +
-+include $(TOPDIR)/config.mk
-+
-+LIB	= $(obj)lib$(BOARD).o
-+
-+COBJS	:= duovero.o
-+
-+SRCS	:= $(COBJS:.o=.c)
-+OBJS	:= $(addprefix $(obj),$(COBJS))
-+
-+$(LIB):	$(obj).depend $(OBJS)
-+	$(call cmd_link_o_target, $(OBJS))
-+
-+#########################################################################
-+
-+# defines $(obj).depend target
-+include $(SRCTREE)/rules.mk
-+
-+sinclude $(obj).depend
-+
-+#########################################################################
++obj-y	:= duovero.o
 diff --git a/board/gumstix/duovero/duovero.c b/board/gumstix/duovero/duovero.c
 new file mode 100644
-index 0000000..fd391fc
+index 0000000..1bc7c63
 --- /dev/null
 +++ b/board/gumstix/duovero/duovero.c
 @@ -0,0 +1,265 @@
@@ -305,7 +286,7 @@ index 0000000..fd391fc
 +
 +	writel(altclksrc, &scrm->altclksrc);
 +
-+	ret = omap_ehci_hcd_init(&usbhs_bdata, hccr, hcor);
++	ret = omap_ehci_hcd_init(index, &usbhs_bdata, hccr, hcor);
 +	if (ret < 0)
 +		return ret;
 +
@@ -531,23 +512,23 @@ index 0000000..2dff5f1
 +
 +#endif /* _DUOVERO_MUX_DATA_H_ */
 diff --git a/boards.cfg b/boards.cfg
-index aa2ee64..34b1e8a 100644
+index a8336cc..4fd1be2 100644
 --- a/boards.cfg
 +++ b/boards.cfg
-@@ -331,6 +331,7 @@ Active  arm         armv7          omap3       ti              evm
+@@ -339,6 +339,7 @@ Active  arm         armv7          omap3       ti              evm
  Active  arm         armv7          omap3       ti              evm                 omap3_evm_quick_nand                 -                                                                                                                                 -
  Active  arm         armv7          omap3       ti              sdp3430             omap3_sdp3430                        -                                                                                                                                 Nishanth Menon <nm@ti.com>
  Active  arm         armv7          omap3       timll           devkit8000          devkit8000                           -                                                                                                                                 Thomas Weber <weber@corscience.de>
 +Active  arm         armv7          omap4       gumstix         duovero             duovero                              -                                                                                                                                 Ash Charles <ash@gumstix.com>
  Active  arm         armv7          omap4       ti              panda               omap4_panda                          -                                                                                                                                 Sricharan R <r.sricharan@ti.com>
  Active  arm         armv7          omap4       ti              sdp4430             omap4_sdp4430                        -                                                                                                                                 Sricharan R <r.sricharan@ti.com>
- Active  arm         armv7          omap5       ti              dra7xx              dra7xx_evm                           -                                                                                                                                 Lokesh Vutla <lokeshvutla@ti.com>
+ Active  arm         armv7          omap5       ti              dra7xx              dra7xx_evm                           dra7xx_evm:CONS_INDEX=1                                                                                                           Lokesh Vutla <lokeshvutla@ti.com>
 diff --git a/include/configs/duovero.h b/include/configs/duovero.h
 new file mode 100644
-index 0000000..2e83bad
+index 0000000..c05ade3
 --- /dev/null
 +++ b/include/configs/duovero.h
-@@ -0,0 +1,59 @@
+@@ -0,0 +1,60 @@
 +/*
 + * (C) Copyright: 2013
 + * Gumstix, Inc - http://www.gumstix.com
@@ -565,7 +546,7 @@ index 0000000..2e83bad
 +/*
 + * High Level Configuration Options
 + */
-+#define CONFIG_DUOVERO		1
++#define CONFIG_DUOVERO
 +#define MACH_TYPE_OMAP4_DUOVERO              4097    /* Until the next sync */
 +#define CONFIG_MACH_TYPE                MACH_TYPE_OMAP4_DUOVERO
 +
@@ -575,22 +556,8 @@ index 0000000..2e83bad
 +#define CONFIG_SYS_AUTOMATIC_SDRAM_DETECTION
 +#define CONFIG_SYS_DEFAULT_LPDDR2_TIMINGS
 +
-+#define CONFIG_SYS_ENABLE_PADS_ALL
-+
-+#define V_OSCK			38400000	/* Clock output from T2 */
-+#define V_SCLK                   V_OSCK
-+
-+#define CONFIG_ENV_IS_NOWHERE
++#undef CONFIG_SYS_PROMPT
 +#define CONFIG_SYS_PROMPT		"duovero # "
-+
-+#define CONFIG_CMD_NET		/* bootp, tftpboot, rarpboot	*/
-+#define CONFIG_CMD_DHCP
-+
-+#if defined(CONFIG_CMD_NET)
-+#define CONFIG_SMC911X
-+#define CONFIG_SMC911X_32_BIT
-+#define CONFIG_SMC911X_BASE		0x2C000000
-+#endif /* (CONFIG_CMD_NET) */
 +
 +/* USB UHH support options */
 +#define CONFIG_CMD_USB
@@ -603,15 +570,44 @@ index 0000000..2e83bad
 +#define CONFIG_OMAP_EHCI_PHY1_RESET_GPIO 1
 +#define CONFIG_OMAP_EHCI_PHY2_RESET_GPIO 62
 +
-+#define CONFIG_USB_ULPI
-+#define CONFIG_USB_ULPI_VIEWPORT_OMAP
++#define CONFIG_SYS_ENABLE_PADS_ALL
++
++#define CONFIG_CMD_PING
++#define CONFIG_CMD_DHCP
++#define CONFIG_CMD_NET
++
++#define CONFIG_SMC911X
++#define CONFIG_SMC911X_32_BIT
++#define CONFIG_SMC911X_BASE		0x2C000000
++
++/* GPIO */
++#define CONFIG_CMD_GPIO
++
++/* ENV related config options */
++#define CONFIG_ENV_IS_NOWHERE
++
++#define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
 +
 +#endif /* __CONFIG_DUOVERO_H */
 diff --git a/include/configs/omap4_common.h b/include/configs/omap4_common.h
-index e9f2383..b5485c0 100644
+index d099bfd..791b9d1 100644
 --- a/include/configs/omap4_common.h
 +++ b/include/configs/omap4_common.h
-@@ -167,6 +167,8 @@
+@@ -111,9 +111,13 @@
+ 	"importbootenv=echo Importing environment from mmc${mmcdev} ...; " \
+ 		"env import -t ${loadaddr} ${filesize}\0" \
+ 	"loadimage=load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}\0" \
++	"loaduimage=fatload mmc ${mmcdev} ${loadaddr} uImage\0" \
+ 	"mmcboot=echo Booting from mmc${mmcdev} ...; " \
+ 		"run mmcargs; " \
+ 		"bootz ${loadaddr} - ${fdtaddr}\0" \
++	"uimageboot=echo Booting from mmc${mmcdev} ...; " \
++		"run mmcargs; " \
++		"bootm ${loadaddr}\0" \
+ 	"findfdt="\
+ 		"if test $board_name = sdp4430; then " \
+ 			"setenv fdtfile omap4-sdp.dtb; fi; " \
+@@ -123,6 +127,8 @@
  			"setenv fdtfile omap4-panda-a4.dtb; fi;" \
  		"if test $board_name = panda-es; then " \
  			"setenv fdtfile omap4-panda-es.dtb; fi;" \
@@ -620,6 +616,16 @@ index e9f2383..b5485c0 100644
  		"if test $fdtfile = undefined; then " \
  			"echo WARNING: Could not determine device tree to use; fi; \0" \
  	"loadfdt=load mmc ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}\0" \
+@@ -146,6 +152,9 @@
+ 			"run loadfdt;" \
+ 			"run mmcboot; " \
+ 		"fi; " \
++		"if run loaduimage; then " \
++			"run uimageboot;" \
++		"fi; " \
+ 	"fi"
+ 
+ /*
 -- 
-1.7.10.4
+1.8.3.2
 

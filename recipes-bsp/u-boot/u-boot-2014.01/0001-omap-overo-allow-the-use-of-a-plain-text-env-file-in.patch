@@ -1,4 +1,4 @@
-From a8ce7cceb7e6f41a75004a6da1ae42171e0f549c Mon Sep 17 00:00:00 2001
+From 2e3935a5106ea2ca5fff72e1a8cd5750dd90590d Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 23 Oct 2013 10:41:00 -0700
 Subject: [PATCH 1/8] omap: overo: allow the use of a plain text env file
@@ -34,14 +34,14 @@ Adapted from d70f5480 described below.
 Signed-off-by: Peter A. Bigot <pab@pabigot.com>
 Tested-by: Ash Charles <ash@gumstix.com>
 ---
- include/configs/omap3_overo.h |   10 ++++++++++
+ include/configs/omap3_overo.h | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
 diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
-index 88380a4..6855f36 100644
+index e0f0262..224777a 100644
 --- a/include/configs/omap3_overo.h
 +++ b/include/configs/omap3_overo.h
-@@ -167,6 +167,9 @@
+@@ -166,6 +166,9 @@
  	"loadbootscript=fatload mmc ${mmcdev} ${loadaddr} boot.scr\0" \
  	"bootscript=echo Running bootscript from mmc ...; " \
  		"source ${loadaddr}\0" \
@@ -51,7 +51,7 @@ index 88380a4..6855f36 100644
  	"loaduimage=fatload mmc ${mmcdev} ${loadaddr} uImage\0" \
  	"mmcboot=echo Booting from mmc ...; " \
  		"run mmcargs; " \
-@@ -181,6 +184,13 @@
+@@ -180,6 +183,13 @@
  		"if run loadbootscript; then " \
  			"run bootscript; " \
  		"else " \
@@ -66,5 +66,5 @@ index 88380a4..6855f36 100644
  				"run mmcboot; " \
  			"else run nandboot; " \
 -- 
-1.7.10.4
+1.8.3.2
 

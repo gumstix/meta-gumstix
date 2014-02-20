@@ -1,4 +1,4 @@
-From bd30d7bfbaba02b31de655a760d500acb5b377ac Mon Sep 17 00:00:00 2001
+From 3f0521c5fd40ef4bed7ac9dcf2ec96324c569d21 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 23 Oct 2013 10:54:08 -0700
 Subject: [PATCH 2/8] OMAP3: overo: add command support for mtd and ubi
@@ -10,11 +10,11 @@ not enabled.
 Signed-off-by: Peter A. Bigot <pab@pabigot.com>
 Tested-by: Ash Charles <ash@gumstix.com>
 ---
- include/configs/omap3_overo.h |   40 +++++++++++++++++++++++++++++++++++++---
+ include/configs/omap3_overo.h | 40 +++++++++++++++++++++++++++++++++++++---
  1 file changed, 37 insertions(+), 3 deletions(-)
 
 diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
-index 6855f36..33a4b2d 100644
+index 224777a..3e9973a 100644
 --- a/include/configs/omap3_overo.h
 +++ b/include/configs/omap3_overo.h
 @@ -43,9 +43,11 @@
@@ -68,9 +68,9 @@ index 6855f36..33a4b2d 100644
 +#endif /* CONFIG_CMD_NAND */
 +
  #define CONFIG_SYS_NO_FLASH
- #define CONFIG_HARD_I2C
- #define CONFIG_SYS_I2C_SPEED		100000
-@@ -148,6 +181,7 @@
+ #define CONFIG_SYS_I2C
+ #define CONFIG_SYS_OMAP24_I2C_SPEED	100000
+@@ -147,6 +180,7 @@
  	"mmcrootfstype=ext3 rootwait\0" \
  	"nandroot=ubi0:rootfs ubi.mtd=4\0" \
  	"nandrootfstype=ubifs\0" \
@@ -79,5 +79,5 @@ index 6855f36..33a4b2d 100644
  		"${optargs} " \
  		"mpurate=${mpurate} " \
 -- 
-1.7.10.4
+1.8.3.2
 

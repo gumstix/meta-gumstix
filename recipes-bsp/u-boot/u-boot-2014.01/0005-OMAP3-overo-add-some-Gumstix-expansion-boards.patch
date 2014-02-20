@@ -1,4 +1,4 @@
-From 8edb94bae67429abb999dfb8e836e5e56a3996b5 Mon Sep 17 00:00:00 2001
+From 2419558ce3931e1112d292d0f8e2927a38e1cfd8 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 23 Oct 2013 10:58:38 -0700
 Subject: [PATCH 5/8] OMAP3: overo: add some Gumstix expansion boards
@@ -8,12 +8,12 @@ Turtlecore Gumstix Overo expansion boards.
 
 Signed-off-by: Ash Charles <ash@gumstix.com>
 ---
- board/overo/overo.c |   42 ++++++++++++++++++++++++++++++++++++++++--
- board/overo/overo.h |   16 ++++++++++++++++
+ board/overo/overo.c | 42 ++++++++++++++++++++++++++++++++++++++++--
+ board/overo/overo.h | 16 ++++++++++++++++
  2 files changed, 56 insertions(+), 2 deletions(-)
 
 diff --git a/board/overo/overo.c b/board/overo/overo.c
-index aace42a..568e13e 100644
+index 9ac35d2..5e04adc 100644
 --- a/board/overo/overo.c
 +++ b/board/overo/overo.c
 @@ -40,6 +40,11 @@ DECLARE_GLOBAL_DATA_PTR;
@@ -119,5 +119,5 @@ index 64604de..33ea58e 100644
 +
  #endif
 -- 
-1.7.10.4
+1.8.3.2
 

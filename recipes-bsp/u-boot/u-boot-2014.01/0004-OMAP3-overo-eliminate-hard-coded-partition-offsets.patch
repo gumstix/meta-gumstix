@@ -1,4 +1,4 @@
-From 9e20b07c0c044a5b5670b7011bc09aeb8329014f Mon Sep 17 00:00:00 2001
+From 2e100c4a30e3d8b50b600b05e399bc2101de6928 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 23 Oct 2013 10:56:12 -0700
 Subject: [PATCH 4/8] OMAP3: overo: eliminate hard-coded partition offsets
@@ -11,14 +11,14 @@ rootfs" to set the default mtd partition for jffs2.
 Signed-off-by: Peter A. Bigot <pab@pabigot.com>
 Tested-by: Ash Charles <ash@gumstix.com>
 ---
- include/configs/omap3_overo.h |   10 +---------
+ include/configs/omap3_overo.h | 10 +---------
  1 file changed, 1 insertion(+), 9 deletions(-)
 
 diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
-index cfb13e0..3658287 100644
+index 4f7c31a..16631d3 100644
 --- a/include/configs/omap3_overo.h
 +++ b/include/configs/omap3_overo.h
-@@ -157,14 +157,6 @@
+@@ -156,14 +156,6 @@
  
  #define CONFIG_SYS_MAX_NAND_DEVICE	1	/* Max number of NAND */
  						/* devices */
@@ -33,7 +33,7 @@ index cfb13e0..3658287 100644
  /* Environment information */
  #define CONFIG_BOOTDELAY		5
  
-@@ -210,7 +202,7 @@
+@@ -209,7 +201,7 @@
  		"bootm ${loadaddr}\0" \
  	"nandboot=echo Booting from nand ...; " \
  		"run nandargs; " \
@@ -43,5 +43,5 @@ index cfb13e0..3658287 100644
  
  #define CONFIG_BOOTCOMMAND \
 -- 
-1.7.10.4
+1.8.3.2
 
