@@ -1,14 +1,13 @@
 DESCRIPTION = "PWM drivers for omap3 processors"
 HOMEPAGE = "https://github.com/scottellis/omap3-pwm"
-LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://../git/pwm.c;endline=28;md5=c8448052329697f9239ac2d919535901"
-PR="r2"
+LICENSE = "GPLv2"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
 inherit module
 
-COMPATIBLE_MACHINE = "overo"
+COMPATIBLE_MACHINE = "omap3"
 
-SRCREV = "dc40d9296054e7e26c89586c1bd01199e1593017"
+SRCREV = "ccee3524b0bc063f968eef3d7963e613dd0beb1b"
 SRC_URI = "git://github.com/scottellis/omap3-pwm.git;protocol=git"
 
 S = "${WORKDIR}/git"
