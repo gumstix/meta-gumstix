@@ -13,10 +13,6 @@ LICENSE_FLAGS_WHITELIST = "commercial"
 # the option is a question of removing the # character and making any change to the
 # variable as required.
 
-# Set a few Preferred Providers that aren't specified elsewhere
-PREFERRED_PROVIDER_jpeg = "jpeg"
-PREFERRED_PROVIDER_jpeg-native = "jpeg-native"
-
 # Use Gumstix source mirror as default premirror
 SOURCE_MIRROR_URL ?= "http://source-cache.gumstix.org/"
 INHERIT += "own-mirrors"
