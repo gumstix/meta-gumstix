@@ -1,6 +1,5 @@
-require linux.inc
+require recipes-kernel/linux/linux-yocto.inc
 
-DESCRIPTION = "Linux kernel for OMAP processors"
 KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "overo"
@@ -10,7 +9,6 @@ BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 # Patches for all releases in linux-3.5.y but PV specifies upstream base.
 # Patches at: git://github.com/gumstix/linux.git;branch=omap-3.5
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.5:"
-PR = "r3"
 
 S = "${WORKDIR}/git"
 

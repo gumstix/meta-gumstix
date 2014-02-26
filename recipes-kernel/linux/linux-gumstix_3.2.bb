@@ -1,6 +1,5 @@
-require linux.inc
+require recipes-kernel/linux/linux-yocto.inc
 
-DESCRIPTION = "Linux kernel for OMAP processors"
 KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "overo"
