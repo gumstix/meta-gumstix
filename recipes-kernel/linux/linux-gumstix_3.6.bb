@@ -10,7 +10,7 @@ BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 # Patches for all releases in linux-3.6.y but PV specifies upstream base.
 # Patches at: git://github.com/gumstix/linux.git;branch=omap-3.6
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.6:"
-PR = "r3"
+PR = "r4"
 
 S = "${WORKDIR}/git"
 
@@ -28,6 +28,7 @@ SRC_URI = " \
     file://0008-Pull-in-some-HDMI-mux-fixes-from-Panda.patch \
     file://0009-ARM-7668-1-fix-memset-related-crashes-caused-by-rece.patch \
     file://0010-ARM-7670-1-fix-the-memset-fix.patch \
+    file://0011-duovero-disable-uAP.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
