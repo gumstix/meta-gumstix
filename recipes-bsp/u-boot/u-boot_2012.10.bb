@@ -1,4 +1,4 @@
-require ${COREBASE}/meta/recipes-bsp/u-boot/u-boot.inc
+require u-boot.inc 
 
 PV = "2012.10"
 COMPATIBLE_MACHINE = "pepper"
@@ -10,7 +10,6 @@ SRC_URI = "git://github.com/gumstix/u-boot.git;branch=omap-v2012.10;protocol=git
 
 SPL_BINARY = "MLO"
 
-UBOOT_FORMAT = "img"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}/git"
