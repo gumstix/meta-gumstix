@@ -1,0 +1,70 @@
+From 4d6578a5429d4e1aea50ff4b4a435a84c77dd98c Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 23 Oct 2013 10:41:00 -0700
+Subject: [PATCH 01/11] omap: overo: allow the use of a plain text env file
+ instead boot scripts
+
+Adapted from d70f5480 described below.
+
+    commit d70f54808dfa83b574e1239c3eccbcf3317343e1
+    Author: Javier Martinez Canillas <javier@dowhile0.org>
+    Date:   Mon Jan 7 03:51:20 2013 +0000
+
+    omap4: allow the use of a plain text env file instead boot scripts
+
+    For production systems it is better to use script images since
+    they are protected by checksums and carry valuable information like
+    name and timestamp. Also, you can't validate the content passed to
+    env import.
+
+    But for development, it is easier to use the env import command and
+    plain text files instead of script-images.
+
+    Since both OMAP4 supported boards (Panda and TI SDP4430) are used
+    primarily for development, this patch allows U-Boot to load env var
+    from a text file in case that an boot.scr script-image is not present.
+
+    The variable uenvcmd (if existent) will be executed (using run) after
+    uEnv.txt was loaded. If uenvcmd doesn't exist the default boot sequence
+    will be started.
+
+    Signed-off-by: Javier Martinez Canillas <javier.martinez@collabora.co.uk>
+    Acked-by: Nishanth Menon <nm@ti.com>
+
+Signed-off-by: Peter A. Bigot <pab@pabigot.com>
+Tested-by: Ash Charles <ash@gumstix.com>
+---
+ include/configs/omap3_overo.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
+index 007e27f..f26d069 100644
+--- a/include/configs/omap3_overo.h
++++ b/include/configs/omap3_overo.h
+@@ -164,6 +164,9 @@
+ 	"loadbootscript=fatload mmc ${mmcdev} ${loadaddr} boot.scr\0" \
+ 	"bootscript=echo Running bootscript from mmc ...; " \
+ 		"source ${loadaddr}\0" \
++	"loadbootenv=fatload mmc ${mmcdev} ${loadaddr} uEnv.txt\0" \
++	"importbootenv=echo Importing environment from mmc${mmcdev} ...; " \
++		"env import -t ${loadaddr} ${filesize}\0" \
+ 	"loaduimage=fatload mmc ${mmcdev} ${loadaddr} uImage\0" \
+ 	"mmcboot=echo Booting from mmc ...; " \
+ 		"run mmcargs; " \
+@@ -178,6 +181,13 @@
+ 		"if run loadbootscript; then " \
+ 			"run bootscript; " \
+ 		"else " \
++			"if run loadbootenv; then " \
++				"run importbootenv; " \
++				"if test -n ${uenvcmd}; then " \
++					"echo Running uenvcmd ...;" \
++					"run uenvcmd;" \
++				"fi;" \
++			"fi;" \
+ 			"if run loaduimage; then " \
+ 				"run mmcboot; " \
+ 			"else run nandboot; " \
+-- 
+1.8.3.2
+

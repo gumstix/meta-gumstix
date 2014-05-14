@@ -1,0 +1,123 @@
+From 7cbfed4d58ecb99fa53bd8540fa42d135de534d7 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 23 Oct 2013 10:58:38 -0700
+Subject: [PATCH 07/11] OMAP3: overo: add some Gumstix expansion boards
+
+Add EEPROM ID switches for Alto35, Arbor43C, Stagecoach, Thumbo, and
+Turtlecore Gumstix Overo expansion boards.
+
+Signed-off-by: Ash Charles <ash@gumstix.com>
+---
+ board/overo/overo.c | 42 ++++++++++++++++++++++++++++++++++++++++--
+ board/overo/overo.h | 16 ++++++++++++++++
+ 2 files changed, 56 insertions(+), 2 deletions(-)
+
+diff --git a/board/overo/overo.c b/board/overo/overo.c
+index 9a5f4c4..62b50a8 100644
+--- a/board/overo/overo.c
++++ b/board/overo/overo.c
+@@ -39,6 +39,11 @@ DECLARE_GLOBAL_DATA_PTR;
+ #define GUMSTIX_CHESTNUT43		0x06000200
+ #define GUMSTIX_PINTO			0x07000200
+ #define GUMSTIX_GALLOP43		0x08000200
++#define GUMSTIX_ALTO35			0x09000200
++#define GUMSTIX_STAGECOACH		0x0A000200
++#define GUMSTIX_THUMBO			0x0B000200
++#define GUMSTIX_TURTLECORE		0x0C000200
++#define GUMSTIX_ARBOR43C		0x0D000200
+ 
+ #define ETTUS_USRP_E			0x01000300
+ 
+@@ -231,6 +236,8 @@ unsigned int get_expansion_id(void)
+  */
+ int misc_init_r(void)
+ {
++	unsigned int expansion_id;
++
+ 	twl4030_power_init();
+ 	twl4030_led_init(TWL4030_LED_LEDEN_LEDAON | TWL4030_LED_LEDEN_LEDBON);
+ 
+@@ -253,7 +260,8 @@ int misc_init_r(void)
+ 		puts("Unable to detect mmc2 connection type\n");
+ 	}
+ 
+-	switch (get_expansion_id()) {
++	expansion_id = get_expansion_id();
++	switch (expansion_id) {
+ 	case GUMSTIX_SUMMIT:
+ 		printf("Recognized Summit expansion board (rev %d %s)\n",
+ 			expansion_config.revision,
+@@ -303,6 +311,35 @@ int misc_init_r(void)
+ 			expansion_config.fab_revision);
+ 		setenv("defaultdisplay", "lcd43");
+ 		break;
++	case GUMSTIX_ALTO35:
++		printf("Recognized Alto35 expansion board (rev %d %s)\n",
++			expansion_config.revision,
++			expansion_config.fab_revision);
++		MUX_ALTO35();
++		setenv("defaultdisplay", "lcd35");
++		break;
++	case GUMSTIX_STAGECOACH:
++		printf("Recognized Stagecoach expansion board (rev %d %s)\n",
++			expansion_config.revision,
++			expansion_config.fab_revision);
++		break;
++	case GUMSTIX_THUMBO:
++		printf("Recognized Thumbo expansion board (rev %d %s)\n",
++			expansion_config.revision,
++			expansion_config.fab_revision);
++		break;
++	case GUMSTIX_TURTLECORE:
++		printf("Recognized Turtlecore expansion board (rev %d %s)\n",
++			expansion_config.revision,
++			expansion_config.fab_revision);
++		break;
++	case GUMSTIX_ARBOR43C:
++		printf("Recognized Arbor43C expansion board (rev %d %s)\n",
++			expansion_config.revision,
++			expansion_config.fab_revision);
++		MUX_ARBOR43C();
++		setenv("defaultdisplay", "lcd43");
++		break;
+ 	case ETTUS_USRP_E:
+ 		printf("Recognized Ettus Research USRP-E (rev %d %s)\n",
+ 			expansion_config.revision,
+@@ -314,7 +351,8 @@ int misc_init_r(void)
+ 		puts("No EEPROM on expansion board\n");
+ 		break;
+ 	default:
+-		puts("Unrecognized expansion board\n");
++		printf("Unrecognized expansion board 0x%08x\n", expansion_id);
++		break;
+ 	}
+ 
+ 	if (expansion_config.content == 1)
+diff --git a/board/overo/overo.h b/board/overo/overo.h
+index 25c9f16..410fa3f 100644
+--- a/board/overo/overo.h
++++ b/board/overo/overo.h
+@@ -405,4 +405,20 @@ const omap3_sysinfo sysinfo = {
+ 	MUX_VAL(CP(MCSPI1_SOMI),	(IEN  | PTD | DIS | M4)) /*GPIO_173 */\
+ 	MUX_VAL(CP(MCSPI1_CS1),		(IDIS | PTD | EN  | M4)) /*GPIO_175 */\
+ 
++#define MUX_ALTO35() \
++	MUX_VAL(CP(SYS_CLKOUT1),	(IEN  | PTU | EN  | M4)) /*GPIO_10-BTN*/\
++	MUX_VAL(CP(UART1_TX),		(IDIS | PTD | DIS | M4)) /*GPIO_148-RED LED*/\
++	MUX_VAL(CP(UART1_CTS),		(IDIS | PTD | DIS | M4)) /*GPIO_150-YELLOW LED*/\
++	MUX_VAL(CP(UART1_RX),		(IDIS | PTD | DIS | M4)) /*GPIO_151-BLUE LED*/\
++	MUX_VAL(CP(HDQ_SIO),		(IDIS | PTD | DIS | M4)) /*GPIO_170-GREEN LED*/\
++	MUX_VAL(CP(MCSPI1_CS1),		(IDIS | PTD | EN  | M4)) /*GPIO_175*/\
++
++#define MUX_ARBOR43C() \
++	MUX_VAL(CP(CSI2_DX1),		(IDIS | PTD | DIS | M4)) /*GPIO_114-RED LED*/\
++	MUX_VAL(CP(UART1_CTS),		(IDIS | PTD | DIS | M4)) /*GPIO_150-YELLOW LED*/\
++	MUX_VAL(CP(HDQ_SIO),		(IDIS | PTD | DIS | M4)) /*GPIO_170-BUTTON */\
++	MUX_VAL(CP(SYS_CLKOUT2),	(IDIS | PTD | DIS | M4)) /*GPIO_186-BLUE LED*/\
++	MUX_VAL(CP(JTAG_EMU1),		(IDIS | PTD | DIS | M4)) /*GPIO_31-CAP WAKE*/\
++	MUX_VAL(CP(SYS_CLKOUT1),	(IEN  | PTU | EN  | M4)) /*GPIO_10-CAP IRQ*/\
++
+ #endif
+-- 
+1.8.3.2
+
