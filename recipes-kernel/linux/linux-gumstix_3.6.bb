@@ -27,6 +27,7 @@ SRC_URI = " \
     file://0009-ARM-7668-1-fix-memset-related-crashes-caused-by-rece.patch \
     file://0010-ARM-7670-1-fix-the-memset-fix.patch \
     file://0011-duovero-disable-uAP.patch \
+    file://0012-Power-off-routines-for-the-TWL6030.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
