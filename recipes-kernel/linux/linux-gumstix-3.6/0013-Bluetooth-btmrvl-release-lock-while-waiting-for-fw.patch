@@ -1,0 +1,78 @@
+From 52ae16327ed5985d8943dee613315fdfb0a82f6e Mon Sep 17 00:00:00 2001
+From: Scott Ellis <scott@pansenti.com>
+Date: Thu, 30 Jan 2014 14:11:42 -0500
+Subject: [PATCH]     Bluetooth: btmrvl: release lock while waiting for fw
+ download complete
+
+    Backport of commit c1c999e27ce5681c5b43c7f82947030e7134f1d0
+
+    If not winner, driver must release the sdio host lock, so the fw
+    download can progress. While holding the lock fw download is stalled
+    and the following error is produced:
+
+    [  235.746015] Bluetooth: FW failed to be active in time!
+    [  235.752799] Bluetooth: Downloading firmware failed!
+
+    Signed-off-by: Andreas Fenkart <andreas.fenkart@streamunlimited.com>
+    Signed-off-by: Gustavo Padovan <gustavo.padovan@collabora.co.uk>
+---
+ drivers/bluetooth/btmrvl_sdio.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/bluetooth/btmrvl_sdio.c b/drivers/bluetooth/btmrvl_sdio.c
+index 6a9e971..40ad800 100644
+--- a/drivers/bluetooth/btmrvl_sdio.c
++++ b/drivers/bluetooth/btmrvl_sdio.c
+@@ -234,7 +234,10 @@ static int btmrvl_sdio_verify_fw_download(struct btmrvl_sdio_card *card,
+ 
+ 	 /* Wait for firmware to become ready */
+ 	for (tries = 0; tries < pollnum; tries++) {
+-		if (btmrvl_sdio_read_fw_status(card, &firmwarestat) < 0)
++               sdio_claim_host(card->func);
++               ret = btmrvl_sdio_read_fw_status(card, &firmwarestat);
++               sdio_release_host(card->func);
++               if (ret < 0)
+ 			continue;
+ 
+ 		if (firmwarestat == FIRMWARE_READY) {
+@@ -877,13 +880,14 @@ static int btmrvl_sdio_download_fw(struct btmrvl_sdio_card *card)
+ 		BT_ERR("card or function is NULL!");
+ 		return -EINVAL;
+ 	}
+-	sdio_claim_host(card->func);
+ 
+ 	if (!btmrvl_sdio_verify_fw_download(card, 1)) {
+ 		BT_DBG("Firmware already downloaded!");
+-		goto done;
++		return 0;
+ 	}
+ 
++	sdio_claim_host(card->func);
++
+ 	/* Check if other function driver is downloading the firmware */
+ 	fws0 = sdio_readb(card->func, card->reg->card_fw_status0, &ret);
+ 	if (ret) {
+@@ -913,15 +917,17 @@ static int btmrvl_sdio_download_fw(struct btmrvl_sdio_card *card)
+ 		}
+ 	}
+ 
++	sdio_release_host(card->func);
++
+ 	if (btmrvl_sdio_verify_fw_download(card, pollnum)) {
+ 		BT_ERR("FW failed to be active in time!");
+-		ret = -ETIMEDOUT;
+-		goto done;
++		return -ETIMEDOUT;
+ 	}
+ 
++	return 0;
++
+ done:
+ 	sdio_release_host(card->func);
+-
+ 	return ret;
+ }
+ 
+-- 
+1.8.1.2
+

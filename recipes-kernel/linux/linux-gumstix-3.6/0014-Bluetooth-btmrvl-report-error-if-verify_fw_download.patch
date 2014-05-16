@@ -1,0 +1,79 @@
+From 36b0233859605d101fbd613ade96963feeafb74c Mon Sep 17 00:00:00 2001
+From: Scott Ellis <scott@pansenti.com>
+Date: Thu, 30 Jan 2014 14:22:19 -0500
+Subject: [PATCH]     Bluetooth: btmrvl: report error if verify_fw_download
+ times out
+
+    Backport of commit 69676b1c2af451bfe5cd36ff4973a484b5d5a86c
+
+    FW does the synchronization of the different modules during init.
+    It will report different modules, that it is ready at different times.
+    The fw download 'winner' will be reported fw ready first. Without this
+    patch, btmrvl was already continuing before the FW told it too. Probably
+    on behalf of the 'winner' which then never sees FW ready and times out.
+
+    Signed-off-by: Andreas Fenkart <andreas.fenkart@streamunlimited.com>
+    Signed-off-by: Gustavo Padovan <gustavo.padovan@collabora.co.uk>
+---
+ drivers/bluetooth/btmrvl_sdio.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/bluetooth/btmrvl_sdio.c b/drivers/bluetooth/btmrvl_sdio.c
+index 40ad800..61a7505 100644
+--- a/drivers/bluetooth/btmrvl_sdio.c
++++ b/drivers/bluetooth/btmrvl_sdio.c
+@@ -228,9 +228,8 @@ failed:
+ static int btmrvl_sdio_verify_fw_download(struct btmrvl_sdio_card *card,
+ 								int pollnum)
+ {
+-	int ret = -ETIMEDOUT;
+ 	u16 firmwarestat;
+-	unsigned int tries;
++	int tries, ret;
+ 
+ 	 /* Wait for firmware to become ready */
+ 	for (tries = 0; tries < pollnum; tries++) {
+@@ -240,15 +239,13 @@ static int btmrvl_sdio_verify_fw_download(struct btmrvl_sdio_card *card,
+                if (ret < 0)
+ 			continue;
+ 
+-		if (firmwarestat == FIRMWARE_READY) {
+-			ret = 0;
+-			break;
+-		} else {
+-			msleep(10);
+-		}
++		if (firmwarestat == FIRMWARE_READY)
++			return 0;
++
++		msleep(10);
+ 	}
+ 
+-	return ret;
++	return -ETIMEDOUT;
+ }
+ 
+ static int btmrvl_sdio_download_helper(struct btmrvl_sdio_card *card)
+@@ -919,6 +916,10 @@ static int btmrvl_sdio_download_fw(struct btmrvl_sdio_card *card)
+ 
+ 	sdio_release_host(card->func);
+ 
++       /*
++        * winner or not, with this test the FW synchronizes when the
++        * module can continue its initialization
++        */
+ 	if (btmrvl_sdio_verify_fw_download(card, pollnum)) {
+ 		BT_ERR("FW failed to be active in time!");
+ 		return -ETIMEDOUT;
+@@ -993,8 +994,6 @@ static int btmrvl_sdio_probe(struct sdio_func *func,
+ 		goto unreg_dev;
+ 	}
+ 
+-	msleep(100);
+-
+ 	btmrvl_sdio_enable_host_int(card);
+ 
+ 	priv = btmrvl_add_card(card);
+-- 
+1.8.1.2
+
