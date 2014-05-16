@@ -30,6 +30,7 @@ SRC_URI = " \
     file://0012-Power-off-routines-for-the-TWL6030.patch \
     file://0013-Bluetooth-btmrvl-release-lock-while-waiting-for-fw.patch \
     file://0014-Bluetooth-btmrvl-report-error-if-verify_fw_download.patch \
+    file://0015-ARM-OMAP4-TWL-mux-sys_drm_msecure-as-output-for-PMIC.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

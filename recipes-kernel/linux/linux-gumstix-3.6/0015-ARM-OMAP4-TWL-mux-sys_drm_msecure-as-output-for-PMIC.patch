@@ -1,0 +1,45 @@
+From 350ea0ac7355bddd225ea627fb3b0a32d27c8dfa Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 15 May 2014 18:14:21 -0700
+Subject: [PATCH] ARM: OMAP4: TWL: mux sys_drm_msecure as output for PMIC
+
+On OMAP4 boards using the TWL6030 PMIC, the sys_drm_msecure is
+connected to the MSECURE input of the TWL6030 PMIC.  This signal
+controls the secure-mode operation of the PMIC.  If its not mux'd
+correctly, some functionality of the PMIC will not be accessible since
+the PMIC will be in secure mode.
+
+For example, if the TWL RTC is in secure mode, most of its registers
+are read-only, meaning (re)programming the RTC (e.g. for wakeup from
+suspend) will fail.
+
+To fix, ensure the signal is properly mux'd as output when TWL is
+intialized.
+
+This fix is required when using recent versions of u-boot (>= v2012.04.01)
+since u-boot is no longer setting the default mux for this pin.
+
+Signed-off-by: Kevin Hilman <khilman@ti.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+
+Conflicts:
+	arch/arm/mach-omap2/twl-common.c
+---
+ arch/arm/mach-omap2/twl-common.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/mach-omap2/twl-common.c b/arch/arm/mach-omap2/twl-common.c
+index db5ff66..d272034 100644
+--- a/arch/arm/mach-omap2/twl-common.c
++++ b/arch/arm/mach-omap2/twl-common.c
+@@ -82,6 +82,7 @@ void __init omap4_pmic_init(const char *pmic_type,
+ {
+ 	/* PMIC part*/
+ 	omap_mux_init_signal("sys_nirq1", OMAP_PIN_INPUT_PULLUP | OMAP_PIN_OFF_WAKEUPENABLE);
++	omap_mux_init_signal("fref_clk0_out.sys_drm_msecure", OMAP_PIN_OUTPUT);
+ 	strncpy(omap4_i2c1_board_info[0].type, pmic_type,
+ 		sizeof(omap4_i2c1_board_info[0].type));
+ 	omap4_i2c1_board_info[0].irq = OMAP44XX_IRQ_SYS_1N;
+-- 
+1.8.3.2
+
