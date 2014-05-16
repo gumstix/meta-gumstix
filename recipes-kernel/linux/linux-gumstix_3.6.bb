@@ -4,6 +4,9 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "duovero"
 
+LINUX_VERSION = "3.6.11"
+LINUX_VERSION_EXTENSION = "-custom"
+
 BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 
 # Patches for all releases in linux-3.6.y but PV specifies upstream base.
@@ -15,7 +18,7 @@ S = "${WORKDIR}/git"
 # v3.6.11 = b2824f4e0990716407b0c0e7acee75bb6353febf
 SRCREV = "b2824f4e0990716407b0c0e7acee75bb6353febf"
 SRC_URI = " \
-    git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;branch=linux-3.6.y \
+    git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.6.y \
     file://0001-omap4-add-duovero-support.patch \
     file://0002-HACK-temporary-hack-to-use-cold-sw-reset-instead-of-.patch \
     file://0003-duovero-add-back-omap4_mux_init.patch \

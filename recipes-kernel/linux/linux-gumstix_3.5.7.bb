@@ -4,6 +4,9 @@ KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "overo"
 
+LINUX_VERSION = "3.5.7"
+LINUX_VERSION_EXTENSION = "-custom"
+
 BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 
 # Patches for all releases in linux-3.5.y but PV specifies upstream base.
@@ -15,7 +18,7 @@ S = "${WORKDIR}/git"
 # v3.5.7 = f2b152564afdf9c9917c17d1c41c1082c82067bd
 SRCREV = "f2b152564afdf9c9917c17d1c41c1082c82067bd"
 SRC_URI = " \
-    git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;branch=linux-3.5.y \
+    git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.5.y \
     file://0001-Revert-omap2_mcspi-Flush-posted-writes.patch \
     file://0002-mtd-nand-Eliminate-noisey-uncorrectable-error-messag.patch \
     file://0003-OMAP-DSS2-add-bootarg-for-selecting-svideo-or-compos.patch \

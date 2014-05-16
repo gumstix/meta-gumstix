@@ -3,20 +3,21 @@ require recipes-kernel/linux/linux-yocto.inc
 KERNEL_IMAGETYPE = "uImage"
 
 COMPATIBLE_MACHINE = "overo"
+LINUX_VERSION = "3.2.53"
+LINUX_VERSION_EXTENSION = "-custom"
 
 BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 
 # Patches for all releases in linux-3.2.y but PV specifies upstream base.
 # Patches at: git://github.com/gumstix/linux.git;branch=omap-3.2
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.2:"
-PR = "r0"
 
 S = "${WORKDIR}/git"
 
 # v3.2.53 = 66c8d27b7084ecd4d7d17dc7a69e6f993f5a2549
 SRCREV = "66c8d27b7084ecd4d7d17dc7a69e6f993f5a2549"
 SRC_URI = " \
-    git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;branch=linux-3.2.y \
+    git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.2.y \
     file://0001-unionfs-Add-support-for-unionfs-2.5.10.patch \
     file://0002-Revert-omap2_mcspi-Flush-posted-writes.patch \
     file://0004-mtd-nand-Eliminate-noisey-uncorrectable-error-messag.patch \
