@@ -1,4 +1,4 @@
-From c620a79166a45949184d684bc1f0b5907fc1958d Mon Sep 17 00:00:00 2001
+From 4ee63c7b1d0b6ef1351a35b392df0a6c616fe6f8 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Tue, 6 May 2014 15:02:51 -0700
 Subject: [PATCH 4/6] Add devicetree for Gumstix Pepper SBC
@@ -6,8 +6,8 @@ Subject: [PATCH 4/6] Add devicetree for Gumstix Pepper SBC
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
  arch/arm/boot/dts/Makefile          |   1 +
- arch/arm/boot/dts/am335x-pepper.dts | 653 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 654 insertions(+)
+ arch/arm/boot/dts/am335x-pepper.dts | 658 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 659 insertions(+)
  create mode 100644 arch/arm/boot/dts/am335x-pepper.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
@@ -24,10 +24,10 @@ index 0320303..8b6f67e 100644
  	am43x-epos-evm.dtb \
 diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
 new file mode 100644
-index 0000000..e09d05e
+index 0000000..487fd89
 --- /dev/null
 +++ b/arch/arm/boot/dts/am335x-pepper.dts
-@@ -0,0 +1,653 @@
+@@ -0,0 +1,658 @@
 +/*
 + * Copyright (C) 2014 Gumstix, Inc. - https://www.gumstix.com/
 + *
@@ -294,6 +294,11 @@ index 0000000..e09d05e
 +&cpsw_emac0 {
 +	phy_id = <&davinci_mdio>, <0>;
 +	phy-mode = "rgmii";
++};
++
++&cpsw_emac1 {
++        phy_id = <&davinci_mdio>, <1>;
++        phy-mode = "rgmii";
 +};
 +
 +&davinci_mdio {
