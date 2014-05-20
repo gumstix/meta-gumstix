@@ -1,0 +1,10 @@
+# Assume Pepper Single Board Computer with touchscreeni by default
+
+# if HAVE_TOUCHSCREEN=1, we
+# * prompt for touchscreen calibration on boot
+# * hide onscreen cursor for in matchbox window environment
+HAVE_TOUCHSCREEN=1
+
+# if HAVE_KEYBOARD=1, we
+# * don't provide a keyboard widget in a matchbox window environment
+HAVE_KEYBOARD=0
