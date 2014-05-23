@@ -2,6 +2,22 @@ require recipes-kernel/linux/linux-yocto.inc
 
 COMPATIBLE_MACHINE = "overo|duovero|pepper"
 
+# Pull in the devicetree files into the rootfs
+RDEPENDS_kernel-base += "kernel-devicetree"
+
+KERNEL_DEVICETREE_overo = " \
+    omap3-overo-storm-tobi.dtb omap3-overo-tobi.dtb \
+    omap3-overo-storm-chestnut43.dtb omap3-overo-chestnut43.dtb \
+    omap3-overo-storm-alto35.dtb omap3-overo-alto35.dtb \
+    omap3-overo-storm-arbor43c.dtb omap3-overo-arbor43c.dtb \
+    omap3-overo-storm-gallop43.dtb omap3-overo-gallop43.dtb \
+    omap3-overo-storm-palo43.dtb omap3-overo-palo43.dtb \
+    omap3-overo-storm-summit.dtb omap3-overo-summit.dtb \
+"
+KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb"
+KERNEL_DEVICETREE_pepper = "am335x-pepper.dtb"
+
+
 LINUX_VERSION = "3.17"
 LINUX_VERSION_EXTENSION = "-custom"
 
