@@ -8,7 +8,10 @@ inherit module
 COMPATIBLE_MACHINE = "omap3"
 
 SRCREV = "ccee3524b0bc063f968eef3d7963e613dd0beb1b"
-SRC_URI = "git://github.com/scottellis/omap3-pwm.git;protocol=git"
+SRC_URI = " \
+    git://github.com/scottellis/omap3-pwm.git;protocol=git \
+    file://0001-Add-include-path-for-dmtimer.h.patch \
+"
 
 S = "${WORKDIR}/git"
 

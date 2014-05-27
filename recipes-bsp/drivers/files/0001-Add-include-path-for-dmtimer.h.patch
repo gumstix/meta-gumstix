@@ -1,0 +1,25 @@
+From 7daaf3482aaa6b84a1ad9b3a5cdd335ad216159d Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Tue, 27 May 2014 11:29:58 -0700
+Subject: [PATCH] Add include path for dmtimer.h
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 1610807..de8d0d3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,7 @@
+ # cross-compile module makefile
+ 
++ccflags-y += -I$(KERNELDIR)/arch/arm/plat-omap/include
++
+ ifneq ($(KERNELRELEASE),)
+     obj-m := pwm.o
+ else
+-- 
+1.8.3.2
+
