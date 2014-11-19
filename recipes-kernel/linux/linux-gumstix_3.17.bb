@@ -1,6 +1,6 @@
 require recipes-kernel/linux/linux-yocto.inc
 
-COMPATIBLE_MACHINE = "overo|duovero"
+COMPATIBLE_MACHINE = "overo|duovero|pepper"
 
 LINUX_VERSION = "3.17"
 LINUX_VERSION_EXTENSION = "-custom"
