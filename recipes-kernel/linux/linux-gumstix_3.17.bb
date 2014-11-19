@@ -16,6 +16,7 @@ SRCREV = "bfe01a5ba2490f299e1d2d5508cbbbadd897bbe9"
 SRC_URI = " \
     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.17.y \
     file://0001-ARM-Gumstix-DuoVero-Bind-vdac-regulator-to-hdmi-node.patch \
+    file://0002-ARM-Config-regulators-for-Gumstix-Pepper.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
