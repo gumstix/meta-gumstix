@@ -17,6 +17,7 @@ SRC_URI = " \
     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.17.y \
     file://0001-ARM-Gumstix-DuoVero-Bind-vdac-regulator-to-hdmi-node.patch \
     file://0002-ARM-Config-regulators-for-Gumstix-Pepper.patch \
+    file://0003-HACK-Invert-the-y-axis-of-the-touchscreen-for-pepper.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
