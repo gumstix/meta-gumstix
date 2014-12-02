@@ -133,6 +133,9 @@ DISTRO ?= "poky"
 PACKAGE_CLASSES ?= "package_rpm"
 PACKAGE_FEED_URIS = "https://packages.gumstix.com/dev/"
 
+# Use local PR server by default
+PRSERV_HOST ?= "localhost:0"
+
 #
 # SDK/ADT target architecture
 #
