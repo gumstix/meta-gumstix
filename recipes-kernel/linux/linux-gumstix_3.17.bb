@@ -18,6 +18,7 @@ SRC_URI = " \
     file://0001-ARM-Gumstix-DuoVero-Bind-vdac-regulator-to-hdmi-node.patch \
     file://0002-ARM-Config-regulators-for-Gumstix-Pepper.patch \
     file://0003-HACK-Invert-the-y-axis-of-the-touchscreen-for-pepper.patch \
+    file://0004-Gumstix-Overo-Arbor43C-Device-Tree.patch \    
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
