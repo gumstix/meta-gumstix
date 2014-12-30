@@ -1,22 +1,21 @@
-From 55db785b966556d7e9c65fcf516605a86a83995f Mon Sep 17 00:00:00 2001
+From 1d88487b6992fcb2fca7c05d13ce56ba356e2bb1 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Tue, 18 Nov 2014 09:54:26 -0800
-Subject: [PATCH] [ARM] Config regulators for Gumstix Pepper
+Subject: [PATCH 1/5] ARM:dts configure regulators for Gumstix Pepper
 
-Kernel changes between 3.15 and 3.17 breaks Gumstix Pepper's device tree.
 Boot process is halting in midway because some of the necessary voltage
 regulators are deemed unused and subsequently powered off, leading to
 a completely unresponsive system.
 
-Most of the device nodes had correct voltage regulator attachements.
-Yet these nodes had to set strictor enforcement on them through
+Most of the device nodes had correct voltage regulator attachments.
+Yet these nodes had to set stricter enforcement on them through
 'regulator-boot-on' and 'regulator-always-on' to function correctly.
 ---
- arch/arm/boot/dts/am335x-pepper.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/arm/boot/dts/am335x-pepper.dts | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
-index 0d35ab6..5c2b00f 100644
+index 0d35ab6..b22f353 100644
 --- a/arch/arm/boot/dts/am335x-pepper.dts
 +++ b/arch/arm/boot/dts/am335x-pepper.dts
 @@ -414,6 +414,7 @@
@@ -27,17 +26,16 @@ index 0d35ab6..5c2b00f 100644
  	regulator-min-microvolt = <3300000>;
  	regulator-max-microvolt = <3300000>;
  	vin-supply = <&vbat>;
-@@ -438,6 +439,9 @@
+@@ -438,6 +439,8 @@
  	regulators {
  		dcdc1_reg: regulator@0 {
  			/* VDD_1V8 system supply */
 +			regulator-name = "vdds_dpr";
-+			regulator-boot-on;
 +			regulator-always-on;
  		};
  
  		dcdc2_reg: regulator@1 {
-@@ -446,6 +450,7 @@
+@@ -446,6 +449,7 @@
  			regulator-min-microvolt = <925000>;
  			regulator-max-microvolt = <1325000>;
  			regulator-boot-on;
@@ -45,7 +43,7 @@ index 0d35ab6..5c2b00f 100644
  		};
  
  		dcdc3_reg: regulator@2 {
-@@ -454,25 +459,34 @@
+@@ -454,25 +458,34 @@
  			regulator-min-microvolt = <925000>;
  			regulator-max-microvolt = <1150000>;
  			regulator-boot-on;
@@ -54,29 +52,29 @@ index 0d35ab6..5c2b00f 100644
  
  		ldo1_reg: regulator@3 {
  			/* VRTC 1.8V always-on supply */
-+			regulator-name = "vio,vrtc,vdds";
++			regulator-name = "vrtc,vdds";
  			regulator-always-on;
  		};
  
  		ldo2_reg: regulator@4 {
  			/* 3.3V rail */
-+				regulator-name = "vdd_3v3aux";
-+				regulator-boot-on;
-+				regulator-always-on;
++			regulator-name = "vdd_3v3aux";
++			regulator-always-on;
  		};
  
  		ldo3_reg: regulator@5 {
  			/* VDD_3V3A 3.3V rail */
-+            regulator-name = "vdd_1v8";
++			regulator-name = "vdd_3v3a";
  			regulator-min-microvolt = <3300000>;
  			regulator-max-microvolt = <3300000>;
++			regulator-boot-on;
++			regulator-always-on;
  		};
  
  		ldo4_reg: regulator@6 {
  			/* VDD_3V3B 3.3V rail */
-+				regulator-name = "vdd_3v3a";
-+				regulator-boot-on;
-+				regulator-always-on;
++			regulator-name = "vdd_3v3b";
++			regulator-always-on;
  		};
  	};
  };
