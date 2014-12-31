@@ -1,0 +1,30 @@
+From f0ac5176583296cfb542e2b12abc02a0ebbf0642 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Tue, 30 Dec 2014 17:01:35 -0800
+Subject: [PATCH 1/2] omap3: overo: Set the Arbor43C 'expansionname'
+
+The Gumstix Arbor43C expansion board [1] uses a customized device tree
+file.  When this expansion board is detected, load this file.
+
+[1] https://store.gumstix.com/index.php/products/635/
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ board/overo/overo.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/board/overo/overo.c b/board/overo/overo.c
+index 13220c5..0ba3ad7 100644
+--- a/board/overo/overo.c
++++ b/board/overo/overo.c
+@@ -345,6 +345,7 @@ int misc_init_r(void)
+ 			expansion_config.fab_revision);
+ 		MUX_ARBOR43C();
+ 		setenv("defaultdisplay", "lcd43");
++		setenv("expansionname", "arbor43c");
+ 		break;
+ 	case ETTUS_USRP_E:
+ 		printf("Recognized Ettus Research USRP-E (rev %d %s)\n",
+-- 
+2.1.0
+
