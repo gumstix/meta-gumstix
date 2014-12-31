@@ -1,7 +1,7 @@
-From 1d88487b6992fcb2fca7c05d13ce56ba356e2bb1 Mon Sep 17 00:00:00 2001
+From e40b5e7823e4935466edf6eca8b421bc90646803 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Tue, 18 Nov 2014 09:54:26 -0800
-Subject: [PATCH 1/5] ARM:dts configure regulators for Gumstix Pepper
+Subject: [PATCH 2/6] ARM:dts configure regulators for Gumstix Pepper
 
 Boot process is halting in midway because some of the necessary voltage
 regulators are deemed unused and subsequently powered off, leading to
@@ -10,12 +10,14 @@ a completely unresponsive system.
 Most of the device nodes had correct voltage regulator attachments.
 Yet these nodes had to set stricter enforcement on them through
 'regulator-boot-on' and 'regulator-always-on' to function correctly.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
  arch/arm/boot/dts/am335x-pepper.dts | 13 +++++++++++++
  1 file changed, 13 insertions(+)
 
 diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
-index 0d35ab6..b22f353 100644
+index 0d35ab64641c..b22f353970d6 100644
 --- a/arch/arm/boot/dts/am335x-pepper.dts
 +++ b/arch/arm/boot/dts/am335x-pepper.dts
 @@ -414,6 +414,7 @@
@@ -79,5 +81,5 @@ index 0d35ab6..b22f353 100644
  	};
  };
 -- 
-1.9.1
+2.1.0
 
