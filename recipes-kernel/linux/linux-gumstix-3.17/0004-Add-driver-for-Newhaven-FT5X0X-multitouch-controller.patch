@@ -1,7 +1,7 @@
 From 8240701d11513b2dfb78a53caac3337a108bf9ed Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 8 Dec 2014 13:11:02 -0800
-Subject: [PATCH 4/6] Add driver for Newhaven FT5X0X multitouch controller
+Subject: [PATCH 4/7] Add driver for Newhaven FT5X0X multitouch controller
 
 Tested with Device Tree enabled Linux Kernel 3.17.4
 on Gumstix Arbor43C using an Overo AirStorm. Backward

@@ -1,13 +1,15 @@
-From 9230b4c7cc1b2155901e9a2355ad46c58aa195e2 Mon Sep 17 00:00:00 2001
+From 2f0aeb1f726ebff87a6cda461c5d17e7ccf8003d Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 5 Jan 2015 17:45:49 -0800
-Subject: [PATCH 6/6] ARM:dts Improve U-Boot and DTS compatibility for LCD43/35
+Subject: [PATCH 6/7] ARM:dts Improve U-Boot and DTS compatibility for LCD43/35
 
 OMAP DSS still uses Kernel boot arguments to set and enable the default
 video out (omapdss.def_disp). Historically it is set to lcd43 for the
 4.3in LCD screen, and lcd35 for the 3.5in LCD screen. By setting the device
 label of the display node in the DTS to match this U-Boot parameter, user
 does not need to make the change himself.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
  arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi | 2 +-
  arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi | 2 +-

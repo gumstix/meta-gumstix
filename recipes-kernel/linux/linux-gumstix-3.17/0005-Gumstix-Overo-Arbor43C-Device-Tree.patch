@@ -1,7 +1,7 @@
 From 992b8fa019bce7647afb7e7d854491b91655af14 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 8 Dec 2014 13:27:21 -0800
-Subject: [PATCH 5/6] Gumstix Overo Arbor43C Device Tree
+Subject: [PATCH 5/7] Gumstix Overo Arbor43C Device Tree
 
 Tested Features
 - Multitouch

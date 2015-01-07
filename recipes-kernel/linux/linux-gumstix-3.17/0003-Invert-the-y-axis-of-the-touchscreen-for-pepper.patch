@@ -1,7 +1,7 @@
 From 5b735a4146e2cc36e4bd69c747c56af669e048c4 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Tue, 6 May 2014 15:03:36 -0700
-Subject: [PATCH 3/6] Invert the y-axis of the touchscreen for pepper
+Subject: [PATCH 3/7] Invert the y-axis of the touchscreen for pepper
 
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
