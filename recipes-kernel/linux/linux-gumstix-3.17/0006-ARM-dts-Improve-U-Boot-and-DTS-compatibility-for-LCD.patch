@@ -1,7 +1,7 @@
 From 2f0aeb1f726ebff87a6cda461c5d17e7ccf8003d Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 5 Jan 2015 17:45:49 -0800
-Subject: [PATCH 6/7] ARM:dts Improve U-Boot and DTS compatibility for LCD43/35
+Subject: [PATCH 6/8] ARM:dts Improve U-Boot and DTS compatibility for LCD43/35
 
 OMAP DSS still uses Kernel boot arguments to set and enable the default
 video out (omapdss.def_disp). Historically it is set to lcd43 for the

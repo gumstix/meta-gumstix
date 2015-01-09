@@ -1,7 +1,7 @@
 From 6a5f80e601c3ce89f78692e3453090c614eb3b62 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Wed, 7 Jan 2015 10:40:42 -0800
-Subject: [PATCH 7/7] ARM:dts Correct maximum SPI clock speed for lcd35
+Subject: [PATCH 7/8] ARM:dts Correct maximum SPI clock speed for lcd35
 
 Gumstix Palo35 dts has incorrect clock speed set for the LGPHILIPS LB035Q02
 display panel. The display only shows noise without this correction.

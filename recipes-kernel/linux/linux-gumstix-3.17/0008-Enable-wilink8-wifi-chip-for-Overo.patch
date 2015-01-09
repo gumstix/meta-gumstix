@@ -1,0 +1,91 @@
+From 36b939408078c8c2c1dd9751d9abb32fe25f5fa1 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 8 Jan 2015 08:04:03 -0800
+Subject: [PATCH 8/8] Enable wilink8 wifi chip for Overo
+
+A Wilink WL18xx chip can replace either the W2CBW003 or W2CBW0015
+wifi + bluetooth modules found on some Gumstix Overo COMs.  Add
+platform data to support this chip if it is present.  Here, board
+configuration data is encapsulated in pdata-quirks.c rather than via
+a device tree file as the DT-bindings for this chip are not yet in
+mainline kernels.
+Note: Bluetooth is not yet supported
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/omap3-overo-base.dtsi | 9 +++++++--
+ arch/arm/mach-omap2/pdata-quirks.c      | 6 ++++++
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap3-overo-base.dtsi b/arch/arm/boot/dts/omap3-overo-base.dtsi
+index d36bf0250a05..3f5841a71442 100644
+--- a/arch/arm/boot/dts/omap3-overo-base.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-base.dtsi
+@@ -68,6 +68,7 @@
+ 		regulator-max-microvolt = <3300000>;
+ 		gpio = <&gpio1 16 GPIO_ACTIVE_HIGH>;		/* gpio_16: WiFi nReset */
+ 		startup-delay-us = <10000>;
++		enable-active-high;
+ 	};
+ 
+ 	/* Regulator to trigger the nReset signal of the Bluetooth module */
+@@ -78,6 +79,7 @@
+ 		regulator-max-microvolt = <3300000>;
+ 		gpio = <&gpio6 4 GPIO_ACTIVE_HIGH>;		/* gpio_164: BT nReset */
+ 		startup-delay-us = <10000>;
++		enable-active-high;
+ 	};
+ };
+ 
+@@ -129,6 +131,7 @@
+ 	w3cbw003c_pins: pinmux_w3cbw003c_pins {
+ 		pinctrl-single,pins = <
+ 			OMAP3_CORE1_IOPAD(0x20b4, PIN_OUTPUT | MUX_MODE4)		/* gpmc_ncs3.gpio_54 */
++			OMAP3_CORE1_IOPAD(0x20bc, PIN_INPUT | MUX_MODE4)		/* gpmc_ncs7.gpio_58 */
+ 			OMAP3_CORE1_IOPAD(0x219c, PIN_OUTPUT | MUX_MODE4)		/* uart3_rts_sd.gpio_164 */
+ 		>;
+ 	};
+@@ -185,12 +188,14 @@
+ &mmc2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc2_pins>;
+-	vmmc-supply = <&w3cbw003c_npoweron>;
++	vmmc_aux-supply = <&w3cbw003c_npoweron>;
+ 	vqmmc-supply = <&w3cbw003c_bt_nreset>;
+-	vmmc_aux-supply = <&w3cbw003c_wifi_nreset>;
++	vmmc-supply = <&w3cbw003c_wifi_nreset>;
+ 	bus-width = <4>;
+ 	cap-sdio-irq;
+ 	non-removable;
++	/* fake dual voltage to get around usage of a transceiver */
++	ti,dual-volt;
+ };
+ 
+ &twl_gpio {
+diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
+index ac5ad74cb607..01a47467c214 100644
+--- a/arch/arm/mach-omap2/pdata-quirks.c
++++ b/arch/arm/mach-omap2/pdata-quirks.c
+@@ -193,6 +193,11 @@ static void __init omap3_zoom_legacy_init(void)
+ 	legacy_init_wl12xx(WL12XX_REFCLOCK_26, 0, 162);
+ }
+ 
++static void __init overo_legacy_init(void)
++{
++	legacy_init_wl12xx(WL12XX_REFCLOCK_26, 0, 58);
++}
++
+ static void am35xx_enable_emac_int(void)
+ {
+ 	u32 v;
+@@ -417,6 +422,7 @@ static struct pdata_init pdata_quirks[] __initdata = {
+ 	{ "ti,omap3-evm-37xx", omap3_evm_legacy_init, },
+ 	{ "ti,omap3-zoom3", omap3_zoom_legacy_init, },
+ 	{ "ti,am3517-evm", am3517_evm_legacy_init, },
++	{ "gumstix,omap3-overo", overo_legacy_init, },
+ 	{ "gumstix,omap3-overo-arbor43c", gumstix_arbor43c_legacy_init, },
+ #endif
+ #ifdef CONFIG_ARCH_OMAP4
+-- 
+2.1.0
+

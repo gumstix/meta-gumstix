@@ -38,6 +38,7 @@ SRC_URI = " \
     file://0005-Gumstix-Overo-Arbor43C-Device-Tree.patch \
     file://0006-ARM-dts-Improve-U-Boot-and-DTS-compatibility-for-LCD.patch \
     file://0007-ARM-dts-Correct-maximum-SPI-clock-speed-for-lcd35.patch \
+    file://0008-Enable-wilink8-wifi-chip-for-Overo.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
