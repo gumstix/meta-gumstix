@@ -1,0 +1,12 @@
+The included meta-gumstix layer makes the "overo", "duovero", and "pepper"
+machines available.  By default, MACHINE=overo but this can readily
+overridden, for example:
+
+    $ MACHINE=duovero bitbake core-image-base
+
+To (re-)build just the bootloader or kernel, use these commands:
+
+    $ bitbake virtual/bootloader
+    $ bitbake virtual/kernel
+
+See https://github.com/gumstix/Gumstix-YoctoProject-Repo for more details.
