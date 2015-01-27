@@ -1,12 +1,16 @@
 require ${COREBASE}/meta/recipes-bsp/u-boot/u-boot.inc
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/u-boot:"
-
-LICENSE = "GPLv2+"
+# The license text is moved from a "COPYING" file to the beginning of
+# the README on recent versions of u-boot.
 LIC_FILES_CHKSUM = "file://README;beginline=1;endline=6;md5=157ab8408beab40cd8ce1dc69f702a6c"
 
-PACKAGE_ARCH = "${MACHINE_ARCH}"
-
-S = "${WORKDIR}/git"
-
 UBOOT_SUFFIX = "img"
+
+SPL_BINARY = "MLO"
+
+# Overo has NAND storage for the environmetn
+SRC_URI_append_overo = " file://fw_env.config"
+
+# To deploy a u-boot environment file, uncomment these lines
+#UBOOT_ENV = "uEnv"
+#SRC_URI_append = " file://uEnv.txt"

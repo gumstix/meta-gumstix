@@ -10,7 +10,3 @@ SRC_URI = "git://git.denx.de/u-boot.git;protocol=git;branch=master \
 	file://0001-omap3-overo-Set-the-Arbor43C-expansionname.patch \
 	file://0002-pepper-Add-support-for-DDR3-variants.patch \
 "
-
-SRC_URI_append_overo = "file://fw_env.config"
-
-SPL_BINARY = "MLO"
