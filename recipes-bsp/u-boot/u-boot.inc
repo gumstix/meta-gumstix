@@ -8,9 +8,6 @@ UBOOT_SUFFIX = "img"
 
 SPL_BINARY = "MLO"
 
-# Overo has NAND storage for the environmetn
-SRC_URI_append_overo = " file://fw_env.config"
-
 # To deploy a u-boot environment file, uncomment these lines
 #UBOOT_ENV = "uEnv"
 #SRC_URI_append = " file://uEnv.txt"
