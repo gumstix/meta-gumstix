@@ -1,0 +1,254 @@
+state.DuoVero {
+	control.1 {
+		iface MIXER
+		name 'Capture Preamplifier Volume'
+		value.0 0
+		value.1 0
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 1'
+			dbmin -600
+			dbmax 0
+			dbvalue.0 -600
+			dbvalue.1 -600
+		}
+	}
+	control.2 {
+		iface MIXER
+		name 'Capture Volume'
+		value.0 2
+		value.1 2
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 4'
+			dbmin 600
+			dbmax 3000
+			dbvalue.0 1800
+			dbvalue.1 1800
+		}
+	}
+	control.3 {
+		iface MIXER
+		name 'Aux FM Volume'
+		value.0 0
+		value.1 0
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 7'
+			dbmin -1800
+			dbmax 2400
+			dbvalue.0 -1800
+			dbvalue.1 -1800
+		}
+	}
+	control.4 {
+		iface MIXER
+		name 'Headset Playback Volume'
+		value.0 9
+		value.1 9
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 15'
+			dbmin -3000
+			dbmax 0
+			dbvalue.0 -1200
+			dbvalue.1 -1200
+		}
+	}
+	control.5 {
+		iface MIXER
+		name 'Handsfree Playback Volume'
+		value.0 0
+		value.1 0
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 29'
+			dbmin -5200
+			dbmax 600
+			dbvalue.0 -5200
+			dbvalue.1 -5200
+		}
+	}
+	control.6 {
+		iface MIXER
+		name 'Earphone Playback Volume'
+		value 0
+		comment {
+			access 'read write'
+			type INTEGER
+			count 1
+			range '0 - 15'
+			dbmin -2400
+			dbmax 600
+			dbvalue.0 -2400
+		}
+	}
+	control.7 {
+		iface MIXER
+		name 'Headset Power Mode'
+		value High-Performance
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Low-Power
+			item.1 High-Performance
+		}
+	}
+	control.8 {
+		iface MIXER
+		name 'PLL Selection'
+		value High-Performance
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Low-Power
+			item.1 High-Performance
+		}
+	}
+	control.9 {
+		iface MIXER
+		name 'AUXR Playback Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.10 {
+		iface MIXER
+		name 'AUXL Playback Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.11 {
+		iface MIXER
+		name 'Earphone Playback Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.12 {
+		iface MIXER
+		name 'Vibra Right Playback'
+		value 'Input FF'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 'Input FF'
+			item.1 'Audio PDM'
+		}
+	}
+	control.13 {
+		iface MIXER
+		name 'Vibra Left Playback'
+		value 'Input FF'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 'Input FF'
+			item.1 'Audio PDM'
+		}
+	}
+	control.14 {
+		iface MIXER
+		name 'Headset Right Playback'
+		value 'HS DAC'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'HS DAC'
+			item.2 'Line-In amp'
+		}
+	}
+	control.15 {
+		iface MIXER
+		name 'Headset Left Playback'
+		value 'HS DAC'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'HS DAC'
+			item.2 'Line-In amp'
+		}
+	}
+	control.16 {
+		iface MIXER
+		name 'Handsfree Right Playback'
+		value Off
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'HF DAC'
+			item.2 'Line-In amp'
+		}
+	}
+	control.17 {
+		iface MIXER
+		name 'Handsfree Left Playback'
+		value Off
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'HF DAC'
+			item.2 'Line-In amp'
+		}
+	}
+	control.18 {
+		iface MIXER
+		name 'Analog Right Capture Route'
+		value Off
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 'Headset Mic'
+			item.1 'Sub Mic'
+			item.2 'Aux/FM Right'
+			item.3 Off
+		}
+	}
+	control.19 {
+		iface MIXER
+		name 'Analog Left Capture Route'
+		value 'Headset Mic'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 'Headset Mic'
+			item.1 'Main Mic'
+			item.2 'Aux/FM Left'
+			item.3 Off
+		}
+	}
+}
