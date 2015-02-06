@@ -1,7 +1,7 @@
-From 36b939408078c8c2c1dd9751d9abb32fe25f5fa1 Mon Sep 17 00:00:00 2001
+From a7f47a2dfead1b8f3b5811921910ab541fea56c4 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Thu, 8 Jan 2015 08:04:03 -0800
-Subject: [PATCH 8/8] Enable wilink8 wifi chip for Overo
+Subject: [PATCH 08/13] Enable wilink8 wifi chip for Overo
 
 A Wilink WL18xx chip can replace either the W2CBW003 or W2CBW0015
 wifi + bluetooth modules found on some Gumstix Overo COMs.  Add
@@ -13,12 +13,12 @@ Note: Bluetooth is not yet supported
 
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
- arch/arm/boot/dts/omap3-overo-base.dtsi | 9 +++++++--
+ arch/arm/boot/dts/omap3-overo-base.dtsi | 8 ++++++--
  arch/arm/mach-omap2/pdata-quirks.c      | 6 ++++++
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/omap3-overo-base.dtsi b/arch/arm/boot/dts/omap3-overo-base.dtsi
-index d36bf0250a05..3f5841a71442 100644
+index d36bf0250a05..717aaa791ce3 100644
 --- a/arch/arm/boot/dts/omap3-overo-base.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-base.dtsi
 @@ -68,6 +68,7 @@
@@ -29,15 +29,7 @@ index d36bf0250a05..3f5841a71442 100644
  	};
  
  	/* Regulator to trigger the nReset signal of the Bluetooth module */
-@@ -78,6 +79,7 @@
- 		regulator-max-microvolt = <3300000>;
- 		gpio = <&gpio6 4 GPIO_ACTIVE_HIGH>;		/* gpio_164: BT nReset */
- 		startup-delay-us = <10000>;
-+		enable-active-high;
- 	};
- };
- 
-@@ -129,6 +131,7 @@
+@@ -129,6 +130,7 @@
  	w3cbw003c_pins: pinmux_w3cbw003c_pins {
  		pinctrl-single,pins = <
  			OMAP3_CORE1_IOPAD(0x20b4, PIN_OUTPUT | MUX_MODE4)		/* gpmc_ncs3.gpio_54 */
@@ -45,7 +37,7 @@ index d36bf0250a05..3f5841a71442 100644
  			OMAP3_CORE1_IOPAD(0x219c, PIN_OUTPUT | MUX_MODE4)		/* uart3_rts_sd.gpio_164 */
  		>;
  	};
-@@ -185,12 +188,14 @@
+@@ -185,12 +187,14 @@
  &mmc2 {
  	pinctrl-names = "default";
  	pinctrl-0 = <&mmc2_pins>;

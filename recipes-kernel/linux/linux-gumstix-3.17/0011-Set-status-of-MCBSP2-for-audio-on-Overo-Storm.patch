@@ -1,0 +1,44 @@
+From 61cde71699084e7ab6d300fa87a8d820f9bd850d Mon Sep 17 00:00:00 2001
+From: Adam YH Lee <adam.yh.lee@gmail.com>
+Date: Mon, 19 Jan 2015 16:53:53 -0800
+Subject: [PATCH 11/13] Set status of MCBSP2 for audio on Overo Storm
+
+Gumstix Overo and Overo Storm COMs use TWL4030 audio module. The module is
+connected to the 2nd module of MCBSP on the OMAP3 SoC. The status is set to
+"okay" only on omap3-overo.dtsi, and not on omap3-overo-storm.dtsi. Unless it
+is specified, it is assumed to be disabled. This resulted in broken audio on
+Storm COMs.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/omap3-overo-base.dtsi | 4 ++++
+ arch/arm/boot/dts/omap3-overo.dtsi      | 4 ----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap3-overo-base.dtsi b/arch/arm/boot/dts/omap3-overo-base.dtsi
+index 714fba4978fa..ee9332b2646a 100644
+--- a/arch/arm/boot/dts/omap3-overo-base.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-base.dtsi
+@@ -222,3 +222,7 @@
+ 	pinctrl-0 = <&uart2_pins>;
+ };
+ 
++&mcbsp2 {
++    status = "okay";
++};
++
+diff --git a/arch/arm/boot/dts/omap3-overo.dtsi b/arch/arm/boot/dts/omap3-overo.dtsi
+index 69ca7c45bca2..932a02ff552a 100644
+--- a/arch/arm/boot/dts/omap3-overo.dtsi
++++ b/arch/arm/boot/dts/omap3-overo.dtsi
+@@ -32,7 +32,3 @@
+ 		>;
+ 	};
+ };
+-
+-&mcbsp2 {
+-	status = "okay";
+-};
+-- 
+2.1.0
+
