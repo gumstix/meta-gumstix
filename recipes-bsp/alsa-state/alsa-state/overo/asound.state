@@ -366,7 +366,7 @@ state.overo {
 	control.27 {
 		iface MIXER
 		name 'Analog Left Main Mic Capture Switch'
-		value false
+		value true
 		comment {
 			access 'read write'
 			type BOOLEAN
