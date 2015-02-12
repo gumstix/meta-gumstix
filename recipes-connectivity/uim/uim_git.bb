@@ -10,6 +10,7 @@ inherit systemd update-rc.d
 # service files over initscripts of the same name.
 # [1] https://github.com/archlinuxarm/PKGBUILDs/pull/680/files
 SYSTEMD_SERVICE_${PN} = "ti-uim.service"
+SYSTEMD_AUTO_ENABLE = "disable"
 INITSCRIPT_NAME = "ti-uim"
 INITSCRIPT_PARAMS = "defaults 03"
 
