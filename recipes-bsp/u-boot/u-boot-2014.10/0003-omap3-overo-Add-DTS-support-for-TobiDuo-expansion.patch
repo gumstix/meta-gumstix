@@ -1,7 +1,7 @@
 From 124cf5f2035ff70cd45b0b0f82a0f7f4a86f5f72 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 23 Jan 2015 16:40:15 -0800
-Subject: [PATCH 3/3] omap3: overo: Add DTS support for TobiDuo expansion
+Subject: [PATCH 3/6] omap3: overo: Add DTS support for TobiDuo expansion
 
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---

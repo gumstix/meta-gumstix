@@ -1,0 +1,71 @@
+From f8ad7526911e5e65c30b0bfd4db50dfa3ee1166c Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 18 Feb 2015 10:02:30 -0800
+Subject: [PATCH 4/6] omap: gpmc: 'nandecc sw' can use HAM1 or BCH8
+
+The 'nandecc sw' command selects a software-based error correction
+algorithm.  By default, this is OMAP_ECC_HAM1_CODE_SW but some
+platforms use OMAP_ECC_BCH8_CODE_HW_DETECTION_SW as their
+software-based correction algorithm.  Allow a user to be specific e.g.
+ # nandecc sw <hamming|bch8>
+where 'hamming' is still the default.
+
+Note: we don't just use CONFIG_NAND_OMAP_ECCSCHEME as it might be set
+      to a hardware-based ECC scheme---a little strange when the user
+      has requested 'sw' ECC.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/cpu/armv7/omap3/board.c | 11 ++++++++++-
+ drivers/mtd/nand/omap_gpmc.c     | 12 +++++++++++-
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/cpu/armv7/omap3/board.c b/arch/arm/cpu/armv7/omap3/board.c
+index 667e77f..b4e29ab 100644
+--- a/arch/arm/cpu/armv7/omap3/board.c
++++ b/arch/arm/cpu/armv7/omap3/board.c
+@@ -327,7 +327,16 @@ static int do_switch_ecc(cmd_tbl_t * cmdtp, int flag, int argc, char * const arg
+ 				goto usage;
+ 		}
+ 	} else if (strncmp(argv[1], "sw", 2) == 0) {
+-		omap_nand_switch_ecc(0, 0);
++		if (argc == 2) {
++			omap_nand_switch_ecc(0, 1);
++		} else {
++			if (strncmp(argv[2], "hamming", 7) == 0)
++				omap_nand_switch_ecc(0, 1);
++			else if (strncmp(argv[2], "bch8", 4) == 0)
++				omap_nand_switch_ecc(0, 8);
++			else
++				goto usage;
++		}
+ 	} else {
+ 		goto usage;
+ 	}
+diff --git a/drivers/mtd/nand/omap_gpmc.c b/drivers/mtd/nand/omap_gpmc.c
+index db1599e..d6a28e6 100644
+--- a/drivers/mtd/nand/omap_gpmc.c
++++ b/drivers/mtd/nand/omap_gpmc.c
+@@ -794,8 +794,18 @@ int __maybe_unused omap_nand_switch_ecc(uint32_t hardware, uint32_t eccstrength)
+ 			return -EINVAL;
+ 		}
+ 	} else {
+-		err = omap_select_ecc_scheme(nand, OMAP_ECC_HAM1_CODE_SW,
++		if (eccstrength == 1) {
++			err = omap_select_ecc_scheme(nand,
++					OMAP_ECC_HAM1_CODE_SW,
++					mtd->writesize, mtd->oobsize);
++		} else if (eccstrength == 8) {
++			err = omap_select_ecc_scheme(nand,
++					OMAP_ECC_BCH8_CODE_HW_DETECTION_SW,
+ 					mtd->writesize, mtd->oobsize);
++		} else {
++			printf("nand: error: unsupported ECC scheme\n");
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	/* Update NAND handling after ECC mode switch */
+-- 
+2.1.0
+

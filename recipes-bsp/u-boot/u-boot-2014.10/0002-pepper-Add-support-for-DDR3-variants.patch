@@ -1,7 +1,7 @@
 From b15227e92c9d3d6562260d679c464bd93264210b Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 31 Dec 2014 10:28:02 -0800
-Subject: [PATCH 2/3] pepper: Add support for DDR3 variants
+Subject: [PATCH 2/6] pepper: Add support for DDR3 variants
 
 Some variants of the Gumstix Pepper board use DDR3 memory instead of
 DDR2.  This adds a machine variant to support these DDR3-based boards.
