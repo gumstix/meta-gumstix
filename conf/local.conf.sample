@@ -131,7 +131,7 @@ DISTRO ?= "poky"
 # E.g.: PACKAGE_CLASSES ?= "package_rpm package_deb package_ipk"
 # We default to rpm:
 PACKAGE_CLASSES ?= "package_rpm"
-PACKAGE_FEED_URIS = "https://packages.gumstix.com/dev/"
+PACKAGE_FEED_URIS = "https://packages.gumstix.com/dev"
 
 # Use local PR server by default
 PRSERV_HOST ?= "localhost:0"
