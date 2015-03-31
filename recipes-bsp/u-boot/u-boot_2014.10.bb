@@ -13,4 +13,5 @@ SRC_URI = "git://git.denx.de/u-boot.git;protocol=git;branch=master \
 	file://0004-omap-gpmc-nandecc-sw-can-use-HAM1-or-BCH8.patch \
 	file://0005-omap3-overo-Use-software-BCH8-ECC-for-NAND.patch \
 	file://0006-omap3-overo-Allow-boot-with-kernel-in-UBI-rootfs.patch \
+	file://0007-overo-Override-RAM-setup-for-rev.-0-boards.patch \
 "

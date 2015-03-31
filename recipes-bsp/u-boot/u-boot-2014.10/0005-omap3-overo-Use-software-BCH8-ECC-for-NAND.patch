@@ -1,7 +1,7 @@
 From 103ba73550ad5d78ac93cb19b406ea03d4b56255 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 23 Jan 2015 12:29:44 -0800
-Subject: [PATCH 5/6] omap3: overo: Use software BCH8 ECC for NAND
+Subject: [PATCH 5/7] omap3: overo: Use software BCH8 ECC for NAND
 
 Overo COMs have NAND flash that requires 4-bit ECC or better except for
 the first sector which can use 1-bit ECC.  The boot ROM expects to load
