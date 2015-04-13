@@ -1,0 +1,1000 @@
+From 1ca056411c26bbbe4eb726d34d4d795d71b713ab Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Wed, 20 Jan 2016 15:15:02 -0800
+Subject: [PATCH] am437x-poblano: Add a new board
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/Kconfig                  |   6 +
+ board/gumstix/poblano/Kconfig     |  15 ++
+ board/gumstix/poblano/MAINTAINERS |   6 +
+ board/gumstix/poblano/Makefile    |  13 ++
+ board/gumstix/poblano/board.c     | 392 ++++++++++++++++++++++++++++++++++++++
+ board/gumstix/poblano/board.h     |  12 ++
+ board/gumstix/poblano/mux.c       |  91 +++++++++
+ configs/poblano_defconfig         |  13 ++
+ include/configs/poblano.h         | 356 ++++++++++++++++++++++++++++++++++
+ 9 files changed, 904 insertions(+)
+ create mode 100644 board/gumstix/poblano/Kconfig
+ create mode 100644 board/gumstix/poblano/MAINTAINERS
+ create mode 100644 board/gumstix/poblano/Makefile
+ create mode 100644 board/gumstix/poblano/board.c
+ create mode 100644 board/gumstix/poblano/board.h
+ create mode 100644 board/gumstix/poblano/mux.c
+ create mode 100644 configs/poblano_defconfig
+ create mode 100644 include/configs/poblano.h
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 9bd6cf1..0d5c2ef 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -512,6 +512,11 @@ config TARGET_CM_T43
+ 	select CPU_V7
+ 	select SUPPORT_SPL
+ 
++config TARGET_POBLANO
++	bool "Support Poblano"
++	select CPU_V7
++	select SUPPORT_SPL
++
+ config ARCH_SUNXI
+ 	bool "Support sunxi (Allwinner) SoCs"
+ 	select CMD_USB
+@@ -805,6 +810,7 @@ source "board/freescale/mx53loco/Kconfig"
+ source "board/freescale/mx53smd/Kconfig"
+ source "board/freescale/vf610twr/Kconfig"
+ source "board/gumstix/pepper/Kconfig"
++source "board/gumstix/poblano/Kconfig"
+ source "board/h2200/Kconfig"
+ source "board/hisilicon/hikey/Kconfig"
+ source "board/imx31_phycore/Kconfig"
+diff --git a/board/gumstix/poblano/Kconfig b/board/gumstix/poblano/Kconfig
+new file mode 100644
+index 0000000..4898699
+--- /dev/null
++++ b/board/gumstix/poblano/Kconfig
+@@ -0,0 +1,15 @@
++if TARGET_POBLANO
++
++config SYS_BOARD
++	default "poblano"
++
++config SYS_VENDOR
++	default "gumstix"
++
++config SYS_SOC
++	default "am33xx"
++
++config SYS_CONFIG_NAME
++	default "poblano"
++
++endif
+diff --git a/board/gumstix/poblano/MAINTAINERS b/board/gumstix/poblano/MAINTAINERS
+new file mode 100644
+index 0000000..bb44035
+--- /dev/null
++++ b/board/gumstix/poblano/MAINTAINERS
+@@ -0,0 +1,6 @@
++POBLANO BOARD
++M:	Ash Charles <ash@gumstix.com>
++S:	Maintained
++F:	board/gumstix/poblano/
++F:	include/configs/poblano.h
++F:	configs/poblano_defconfig
+diff --git a/board/gumstix/poblano/Makefile b/board/gumstix/poblano/Makefile
+new file mode 100644
+index 0000000..90e90e1
+--- /dev/null
++++ b/board/gumstix/poblano/Makefile
+@@ -0,0 +1,13 @@
++#
++# Makefile
++#
++# Copyright (C) 2015 Gumstix, Inc.
++#
++# SPDX-License-Identifier:	GPL-2.0+
++#
++
++ifeq ($(CONFIG_SKIP_LOWLEVEL_INIT),)
++obj-y   := mux.o
++endif
++
++obj-y	+= board.o
+diff --git a/board/gumstix/poblano/board.c b/board/gumstix/poblano/board.c
+new file mode 100644
+index 0000000..b01806e
+--- /dev/null
++++ b/board/gumstix/poblano/board.c
+@@ -0,0 +1,392 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc.
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++#include <common.h>
++#include <i2c.h>
++#include <miiphy.h>
++#include <cpsw.h>
++#include <spl.h>
++#include <usb.h>
++#include <asm/arch/clock.h>
++#include <asm/arch/sys_proto.h>
++#include <asm/arch/mux.h>
++#include <asm/arch/ddr_defs.h>
++#include <asm/errno.h>
++#include <asm/gpio.h>
++#include <asm/emif.h>
++#include <power/pmic.h>
++#include <power/tps65218.h>
++#include <linux/usb/gadget.h>
++#include <dwc3-uboot.h>
++#include <dwc3-omap-uboot.h>
++#include <ti-usb-phy-uboot.h>
++#include "board.h"
++
++DECLARE_GLOBAL_DATA_PTR;
++
++static struct ctrl_dev *cdev = (struct ctrl_dev *)CTRL_DEVICE_BASE;
++
++#ifndef CONFIG_SKIP_LOWLEVEL_INIT
++
++/* 24MHz System Clock */
++const struct dpll_params dpll_mpu  = { 800, 23,  1, -1, -1, -1, -1};
++const struct dpll_params dpll_core = {1000, 23, -1, -1, 10,  8,  4};
++const struct dpll_params dpll_per  = { 400,  9,  5, -1, -1, -1, -1};
++const struct dpll_params dpll_ddr  = {  50,  2,  1, -1,  2, -1, -1};
++
++const struct ctrl_ioregs ioregs_ddr3 = {
++	.cm0ioctl		= DDR3_ADDRCTRL_IOCTRL_VALUE,
++	.cm1ioctl		= DDR3_ADDRCTRL_WD0_IOCTRL_VALUE,
++	.cm2ioctl		= DDR3_ADDRCTRL_WD1_IOCTRL_VALUE,
++	.dt0ioctl		= DDR3_DATA0_IOCTRL_VALUE,
++	.dt1ioctl		= DDR3_DATA0_IOCTRL_VALUE,
++	.dt2ioctrl		= DDR3_DATA0_IOCTRL_VALUE,
++	.dt3ioctrl		= DDR3_DATA0_IOCTRL_VALUE,
++	.emif_sdram_config_ext	= 0xc163,
++};
++
++struct emif_regs ddr3_emif_regs = {
++	.sdram_config                   = 0x638453b2,
++	.sdram_config2                  = 0x00000000,
++	.ref_ctrl                       = 0x00000c30,
++	.sdram_tim1                     = 0xeaaad4db,
++	.sdram_tim2                     = 0x266b7fda,
++	.sdram_tim3                     = 0x107f8678,
++	.read_idle_ctrl                 = 0x00050000,
++	.zq_config                      = 0x50074be4,
++	.temp_alert_config              = 0x0,
++	.emif_ddr_phy_ctlr_1            = 0x0e084008,
++	.emif_ddr_ext_phy_ctrl_1        = 0x08020080,
++	.emif_ddr_ext_phy_ctrl_2        = 0x89,
++	.emif_ddr_ext_phy_ctrl_3        = 0x90,
++	.emif_ddr_ext_phy_ctrl_4        = 0x8e,
++	.emif_ddr_ext_phy_ctrl_5        = 0x8d,
++	.emif_rd_wr_lvl_rmp_win         = 0x0,
++	.emif_rd_wr_lvl_rmp_ctl         = 0x00000000,
++	.emif_rd_wr_lvl_ctl             = 0x00000000,
++	.emif_rd_wr_exec_thresh         = 0x80000000,
++	.emif_prio_class_serv_map       = 0x80000001,
++	.emif_connect_id_serv_1_map     = 0x80000094,
++	.emif_connect_id_serv_2_map     = 0x00000000,
++	.emif_cos_config                = 0x000FFFFF
++};
++
++void emif_get_ext_phy_ctrl_const_regs(const u32 **regs, u32 *size)
++{
++	return;
++}
++
++const struct dpll_params *get_dpll_ddr_params(void)
++{
++	return &dpll_ddr;
++}
++
++const struct dpll_params *get_dpll_mpu_params(void)
++{
++	return &dpll_mpu;
++}
++
++const struct dpll_params *get_dpll_core_params(void)
++{
++	return &dpll_core;
++}
++
++const struct dpll_params *get_dpll_per_params(void)
++{
++	return &dpll_per;
++}
++
++void scale_vcores_generic(u32 m)
++{
++	int mpu_vdd;
++
++	if (i2c_probe(TPS65218_CHIP_PM))
++		return;
++
++	switch (m) {
++		case 1000:
++			mpu_vdd = TPS65218_DCDC_VOLT_SEL_1330MV;
++			break;
++		case 800:
++			mpu_vdd = TPS65218_DCDC_VOLT_SEL_1260MV;
++			break;
++		case 720:
++			mpu_vdd = TPS65218_DCDC_VOLT_SEL_1200MV;
++			break;
++		case 600:
++			mpu_vdd = TPS65218_DCDC_VOLT_SEL_1100MV;
++			break;
++		case 300:
++			mpu_vdd = TPS65218_DCDC_VOLT_SEL_0950MV;
++			break;
++		default:
++			puts("Unknown MPU clock, not scaling\n");
++			return;
++	}
++
++	/* Set DCDC1 (CORE) voltage to 1.1V */
++	if (tps65218_voltage_update(TPS65218_DCDC1,
++								TPS65218_DCDC_VOLT_SEL_1100MV)) {
++		printf("%s failure\n", __func__);
++		return;
++	}
++
++	/* Set DCDC2 (MPU) voltage */
++	if (tps65218_voltage_update(TPS65218_DCDC2, mpu_vdd)) {
++		printf("%s failure\n", __func__);
++		return;
++	}
++}
++
++void scale_vcores(void)
++{
++	const struct dpll_params *mpu_params;
++
++	enable_i2c_pin_mux();
++	i2c_init(CONFIG_SYS_OMAP24_I2C_SPEED, CONFIG_SYS_OMAP24_I2C_SLAVE);
++
++	/* Get the frequency */
++	mpu_params = get_dpll_mpu_params();
++	scale_vcores_generic(mpu_params->m);
++}
++
++void set_uart_mux_conf(void)
++{
++	enable_uart0_pin_mux();
++}
++
++void set_mux_conf_regs(void)
++{
++	enable_board_pin_mux();
++}
++
++
++
++void sdram_init(void)
++{
++	config_ddr(400, &ioregs_ddr3, NULL, NULL, &ddr3_emif_regs, 0);
++}
++#endif
++
++/* setup board specific PMIC */
++int power_init_board(void)
++{
++	struct pmic *p;
++
++	power_tps65218_init(I2C_PMIC);
++	p = pmic_get("TPS65218_PMIC");
++	if (p && !pmic_probe(p))
++		puts("PMIC:  TPS65218\n");
++
++	return 0;
++}
++
++int board_init(void)
++{
++	gd->bd->bi_boot_params = CONFIG_SYS_SDRAM_BASE + 0x100;
++	i2c_init(CONFIG_SYS_OMAP24_I2C_SPEED, CONFIG_SYS_OMAP24_I2C_SLAVE);
++
++	return 0;
++}
++
++#ifdef CONFIG_DRIVER_TI_CPSW
++
++static void cpsw_control(int enabled)
++{
++	return;
++}
++
++static struct cpsw_slave_data cpsw_slaves[] = {
++	{
++		.slave_reg_ofs	= 0x208,
++		.sliver_reg_ofs	= 0xd80,
++		.phy_addr	= 0,
++		.phy_if		= PHY_INTERFACE_MODE_RGMII,
++	},
++	{ /* Unused */
++		.slave_reg_ofs	= 0x308,
++		.sliver_reg_ofs	= 0xdc0,
++		.phy_addr	= 1,
++		.phy_if		= PHY_INTERFACE_MODE_RGMII,
++	},
++};
++
++static struct cpsw_platform_data cpsw_data = {
++	.mdio_base		= CPSW_MDIO_BASE,
++	.cpsw_base		= CPSW_BASE,
++	.mdio_div		= 0xff,
++	.channels		= 8,
++	.cpdma_reg_ofs		= 0x800,
++	.slaves			= 1,
++	.slave_data		= cpsw_slaves,
++	.ale_reg_ofs		= 0xd00,
++	.ale_entries		= 1024,
++	.host_port_reg_ofs	= 0x108,
++	.hw_stats_reg_ofs	= 0x900,
++	.bd_ram_ofs		= 0x2000,
++	.mac_control		= (1 << 5),
++	.control		= cpsw_control,
++	.host_port_num		= 0,
++	.version		= CPSW_CTRL_VERSION_2,
++};
++
++#define GPIO_PHY1_RST		171
++
++static void board_phy_init(void)
++{
++	gpio_request(GPIO_PHY1_RST, "phy1_rst");
++	gpio_direction_output(GPIO_PHY1_RST, 0);
++	mdelay(2);
++
++	gpio_set_value(GPIO_PHY1_RST, 1);
++	mdelay(2);
++}
++
++int board_eth_init(bd_t *bis)
++{
++	int rv;
++	const char *devname;
++
++	board_phy_init();
++	writel(RGMII_MODE_ENABLE | RGMII_INT_DELAY, &cdev->miisel);
++
++	rv = cpsw_register(&cpsw_data);
++	if (rv < 0)
++		printf("Error %d registering CPSW switch\n", rv);
++
++        /*
++         *
++         * CPSW RGMII Internal Delay Mode is not supported in all PVT
++         * operating points.  So we must set the TX clock delay feature
++         * in the KSZ9021 PHY.  Since we only support a single ethernet
++         * device in U-Boot, we only do this for the current instance.
++         */
++        devname = miiphy_get_current_dev();
++        /* max rx/tx clock delay, min rx/tx control delay */
++        miiphy_write(devname, 0x0, 0x0b, 0x8104);
++        miiphy_write(devname, 0x0, 0xc, 0xa0a0);
++
++        /* min rx data delay */
++        miiphy_write(devname, 0x0, 0x0b, 0x8105);
++        miiphy_write(devname, 0x0, 0x0c, 0x0000);
++
++        /* min tx data delay */
++        miiphy_write(devname, 0x0, 0x0b, 0x8106);
++        miiphy_write(devname, 0x0, 0x0c, 0x0000);
++
++	return rv;
++}
++#endif
++
++#ifdef CONFIG_BOARD_LATE_INIT
++int board_late_init(void)
++{
++	return 0;
++}
++#endif
++
++#ifdef CONFIG_USB_DWC3
++static struct dwc3_device usb_otg_ss1 = {
++	.maximum_speed = USB_SPEED_HIGH,
++	.base = USB_OTG_SS1_BASE,
++	.tx_fifo_resize = false,
++	.index = 0,
++};
++
++static struct dwc3_omap_device usb_otg_ss1_glue = {
++	.base = (void *)USB_OTG_SS1_GLUE_BASE,
++	.utmi_mode = DWC3_OMAP_UTMI_MODE_SW,
++	.index = 0,
++};
++
++static struct ti_usb_phy_device usb_phy1_device = {
++	.usb2_phy_power = (void *)USB2_PHY1_POWER,
++	.index = 0,
++};
++
++static struct dwc3_device usb_otg_ss2 = {
++	.maximum_speed = USB_SPEED_HIGH,
++	.base = USB_OTG_SS2_BASE,
++	.tx_fifo_resize = false,
++	.index = 1,
++};
++
++static struct dwc3_omap_device usb_otg_ss2_glue = {
++	.base = (void *)USB_OTG_SS2_GLUE_BASE,
++	.utmi_mode = DWC3_OMAP_UTMI_MODE_SW,
++	.index = 1,
++};
++
++static struct ti_usb_phy_device usb_phy2_device = {
++	.usb2_phy_power = (void *)USB2_PHY2_POWER,
++	.index = 1,
++};
++
++int board_usb_init(int index, enum usb_init_type init)
++{
++	enable_usb_clocks(index);
++	switch (index) {
++	case 0:
++		if (init == USB_INIT_DEVICE) {
++			usb_otg_ss1.dr_mode = USB_DR_MODE_PERIPHERAL;
++			usb_otg_ss1_glue.vbus_id_status = OMAP_DWC3_VBUS_VALID;
++		} else {
++			usb_otg_ss1.dr_mode = USB_DR_MODE_HOST;
++			usb_otg_ss1_glue.vbus_id_status = OMAP_DWC3_ID_GROUND;
++		}
++
++		dwc3_omap_uboot_init(&usb_otg_ss1_glue);
++		ti_usb_phy_uboot_init(&usb_phy1_device);
++		dwc3_uboot_init(&usb_otg_ss1);
++		break;
++	case 1:
++		if (init == USB_INIT_DEVICE) {
++			usb_otg_ss2.dr_mode = USB_DR_MODE_PERIPHERAL;
++			usb_otg_ss2_glue.vbus_id_status = OMAP_DWC3_VBUS_VALID;
++		} else {
++			usb_otg_ss2.dr_mode = USB_DR_MODE_HOST;
++			usb_otg_ss2_glue.vbus_id_status = OMAP_DWC3_ID_GROUND;
++		}
++
++		ti_usb_phy_uboot_init(&usb_phy2_device);
++		dwc3_omap_uboot_init(&usb_otg_ss2_glue);
++		dwc3_uboot_init(&usb_otg_ss2);
++		break;
++	default:
++		printf("Invalid Controller Index\n");
++	}
++
++	return 0;
++}
++
++int board_usb_cleanup(int index, enum usb_init_type init)
++{
++	switch (index) {
++	case 0:
++	case 1:
++		ti_usb_phy_uboot_exit(index);
++		dwc3_uboot_exit(index);
++		dwc3_omap_uboot_exit(index);
++		break;
++	default:
++		printf("Invalid Controller Index\n");
++	}
++	disable_usb_clocks(index);
++
++	return 0;
++}
++
++int usb_gadget_handle_interrupts(int index)
++{
++	u32 status;
++
++	status = dwc3_omap_uboot_interrupt_status(index);
++	if (status)
++		dwc3_uboot_handle_interrupt(index);
++
++	return 0;
++}
++#endif
+diff --git a/board/gumstix/poblano/board.h b/board/gumstix/poblano/board.h
+new file mode 100644
+index 0000000..8c66767
+--- /dev/null
++++ b/board/gumstix/poblano/board.h
+@@ -0,0 +1,12 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc.
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++#ifndef _BOARD_H_
++#define _BOARD_H_
++void enable_i2c_pin_mux(void);
++void enable_board_pin_mux(void);
++void enable_uart0_pin_mux(void);
++#endif
+diff --git a/board/gumstix/poblano/mux.c b/board/gumstix/poblano/mux.c
+new file mode 100644
+index 0000000..b21808b
+--- /dev/null
++++ b/board/gumstix/poblano/mux.c
+@@ -0,0 +1,91 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc.
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++#include <common.h>
++#include <asm/arch/sys_proto.h>
++#include <asm/arch/mux.h>
++#include "board.h"
++
++static struct module_pin_mux rgmii1_pin_mux[] = {
++	{OFFSET(mii1_txen),  MODE(2)},
++	{OFFSET(mii1_txd3),  MODE(2)},
++	{OFFSET(mii1_txd2),  MODE(2)},
++	{OFFSET(mii1_txd1),  MODE(2)},
++	{OFFSET(mii1_txd0),  MODE(2)},
++	{OFFSET(mii1_txclk), MODE(2)},
++	{OFFSET(mii1_rxdv),  MODE(2) | RXACTIVE | PULLDOWN_EN},
++	{OFFSET(mii1_rxclk), MODE(2) | RXACTIVE | PULLDOWN_EN},
++	{OFFSET(mii1_rxd3),  MODE(2) | RXACTIVE | PULLDOWN_EN},
++	{OFFSET(mii1_rxd2),  MODE(2) | RXACTIVE | PULLDOWN_EN},
++	{OFFSET(mii1_rxd1),  MODE(2) | RXACTIVE | PULLDOWN_EN},
++	{OFFSET(mii1_rxd0),  MODE(2) | RXACTIVE | PULLDOWN_EN},
++	{-1},
++};
++
++static struct module_pin_mux mdio_pin_mux[] = {
++	{OFFSET(mdio_data), (MODE(0) | PULLUP_EN | RXACTIVE)},
++	{OFFSET(mdio_clk),  (MODE(0) | PULLUP_EN)},
++	{-1},
++};
++
++static struct module_pin_mux uart0_pin_mux[] = {
++	{OFFSET(uart0_rxd), (MODE(0) | PULLUP_EN | RXACTIVE  | SLEWCTRL)},
++	{OFFSET(uart0_txd), (MODE(0) | PULLUDDIS | PULLUP_EN | SLEWCTRL)},
++	{-1},
++};
++
++static struct module_pin_mux mmc0_pin_mux[] = {
++	{OFFSET(mmc0_clk),  (MODE(0) | PULLUDDIS | RXACTIVE)},
++	{OFFSET(mmc0_cmd),  (MODE(0) | PULLUP_EN | RXACTIVE)},
++	{OFFSET(mmc0_dat0), (MODE(0) | PULLUP_EN | RXACTIVE)},
++	{OFFSET(mmc0_dat1), (MODE(0) | PULLUP_EN | RXACTIVE)},
++	{OFFSET(mmc0_dat2), (MODE(0) | PULLUP_EN | RXACTIVE)},
++	{OFFSET(mmc0_dat3), (MODE(0) | PULLUP_EN | RXACTIVE)},
++	{-1},
++};
++
++static struct module_pin_mux i2c_pin_mux[] = {
++	{OFFSET(i2c0_sda),  (MODE(0) | PULLUP_EN | RXACTIVE | SLEWCTRL)},
++	{OFFSET(i2c0_scl),  (MODE(0) | PULLUP_EN | RXACTIVE | SLEWCTRL)},
++	{OFFSET(spi0_d1), (MODE(2) | PULLUP_EN | RXACTIVE | SLEWCTRL)},
++	{OFFSET(spi0_cs0),  (MODE(2) | PULLUP_EN | RXACTIVE | SLEWCTRL)},
++	{OFFSET(uart1_ctsn), (MODE(3) | PULLUP_EN | RXACTIVE | SLEWCTRL)},
++	{OFFSET(uart1_rtsn),  (MODE(3) | PULLUP_EN | RXACTIVE | SLEWCTRL)},
++	{-1},
++};
++
++static struct module_pin_mux emmc_pin_mux[] = {
++	{OFFSET(gpmc_csn1), (MODE(2) | PULLUDDIS | RXACTIVE)}, /* EMMC_CLK */
++	{OFFSET(gpmc_csn2), (MODE(2) | PULLUP_EN | RXACTIVE)}, /* EMMC_CMD */
++	{OFFSET(gpmc_ad0),  (MODE(1) | PULLUP_EN | RXACTIVE)}, /* EMMC_DAT0 */
++	{OFFSET(gpmc_ad1),  (MODE(1) | PULLUP_EN | RXACTIVE)}, /* EMMC_DAT1 */
++	{OFFSET(gpmc_ad2), (MODE(1) | PULLUP_EN | RXACTIVE)}, /* EMMC_DAT2 */
++	{OFFSET(gpmc_ad3), (MODE(1) | PULLUP_EN | RXACTIVE)}, /* EMMC_DAT3 */
++	{OFFSET(gpmc_ad4), (MODE(1) | PULLUP_EN | RXACTIVE)}, /* EMMC_DAT4 */
++	{OFFSET(gpmc_ad5), (MODE(1) | PULLUP_EN | RXACTIVE)}, /* EMMC_DAT5 */
++	{OFFSET(gpmc_ad6), (MODE(1) | PULLUP_EN | RXACTIVE)}, /* EMMC_DAT6 */
++	{OFFSET(gpmc_ad7), (MODE(1) | PULLUP_EN | RXACTIVE)}, /* EMMC_DAT7 */
++	{-1},
++};
++
++void enable_uart0_pin_mux(void)
++{
++	configure_module_pin_mux(uart0_pin_mux);
++}
++
++void enable_board_pin_mux(void)
++{
++	configure_module_pin_mux(mmc0_pin_mux);
++	configure_module_pin_mux(i2c_pin_mux);
++	configure_module_pin_mux(emmc_pin_mux);
++	configure_module_pin_mux(mdio_pin_mux);
++	configure_module_pin_mux(rgmii1_pin_mux);
++}
++
++void enable_i2c_pin_mux(void)
++{
++	configure_module_pin_mux(i2c_pin_mux);
++}
+diff --git a/configs/poblano_defconfig b/configs/poblano_defconfig
+new file mode 100644
+index 0000000..1dd80f3
+--- /dev/null
++++ b/configs/poblano_defconfig
+@@ -0,0 +1,13 @@
++CONFIG_ARM=y
++CONFIG_TARGET_POBLANO=y
++CONFIG_SPL=y
++CONFIG_SYS_EXTRA_OPTIONS="SERIAL1,CONS_INDEX=1"
++# CONFIG_CMD_IMLS is not set
++# CONFIG_CMD_FLASH is not set
++CONFIG_CMD_GPIO=y
++# CONFIG_CMD_SETEXPR is not set
++CONFIG_SPI_FLASH=y
++CONFIG_SPI_FLASH_BAR=y
++CONFIG_SPI_FLASH_MACRONIX=y
++CONFIG_SYS_NS16550=y
++CONFIG_TI_QSPI=y
+diff --git a/include/configs/poblano.h b/include/configs/poblano.h
+new file mode 100644
+index 0000000..f6994a4
+--- /dev/null
++++ b/include/configs/poblano.h
+@@ -0,0 +1,356 @@
++/*
++ * am43xx_evm.h
++ *
++ * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com/
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++#ifndef __CONFIG_POBLANO_H
++#define __CONFIG_POBLANO_H
++
++#define CONFIG_AM43XX
++
++#define CONFIG_CMD_FAT
++
++#define CONFIG_BOARD_LATE_INIT
++#define CONFIG_ARCH_CPU_INIT
++#define CONFIG_SYS_CACHELINE_SIZE       32
++#define CONFIG_MAX_RAM_BANK_SIZE	(1024 << 21)	/* 2GB */
++#define CONFIG_SYS_TIMERBASE		0x48040000	/* Use Timer2 */
++
++#include <asm/arch/omap.h>
++
++/* NS16550 Configuration */
++#define CONFIG_SYS_NS16550_CLK		48000000
++#if defined(CONFIG_SPL_BUILD) || !defined(CONFIG_DM_SERIAL)
++#define CONFIG_SYS_NS16550_SERIAL
++#define CONFIG_SYS_NS16550_REG_SIZE	(-4)
++#endif
++
++/* I2C Configuration */
++#define CONFIG_CMD_EEPROM
++#define CONFIG_ENV_EEPROM_IS_ON_I2C
++#define CONFIG_SYS_I2C_EEPROM_ADDR	0x50	/* Main EEPROM */
++#define CONFIG_SYS_I2C_EEPROM_ADDR_LEN	2
++
++/* Power */
++#define CONFIG_POWER
++#define CONFIG_POWER_I2C
++#define CONFIG_POWER_TPS65218
++#define CONFIG_POWER_TPS62362
++
++/* SPL defines. */
++#ifdef CONFIG_SPL_USB_HOST_SUPPORT
++/*
++ * For USB host boot, ROM uses DMA for copying MLO from USB storage
++ * and ARM internal ram is not accessible for DMA, so SPL text base
++ * should be in OCMC ram
++ */
++#define CONFIG_SPL_TEXT_BASE		0x40300350
++#else
++#define CONFIG_SPL_TEXT_BASE		0x402F4000
++#endif
++#define CONFIG_SPL_MAX_SIZE		(220 << 10)	/* 220KB */
++#define CONFIG_SYS_SPL_ARGS_ADDR	(CONFIG_SYS_SDRAM_BASE + \
++					 (128 << 20))
++#define CONFIG_SPL_POWER_SUPPORT
++#define CONFIG_SPL_YMODEM_SUPPORT
++
++/* Enabling L2 Cache */
++#define CONFIG_SYS_L2_PL310
++#define CONFIG_SYS_PL310_BASE	0x48242000
++#define CONFIG_SYS_CACHELINE_SIZE	32
++
++/*
++ * Since SPL did pll and ddr initialization for us,
++ * we don't need to do it twice.
++ */
++#if !defined(CONFIG_SPL_BUILD) && !defined(CONFIG_QSPI_BOOT)
++#define CONFIG_SKIP_LOWLEVEL_INIT
++#endif
++
++/*
++ * When building U-Boot such that there is no previous loader
++ * we need to call board_early_init_f.  This is taken care of in
++ * s_init when we have SPL used.
++ */
++#if !defined(CONFIG_SKIP_LOWLEVEL_INIT) && !defined(CONFIG_SPL)
++#define CONFIG_BOARD_EARLY_INIT_F
++#endif
++
++/* Now bring in the rest of the common code. */
++#include <configs/ti_armv7_omap.h>
++
++/* Always 64 KiB env size */
++#define CONFIG_ENV_SIZE			(64 << 10)
++
++#define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
++
++/* Clock Defines */
++#define V_OSCK				24000000  /* Clock output from T2 */
++#define V_SCLK				(V_OSCK)
++
++/* NS16550 Configuration */
++#define CONFIG_SYS_NS16550_COM1		0x44e09000	/* Base EVM has UART0 */
++
++#define CONFIG_ENV_IS_IN_FAT
++#define FAT_ENV_INTERFACE		"mmc"
++#define FAT_ENV_DEVICE_AND_PART		"0:1"
++#define FAT_ENV_FILE			"uboot.env"
++#define CONFIG_FAT_WRITE
++
++#define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/omap-common/u-boot-spl.lds"
++
++/* SPL USB Support */
++#ifdef CONFIG_SPL_USB_HOST_SUPPORT
++#define CONFIG_SPL_USB_SUPPORT
++#define CONFIG_SYS_USB_FAT_BOOT_PARTITION		1
++
++#define CONFIG_CMD_USB
++#define CONFIG_USB_HOST
++#define CONFIG_USB_XHCI
++#define CONFIG_USB_XHCI_DWC3
++#define CONFIG_USB_XHCI_OMAP
++#define CONFIG_USB_STORAGE
++#define CONFIG_SYS_USB_XHCI_MAX_ROOT_PORTS 2
++
++#define CONFIG_OMAP_USB_PHY
++#define CONFIG_AM437X_USB2PHY2_HOST
++#endif
++
++/* USB GADGET */
++#if !defined(CONFIG_SPL_BUILD) || \
++	(defined(CONFIG_SPL_BUILD) && defined(CONFIG_SPL_USBETH_SUPPORT))
++#define CONFIG_USB_DWC3_PHY_OMAP
++#define CONFIG_USB_DWC3_OMAP
++#define CONFIG_USB_DWC3
++#define CONFIG_USB_DWC3_GADGET
++
++#define CONFIG_USB_GADGET
++#define CONFIG_USB_GADGET_DOWNLOAD
++#define CONFIG_USB_GADGET_VBUS_DRAW 2
++#define CONFIG_G_DNL_MANUFACTURER "Texas Instruments"
++#define CONFIG_G_DNL_VENDOR_NUM 0x0403
++#define CONFIG_G_DNL_PRODUCT_NUM 0xBD00
++#define CONFIG_USB_GADGET_DUALSPEED
++#endif
++
++/*
++ * Disable MMC DM for SPL build and can be re-enabled after adding
++ * DM support in SPL
++ */
++#ifdef CONFIG_SPL_BUILD
++#undef CONFIG_DM_MMC
++#endif
++
++#ifndef CONFIG_SPL_BUILD
++/* USB Device Firmware Update support */
++#define CONFIG_USB_FUNCTION_DFU
++#define CONFIG_DFU_RAM
++#define CONFIG_CMD_DFU
++
++#define CONFIG_DFU_MMC
++#define DFU_ALT_INFO_MMC \
++	"dfu_alt_info_mmc=" \
++	"boot part 0 1;" \
++	"rootfs part 0 2;" \
++	"MLO fat 0 1;" \
++	"spl-os-args fat 0 1;" \
++	"spl-os-image fat 0 1;" \
++	"u-boot.img fat 0 1;" \
++	"uEnv.txt fat 0 1\0"
++
++#define DFU_ALT_INFO_EMMC \
++	"dfu_alt_info_emmc=" \
++	"MLO raw 0x100 0x100 mmcpart 0;" \
++	"u-boot.img raw 0x300 0x1000 mmcpart 0\0"
++
++#define CONFIG_DFU_RAM
++#define DFU_ALT_INFO_RAM \
++	"dfu_alt_info_ram=" \
++	"kernel ram 0x80200000 0x4000000;" \
++	"fdt ram 0x80f80000 0x80000;" \
++	"ramdisk ram 0x81000000 0x4000000\0"
++
++#define CONFIG_DFU_SF
++#define DFU_ALT_INFO_QSPI \
++	"dfu_alt_info_qspi=" \
++	"u-boot.bin raw 0x0 0x080000;" \
++	"u-boot.backup raw 0x080000 0x080000;" \
++	"u-boot-spl-os raw 0x100000 0x010000;" \
++	"u-boot-env raw 0x110000 0x010000;" \
++	"u-boot-env.backup raw 0x120000 0x010000;" \
++	"kernel raw 0x130000 0x800000\0"
++
++#define DFUARGS \
++	"dfu_bufsiz=0x10000\0" \
++	DFU_ALT_INFO_MMC \
++	DFU_ALT_INFO_EMMC \
++	DFU_ALT_INFO_RAM \
++	DFU_ALT_INFO_QSPI
++#else
++#define DFUARGS
++#endif
++
++#ifdef CONFIG_QSPI_BOOT
++#define CONFIG_SYS_TEXT_BASE           0x30000000
++#undef CONFIG_ENV_IS_IN_FAT
++#define CONFIG_ENV_IS_IN_SPI_FLASH
++#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
++#define CONFIG_ENV_SPI_MAX_HZ           CONFIG_SF_DEFAULT_SPEED
++#define CONFIG_ENV_SECT_SIZE           (64 << 10) /* 64 KB sectors */
++#define CONFIG_ENV_OFFSET              0x110000
++#define CONFIG_ENV_OFFSET_REDUND       0x120000
++#ifdef MTDIDS_DEFAULT
++#undef MTDIDS_DEFAULT
++#endif
++#ifdef MTDPARTS_DEFAULT
++#undef MTDPARTS_DEFAULT
++#endif
++#define MTDPARTS_DEFAULT		"mtdparts=qspi.0:512k(QSPI.u-boot)," \
++					"512k(QSPI.u-boot.backup)," \
++					"512k(QSPI.u-boot-spl-os)," \
++					"64k(QSPI.u-boot-env)," \
++					"64k(QSPI.u-boot-env.backup)," \
++					"8m(QSPI.kernel)," \
++					"-(QSPI.file-system)"
++#endif
++
++/* SPI */
++#undef CONFIG_OMAP3_SPI
++#define CONFIG_CMD_SF
++#define CONFIG_CMD_SPI
++#define CONFIG_TI_SPI_MMAP
++#define CONFIG_QSPI_SEL_GPIO                   48
++#define CONFIG_SF_DEFAULT_SPEED                48000000
++#define CONFIG_DEFAULT_SPI_MODE                SPI_MODE_3
++#define CONFIG_QSPI_QUAD_SUPPORT
++#define CONFIG_TI_EDMA3
++
++/* Enhance our eMMC support / experience. */
++#define CONFIG_CMD_GPT
++#define CONFIG_EFI_PARTITION
++
++#ifndef CONFIG_SPL_BUILD
++#define CONFIG_EXTRA_ENV_SETTINGS \
++	DEFAULT_LINUX_BOOT_ENV \
++	DEFAULT_MMC_TI_ARGS \
++	"fdtfile=undefined\0" \
++	"bootpart=0:2\0" \
++	"bootdir=/boot\0" \
++	"bootfile=zImage\0" \
++	"console=ttyO0,115200n8\0" \
++	"partitions=" \
++		"uuid_disk=${uuid_gpt_disk};" \
++		"name=rootfs,start=2MiB,size=-,uuid=${uuid_gpt_rootfs}\0" \
++	"optargs=\0" \
++	"usbroot=/dev/sda2 rw\0" \
++	"usbrootfstype=ext4 rootwait\0" \
++	"usbdev=0\0" \
++	"ramroot=/dev/ram0 rw\0" \
++	"ramrootfstype=ext2\0" \
++	"usbargs=setenv bootargs console=${console} " \
++		"${optargs} " \
++		"root=${usbroot} " \
++		"rootfstype=${usbrootfstype}\0" \
++	"bootenv=uEnv.txt\0" \
++	"loadbootenv=load ${devtype} ${devnum} ${loadaddr} ${bootenv}\0" \
++	"importbootenv=echo Importing environment from mmc ...; " \
++		"env import -t $loadaddr $filesize\0" \
++	"ramargs=setenv bootargs console=${console} " \
++		"${optargs} " \
++		"root=${ramroot} " \
++		"rootfstype=${ramrootfstype}\0" \
++	"loadramdisk=load ${devtype} ${devnum} ${rdaddr} ramdisk.gz\0" \
++	"loadimage=load ${devtype} ${bootpart} ${loadaddr} ${bootdir}/${bootfile}\0" \
++	"loadfdt=load ${devtype} ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}\0" \
++	"mmcboot=mmc dev ${mmcdev}; " \
++		"setenv devnum ${mmcdev}; " \
++		"setenv devtype mmc; " \
++		"if mmc rescan; then " \
++			"echo SD/MMC found on device ${devnum};" \
++			"if run loadbootenv; then " \
++				"echo Loaded environment from ${bootenv};" \
++				"run importbootenv;" \
++			"fi;" \
++			"if test -n $uenvcmd; then " \
++				"echo Running uenvcmd ...;" \
++				"run uenvcmd;" \
++			"fi;" \
++			"if run loadimage; then " \
++				"run loadfdt; " \
++				"echo Booting from mmc${mmcdev} ...; " \
++				"run args_mmc; " \
++				"bootz ${loadaddr} - ${fdtaddr}; " \
++			"fi;" \
++		"fi;\0" \
++	"usbboot=" \
++		"setenv devnum ${usbdev}; " \
++		"setenv devtype usb; " \
++		"usb start ${usbdev}; " \
++		"if usb dev ${usbdev}; then " \
++			"if run loadbootenv; then " \
++				"echo Loaded environment from ${bootenv};" \
++				"run importbootenv;" \
++			"fi;" \
++			"if test -n $uenvcmd; then " \
++				"echo Running uenvcmd ...;" \
++				"run uenvcmd;" \
++			"fi;" \
++			"if run loadimage; then " \
++				"run loadfdt; " \
++				"echo Booting from usb ${usbdev}...; " \
++				"run usbargs;" \
++				"bootz ${loadaddr} - ${fdtaddr}; " \
++			"fi;" \
++		"fi\0" \
++		"fi;" \
++		"usb stop ${usbdev};\0" \
++	"findfdt="\
++		"if test $board_name = poblano; then " \
++			"setenv fdtfile am437x-poblano.dtb; fi; " \
++		"if test $fdtfile = undefined; then " \
++			"echo WARNING: Could not determine device tree; fi; \0" \
++	NETARGS \
++	DFUARGS \
++
++#define CONFIG_BOOTCOMMAND \
++	"run findfdt; " \
++	"run mmcboot;" \
++	"run usbboot;" \
++
++#endif
++
++#ifndef CONFIG_SPL_BUILD
++/* CPSW Ethernet */
++#define CONFIG_CMD_DHCP
++#define CONFIG_CMD_PING
++#define CONFIG_CMD_MII
++#define CONFIG_MII
++#define CONFIG_BOOTP_DEFAULT
++#define CONFIG_BOOTP_DNS
++#define CONFIG_BOOTP_DNS2
++#define CONFIG_BOOTP_SEND_HOSTNAME
++#define CONFIG_BOOTP_GATEWAY
++#define CONFIG_BOOTP_SUBNETMASK
++#define CONFIG_NET_RETRY_COUNT		10
++#define CONFIG_PHY_GIGE
++#endif
++
++#define CONFIG_DRIVER_TI_CPSW
++#define CONFIG_PHYLIB
++#define PHY_ANEG_TIMEOUT	8000 /* PHY needs longer aneg time at 1G */
++
++#define CONFIG_SPL_ENV_SUPPORT
++#define CONFIG_SPL_NET_VCI_STRING	"AM43xx U-Boot SPL"
++
++#if defined(CONFIG_SPL_BUILD) && defined(CONFIG_SPL_ETH_SUPPORT)
++#undef CONFIG_ENV_IS_IN_FAT
++#define CONFIG_ENV_IS_NOWHERE
++#define CONFIG_SPL_NET_SUPPORT
++#endif
++
++#define CONFIG_SYS_RX_ETH_BUFFER	64
++
++#endif	/* __CONFIG_POBLANO_H */
+-- 
+2.1.4
+
