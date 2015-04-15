@@ -1,7 +1,7 @@
 From fc4910b85960733310feb688815f5959ae03f6b2 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 23 Jan 2015 17:10:10 -0800
-Subject: [PATCH 10/13] omap3: dts: Add DTS for Gumstix TobiDuo expansion board
+Subject: [PATCH 10/15] omap3: dts: Add DTS for Gumstix TobiDuo expansion board
 
 The Gumstix "Tobi-Duo" expansion board [1] can be used with either
 OMAP3 Overo or Overo Storm COMs.  It provides two NICs using LAN9221
@@ -24,7 +24,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  create mode 100644 arch/arm/boot/dts/omap3-overo-tobiduo.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index e6aa6e77a3ec..aaa835c3e843 100644
+index e6aa6e7..aaa835c 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -304,8 +304,10 @@ dtb-$(CONFIG_ARCH_OMAP3) += am3517-craneboard.dtb \
@@ -40,7 +40,7 @@ index e6aa6e77a3ec..aaa835c3e843 100644
  	omap3-sbc-t3730.dtb \
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts b/arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts
 new file mode 100644
-index 000000000000..0c7d5a70e5e5
+index 0000000..0c7d5a7
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-storm-tobiduo.dts
 @@ -0,0 +1,22 @@
@@ -68,7 +68,7 @@ index 000000000000..0c7d5a70e5e5
 +
 diff --git a/arch/arm/boot/dts/omap3-overo-tobiduo-common.dtsi b/arch/arm/boot/dts/omap3-overo-tobiduo-common.dtsi
 new file mode 100644
-index 000000000000..0257532088f8
+index 0000000..0257532
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-tobiduo-common.dtsi
 @@ -0,0 +1,66 @@
@@ -140,7 +140,7 @@ index 000000000000..0257532088f8
 +
 diff --git a/arch/arm/boot/dts/omap3-overo-tobiduo.dts b/arch/arm/boot/dts/omap3-overo-tobiduo.dts
 new file mode 100644
-index 000000000000..bebc4b1e0bf7
+index 0000000..bebc4b1
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-tobiduo.dts
 @@ -0,0 +1,22 @@
@@ -167,5 +167,5 @@ index 000000000000..bebc4b1e0bf7
 +};
 +
 -- 
-2.1.0
+1.9.1
 
