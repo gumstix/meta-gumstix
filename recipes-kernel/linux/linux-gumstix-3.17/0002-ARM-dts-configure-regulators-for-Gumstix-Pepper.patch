@@ -1,7 +1,7 @@
 From cc99126113ce649982e7f07061245d308540f084 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Tue, 18 Nov 2014 09:54:26 -0800
-Subject: [PATCH 02/13] ARM:dts configure regulators for Gumstix Pepper
+Subject: [PATCH 02/15] ARM:dts configure regulators for Gumstix Pepper
 
 Boot process is halting in midway because some of the necessary voltage
 regulators are deemed unused and subsequently powered off, leading to
@@ -17,7 +17,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
-index 0d35ab64641c..b22f353970d6 100644
+index 0d35ab6..b22f353 100644
 --- a/arch/arm/boot/dts/am335x-pepper.dts
 +++ b/arch/arm/boot/dts/am335x-pepper.dts
 @@ -414,6 +414,7 @@
@@ -81,5 +81,5 @@ index 0d35ab64641c..b22f353970d6 100644
  	};
  };
 -- 
-2.1.0
+1.9.1
 

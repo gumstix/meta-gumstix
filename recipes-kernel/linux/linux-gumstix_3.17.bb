@@ -13,6 +13,7 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-arbor43c.dtb omap3-overo-arbor43c.dtb \
     omap3-overo-storm-gallop43.dtb omap3-overo-gallop43.dtb \
     omap3-overo-storm-palo43.dtb omap3-overo-palo43.dtb \
+    omap3-overo-storm-palo35.dtb omap3-overo-palo35.dtb \
     omap3-overo-storm-summit.dtb omap3-overo-summit.dtb \
 "
 KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb"
@@ -45,6 +46,8 @@ SRC_URI = " \
     file://0011-Set-status-of-MCBSP2-for-audio-on-Overo-Storm.patch \
     file://0012-omap3-overo-Support-PoP-NAND.patch \
     file://0013-arm-DTS-Correct-audio-input-route-set-mic-bias.patch \
+    file://0014-omap3-overo-Add-device-tree-for-Palo35-board.patch \
+    file://0015-gpio-backlight-Discover-driver-during-boot-time.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

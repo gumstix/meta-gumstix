@@ -1,7 +1,7 @@
 From 0821d52872f43da4ae93eb57502f0df6ff39becf Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Tue, 6 May 2014 15:03:36 -0700
-Subject: [PATCH 03/13] Invert the y-axis of the touchscreen for pepper
+Subject: [PATCH 03/15] Invert the y-axis of the touchscreen for pepper
 
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---
@@ -9,7 +9,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/input/touchscreen/ti_am335x_tsc.c b/drivers/input/touchscreen/ti_am335x_tsc.c
-index 2ce649520fe0..1f9812273ee7 100644
+index 2ce6495..1f98122 100644
 --- a/drivers/input/touchscreen/ti_am335x_tsc.c
 +++ b/drivers/input/touchscreen/ti_am335x_tsc.c
 @@ -235,6 +235,7 @@ static void titsc_read_coordinates(struct titsc *ts_dev,
@@ -21,5 +21,5 @@ index 2ce649520fe0..1f9812273ee7 100644
  			if (diff < prev_diff_y) {
  				prev_diff_y = diff;
 -- 
-2.1.0
+1.9.1
 

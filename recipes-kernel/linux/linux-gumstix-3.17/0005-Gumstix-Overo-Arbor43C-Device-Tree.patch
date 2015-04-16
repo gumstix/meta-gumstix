@@ -1,7 +1,7 @@
 From a33808276929c65a230ec6956a5e56c431afb000 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 8 Dec 2014 13:27:21 -0800
-Subject: [PATCH 05/13] Gumstix Overo Arbor43C Device Tree
+Subject: [PATCH 05/15] Gumstix Overo Arbor43C Device Tree
 
 Tested Features
 - Multitouch
@@ -44,7 +44,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
 
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor43c-common.dtsi b/arch/arm/boot/dts/omap3-overo-arbor43c-common.dtsi
 new file mode 100644
-index 000000000000..d869480924bd
+index 0000000..d869480
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-arbor43c-common.dtsi
 @@ -0,0 +1,69 @@
@@ -119,7 +119,7 @@ index 000000000000..d869480924bd
 +
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor43c.dts b/arch/arm/boot/dts/omap3-overo-arbor43c.dts
 new file mode 100644
-index 000000000000..203e24a5bbc3
+index 0000000..203e24a
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-arbor43c.dts
 @@ -0,0 +1,38 @@
@@ -162,7 +162,7 @@ index 000000000000..203e24a5bbc3
 +	};
 +};
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
-index f5395b7da912..7e5d786a7c49 100644
+index f5395b7..7e5d786 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 @@ -133,6 +133,7 @@
@@ -175,7 +175,7 @@ index f5395b7da912..7e5d786a7c49 100644
  	backlight {
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43c.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43c.dtsi
 new file mode 100644
-index 000000000000..a099b8d7b919
+index 0000000..a099b8d
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd43c.dtsi
 @@ -0,0 +1,43 @@
@@ -224,7 +224,7 @@ index 000000000000..a099b8d7b919
 +	};
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor43c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor43c.dts
 new file mode 100644
-index 000000000000..6c0349189521
+index 0000000..6c03491
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-storm-arbor43c.dts
 @@ -0,0 +1,39 @@
@@ -268,5 +268,5 @@ index 000000000000..6c0349189521
 +};
 +
 -- 
-2.1.0
+1.9.1
 

@@ -1,7 +1,7 @@
 From a3690aad663af51e846eaaa441d9b8f5dc3e8ad0 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Tue, 20 Jan 2015 16:14:05 -0800
-Subject: [PATCH 09/13] Enable wilink8 bluetooth chip for Overo
+Subject: [PATCH 09/15] Enable wilink8 bluetooth chip for Overo
 
 Add platform data for Gumstix Overo COMs to support bluetooth from the
 Wilink WL18xx chips.  Here, board configuration data is encapsulated
@@ -17,7 +17,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  2 files changed, 20 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/omap3-overo-base.dtsi b/arch/arm/boot/dts/omap3-overo-base.dtsi
-index 717aaa791ce3..714fba4978fa 100644
+index 717aaa7..714fba4 100644
 --- a/arch/arm/boot/dts/omap3-overo-base.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-base.dtsi
 @@ -77,7 +77,6 @@
@@ -29,7 +29,7 @@ index 717aaa791ce3..714fba4978fa 100644
  	};
  };
 diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
-index 01a47467c214..67698c968b05 100644
+index 01a4746..67698c9 100644
 --- a/arch/arm/mach-omap2/pdata-quirks.c
 +++ b/arch/arm/mach-omap2/pdata-quirks.c
 @@ -16,6 +16,7 @@
@@ -69,5 +69,5 @@ index 01a47467c214..67698c968b05 100644
  }
  
 -- 
-2.1.0
+1.9.1
 

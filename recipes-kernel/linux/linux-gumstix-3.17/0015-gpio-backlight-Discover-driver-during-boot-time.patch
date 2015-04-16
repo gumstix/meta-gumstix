@@ -1,0 +1,34 @@
+From 38e54921f4d7cefbe14832057f7fe93eaf846816 Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Wed, 15 Apr 2015 16:24:04 -0700
+Subject: [PATCH 15/15] gpio-backlight: Discover driver during boot time
+
+The MODULE_DEVICE_TABLE line for the gpio-backlight
+driver seems to be missing and hence the driver does
+not get automatically modprobed by the kernel at boot
+time.
+
+This seems to be a bug. This patch fixes that.
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ drivers/video/backlight/gpio_backlight.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/video/backlight/gpio_backlight.c b/drivers/video/backlight/gpio_backlight.c
+index aaead04..159d088 100644
+--- a/drivers/video/backlight/gpio_backlight.c
++++ b/drivers/video/backlight/gpio_backlight.c
+@@ -146,6 +146,8 @@ static struct of_device_id gpio_backlight_of_match[] = {
+ 	{ .compatible = "gpio-backlight" },
+ 	{ /* sentinel */ }
+ };
++
++MODULE_DEVICE_TABLE(of, gpio_backlight_of_match);
+ #endif
+ 
+ static struct platform_driver gpio_backlight_driver = {
+-- 
+1.9.1
+

@@ -1,7 +1,7 @@
 From 193f09654df020fdae91edd8a2e729ddbc5ae5d1 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Fri, 6 Feb 2015 17:20:05 -0800
-Subject: [PATCH 13/13] arm:DTS Correct audio input route & set mic bias
+Subject: [PATCH 13/15] arm:DTS Correct audio input route & set mic bias
 
 Audio-in was incorrectly routed to Line In. It should be Mic3L as per
 schematic.
@@ -18,7 +18,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
-index b22f353970d6..99f855da298e 100644
+index b22f353..99f855d 100644
 --- a/arch/arm/boot/dts/am335x-pepper.dts
 +++ b/arch/arm/boot/dts/am335x-pepper.dts
 @@ -74,6 +74,7 @@
@@ -39,5 +39,5 @@ index b22f353970d6..99f855da298e 100644
  
  &mcasp0 {
 -- 
-2.1.0
+1.9.1
 

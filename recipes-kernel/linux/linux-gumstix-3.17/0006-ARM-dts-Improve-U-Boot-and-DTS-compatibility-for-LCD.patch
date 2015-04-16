@@ -1,7 +1,7 @@
 From 2801ae9b65fff13b917c8c56befdd75d47fe7c2f Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 5 Jan 2015 17:45:49 -0800
-Subject: [PATCH 06/13] ARM:dts Improve U-Boot and DTS compatibility for
+Subject: [PATCH 06/15] ARM:dts Improve U-Boot and DTS compatibility for
  LCD43/35
 
 OMAP DSS still uses Kernel boot arguments to set and enable the default
@@ -17,7 +17,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
-index 233c69e50ae3..df8908adb0cb 100644
+index 233c69e..df8908a 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
 @@ -120,7 +120,7 @@
@@ -30,7 +30,7 @@ index 233c69e50ae3..df8908adb0cb 100644
  		reg = <1>;					/* CS1 */
  		spi-max-frequency = <10000000>;
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
-index 7e5d786a7c49..606dfe83dca8 100644
+index 7e5d786..606dfe8 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 @@ -98,7 +98,7 @@
@@ -43,5 +43,5 @@ index 7e5d786a7c49..606dfe83dca8 100644
  		pinctrl-names = "default";
  		pinctrl-0 = <&lte430_pins>;
 -- 
-2.1.0
+1.9.1
 
