@@ -1,0 +1,197 @@
+From c2a89772cb7c9f048718ee12d8aff3877a3cbcd8 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 15 Apr 2015 11:48:21 -0700
+Subject: [PATCH 14/15] omap3: overo: Add device tree for Palo35 board
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/Makefile                       |  2 +
+ arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi  |  1 +
+ arch/arm/boot/dts/omap3-overo-palo35-common.dtsi | 54 ++++++++++++++++++++++++
+ arch/arm/boot/dts/omap3-overo-palo35.dts         | 38 +++++++++++++++++
+ arch/arm/boot/dts/omap3-overo-storm-palo35.dts   | 38 +++++++++++++++++
+ 5 files changed, 133 insertions(+)
+ create mode 100644 arch/arm/boot/dts/omap3-overo-palo35-common.dtsi
+ create mode 100644 arch/arm/boot/dts/omap3-overo-palo35.dts
+ create mode 100644 arch/arm/boot/dts/omap3-overo-storm-palo35.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index aaa835c..aff0e82 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -297,10 +297,12 @@ dtb-$(CONFIG_ARCH_OMAP3) += am3517-craneboard.dtb \
+ 	omap3-overo-alto35.dtb \
+ 	omap3-overo-chestnut43.dtb \
+ 	omap3-overo-gallop43.dtb \
++	omap3-overo-palo35.dtb \
+ 	omap3-overo-palo43.dtb \
+ 	omap3-overo-storm-alto35.dtb \
+ 	omap3-overo-storm-chestnut43.dtb \
+ 	omap3-overo-storm-gallop43.dtb \
++	omap3-overo-storm-palo35.dtb \
+ 	omap3-overo-storm-palo43.dtb \
+ 	omap3-overo-storm-summit.dtb \
+ 	omap3-overo-storm-tobi.dtb \
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
+index b628cc6..80d236a 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
+@@ -62,6 +62,7 @@
+ 			OMAP3_CORE1_IOPAD(0x21ca, PIN_INPUT | MUX_MODE0)	/* mcspi1_simo.mcspi1_simo */
+ 			OMAP3_CORE1_IOPAD(0x21cc, PIN_INPUT | MUX_MODE0)	/* mcspi1_somi.mcspi1_somi */
+ 			OMAP3_CORE1_IOPAD(0x21ce, PIN_INPUT | MUX_MODE0)	/* mcspi1_cs0.mcspi1_cs0 */
++			OMAP3_CORE1_IOPAD(0x21d0, PIN_INPUT | MUX_MODE0)	/* mcspi1_cs1.mcspi1_cs1 */
+ 		>;
+ 	};
+ 
+diff --git a/arch/arm/boot/dts/omap3-overo-palo35-common.dtsi b/arch/arm/boot/dts/omap3-overo-palo35-common.dtsi
+new file mode 100644
+index 0000000..eab94c1
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-palo35-common.dtsi
+@@ -0,0 +1,54 @@
++/*
++ * Copyright (C) 2015 Ash Charles, Gumstix Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Palo35 expansion board is manufactured by Gumstix Inc.
++ */
++
++#include "omap3-overo-common-peripherals.dtsi"
++#include "omap3-overo-common-lcd35.dtsi"
++
++#include <dt-bindings/input/input.h>
++
++/ {
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&led_pins>;
++		heartbeat {
++			label = "overo:red:gpio21";
++			gpios = <&gpio1 21 GPIO_ACTIVE_LOW>;		/* gpio_21 */
++			linux,default-trigger = "heartbeat";
++		};
++		gpio22 {
++			label = "overo:blue:gpio22";
++			gpios = <&gpio1 22 GPIO_ACTIVE_LOW>;		/* gpio_22 */
++		};
++	};
++
++	gpio_keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&button_pins>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		button0@23 {
++			label = "button0";
++			linux,code = <BTN_0>;
++			gpios = <&gpio1 23 GPIO_ACTIVE_LOW>;		/* gpio_23 */
++			gpio-key,wakeup;
++		};
++		button1@14 {
++			label = "button1";
++			linux,code = <BTN_1>;
++			gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;		/* gpio_14 */
++			gpio-key,wakeup;
++		};
++	};
++};
++
+diff --git a/arch/arm/boot/dts/omap3-overo-palo35.dts b/arch/arm/boot/dts/omap3-overo-palo35.dts
+new file mode 100644
+index 0000000..8801019
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-palo35.dts
+@@ -0,0 +1,38 @@
++/*
++ * Copyright (C) 2015 Ash Charles, Gumstix Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Palo35 expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo.dtsi"
++#include "omap3-overo-palo35-common.dtsi"
++
++/ {
++	model = "OMAP35xx Gumstix Overo on Palo35";
++	compatible = "gumstix,omap3-overo-palo35", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3";
++};
++
++&omap3_pmx_core2 {
++	led_pins: pinmux_led_pins {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25ea, PIN_OUTPUT | MUX_MODE4)	/* etk_d7.gpio_21 */
++			OMAP3430_CORE2_IOPAD(0x25ec, PIN_OUTPUT | MUX_MODE4)	/* etk_d8.gpio_22 */
++		>;
++	};
++
++	button_pins: pinmux_button_pins {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25ee, PIN_INPUT | MUX_MODE4)	/* etk_d9.gpio_23 */
++			OMAP3430_CORE2_IOPAD(0x25dc, PIN_INPUT | MUX_MODE4)	/* etk_d0.gpio_14 */
++		>;
++	};
++};
++
+diff --git a/arch/arm/boot/dts/omap3-overo-storm-palo35.dts b/arch/arm/boot/dts/omap3-overo-storm-palo35.dts
+new file mode 100644
+index 0000000..e251545
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-storm-palo35.dts
+@@ -0,0 +1,38 @@
++/*
++ * Copyright (C) 2015 Ash Charles, Gumstix, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Palo35 expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo-storm.dtsi"
++#include "omap3-overo-palo35-common.dtsi"
++
++/ {
++	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Palo35";
++	compatible = "gumstix,omap3-overo-palo35", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
++};
++
++&omap3_pmx_core2 {
++	led_pins: pinmux_led_pins {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25ea, PIN_OUTPUT | MUX_MODE4)	/* etk_d7.gpio_21 */
++			OMAP3630_CORE2_IOPAD(0x25ec, PIN_OUTPUT | MUX_MODE4)	/* etk_d8.gpio_22 */
++		>;
++	};
++
++	button_pins: pinmux_button_pins {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25ee, PIN_INPUT | MUX_MODE4)	/* etk_d9.gpio_23 */
++			OMAP3630_CORE2_IOPAD(0x25dc, PIN_INPUT | MUX_MODE4)	/* etk_d0.gpio_14 */
++		>;
++	};
++};
++
+-- 
+1.9.1
+

@@ -1,7 +1,7 @@
 From a7f47a2dfead1b8f3b5811921910ab541fea56c4 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Thu, 8 Jan 2015 08:04:03 -0800
-Subject: [PATCH 08/13] Enable wilink8 wifi chip for Overo
+Subject: [PATCH 08/15] Enable wilink8 wifi chip for Overo
 
 A Wilink WL18xx chip can replace either the W2CBW003 or W2CBW0015
 wifi + bluetooth modules found on some Gumstix Overo COMs.  Add
@@ -18,7 +18,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  2 files changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/omap3-overo-base.dtsi b/arch/arm/boot/dts/omap3-overo-base.dtsi
-index d36bf0250a05..717aaa791ce3 100644
+index d36bf02..717aaa7 100644
 --- a/arch/arm/boot/dts/omap3-overo-base.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-base.dtsi
 @@ -68,6 +68,7 @@
@@ -55,7 +55,7 @@ index d36bf0250a05..717aaa791ce3 100644
  
  &twl_gpio {
 diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
-index ac5ad74cb607..01a47467c214 100644
+index ac5ad74..01a4746 100644
 --- a/arch/arm/mach-omap2/pdata-quirks.c
 +++ b/arch/arm/mach-omap2/pdata-quirks.c
 @@ -193,6 +193,11 @@ static void __init omap3_zoom_legacy_init(void)
@@ -79,5 +79,5 @@ index ac5ad74cb607..01a47467c214 100644
  #endif
  #ifdef CONFIG_ARCH_OMAP4
 -- 
-2.1.0
+1.9.1
 

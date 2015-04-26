@@ -1,7 +1,7 @@
 From 888e42668e2c5068c37b43a552e8c78d67e67e4b Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 8 Dec 2014 13:11:02 -0800
-Subject: [PATCH 04/13] Add driver for Newhaven FT5X0X multitouch controller
+Subject: [PATCH 04/15] Add driver for Newhaven FT5X0X multitouch controller
 
 Tested with Device Tree enabled Linux Kernel 3.17.4
 on Gumstix Arbor43C using an Overo AirStorm. Backward
@@ -53,7 +53,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  create mode 100644 include/linux/input/ft5x06_ts.h
 
 diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
-index 90c88d498485..ac5ad74cb607 100644
+index 90c88d4..ac5ad74 100644
 --- a/arch/arm/mach-omap2/pdata-quirks.c
 +++ b/arch/arm/mach-omap2/pdata-quirks.c
 @@ -7,6 +7,7 @@
@@ -133,7 +133,7 @@ index 90c88d498485..ac5ad74cb607 100644
  #ifdef CONFIG_ARCH_OMAP4
  	{ "ti,omap4-sdp", omap4_sdp_legacy_init, },
 diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
-index 6bb9a7dd23b6..f96db89a840d 100644
+index 6bb9a7d..f96db89 100644
 --- a/drivers/input/touchscreen/Kconfig
 +++ b/drivers/input/touchscreen/Kconfig
 @@ -239,6 +239,15 @@ config TOUCHSCREEN_DYNAPRO
@@ -153,7 +153,7 @@ index 6bb9a7dd23b6..f96db89a840d 100644
  	tristate "Hampshire serial touchscreen"
  	select SERIO
 diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
-index 4be94fce41af..1792fd9bf43c 100644
+index 4be94fc..1792fd9 100644
 --- a/drivers/input/touchscreen/Makefile
 +++ b/drivers/input/touchscreen/Makefile
 @@ -78,3 +78,4 @@ obj-$(CONFIG_TOUCHSCREEN_WM97XX_ZYLONITE)	+= zylonite-wm97xx.o
@@ -163,7 +163,7 @@ index 4be94fce41af..1792fd9bf43c 100644
 +obj-$(CONFIG_TOUCHSCREEN_NEWHAVEN_FT5X0X)	+= ft5x06_ts.o
 diff --git a/drivers/input/touchscreen/ft5x06_ts.c b/drivers/input/touchscreen/ft5x06_ts.c
 new file mode 100644
-index 000000000000..f8bf5289c3eb
+index 0000000..f8bf528
 --- /dev/null
 +++ b/drivers/input/touchscreen/ft5x06_ts.c
 @@ -0,0 +1,376 @@
@@ -545,7 +545,7 @@ index 000000000000..f8bf5289c3eb
 +MODULE_LICENSE("GPL");
 diff --git a/include/linux/input/ft5x06_ts.h b/include/linux/input/ft5x06_ts.h
 new file mode 100644
-index 000000000000..bb1c1908ec45
+index 0000000..bb1c190
 --- /dev/null
 +++ b/include/linux/input/ft5x06_ts.h
 @@ -0,0 +1,25 @@
@@ -575,5 +575,5 @@ index 000000000000..bb1c1908ec45
 +
 +#endif /* _FT5X0X_TS_H__ */
 -- 
-2.1.0
+1.9.1
 

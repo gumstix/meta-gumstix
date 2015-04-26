@@ -1,7 +1,7 @@
 From f8ad7526911e5e65c30b0bfd4db50dfa3ee1166c Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 18 Feb 2015 10:02:30 -0800
-Subject: [PATCH 4/6] omap: gpmc: 'nandecc sw' can use HAM1 or BCH8
+Subject: [PATCH 4/7] omap: gpmc: 'nandecc sw' can use HAM1 or BCH8
 
 The 'nandecc sw' command selects a software-based error correction
 algorithm.  By default, this is OMAP_ECC_HAM1_CODE_SW but some

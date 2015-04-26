@@ -1,7 +1,7 @@
 From 33c87c3a116ec28b49009b29ba48951e9ed8f84f Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 18 Feb 2015 15:44:38 -0800
-Subject: [PATCH 6/6] omap3: overo: Allow boot with kernel in UBI rootfs
+Subject: [PATCH 6/7] omap3: overo: Allow boot with kernel in UBI rootfs
 
 If regular NAND booting fails to find a valid uImage in the
 kernel partition in NAND, try to boot using a zImage and dtb found
