@@ -1,7 +1,7 @@
-From 103ba73550ad5d78ac93cb19b406ea03d4b56255 Mon Sep 17 00:00:00 2001
+From c7b6a45b5b5bd3c6e0a90973e672b710021f85c0 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 23 Jan 2015 12:29:44 -0800
-Subject: [PATCH 5/7] omap3: overo: Use software BCH8 ECC for NAND
+Subject: [PATCH 06/10] omap3: overo: Use software BCH8 ECC for NAND
 
 Overo COMs have NAND flash that requires 4-bit ECC or better except for
 the first sector which can use 1-bit ECC.  The boot ROM expects to load
@@ -26,7 +26,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  1 file changed, 15 insertions(+), 4 deletions(-)
 
 diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
-index b17e495..c4922ad 100644
+index c58636a..3d28f55 100644
 --- a/include/configs/omap3_overo.h
 +++ b/include/configs/omap3_overo.h
 @@ -11,6 +11,12 @@
@@ -42,7 +42,7 @@ index b17e495..c4922ad 100644
  
  /* Display CPU and Board information */
  #define CONFIG_DISPLAY_CPUINFO
-@@ -203,17 +209,22 @@
+@@ -212,17 +218,22 @@
  
  /* NAND boot config */
  #define CONFIG_SYS_NAND_BUSWIDTH_16BIT	16
@@ -70,5 +70,5 @@ index b17e495..c4922ad 100644
  #define CONFIG_SYS_NAND_U_BOOT_OFFS	0x80000
  /* NAND: SPL falcon mode configs */
 -- 
-2.1.0
+2.1.4
 
