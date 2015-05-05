@@ -1,0 +1,29 @@
+From 1275c5acabd629f03b44b887735cc7b8b93d0751 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@iki.fi>
+Date: Fri, 26 Sep 2014 16:57:11 +0300
+Subject: [PATCH 02/16] omap3isp: Fix error handling in probe
+
+The mutex was not destroyed correctly if dma_coerce_mask_and_coherent()
+failed for some reason.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
+---
+ drivers/media/platform/omap3isp/isp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+index 72265e58ca60..9d5994a24ca2 100644
+--- a/drivers/media/platform/omap3isp/isp.c
++++ b/drivers/media/platform/omap3isp/isp.c
+@@ -2249,7 +2249,7 @@ static int isp_probe(struct platform_device *pdev)
+ 
+ 	ret = dma_coerce_mask_and_coherent(isp->dev, DMA_BIT_MASK(32));
+ 	if (ret)
+-		return ret;
++		goto error;
+ 
+ 	platform_set_drvdata(pdev, isp);
+ 
+-- 
+2.1.4
+
