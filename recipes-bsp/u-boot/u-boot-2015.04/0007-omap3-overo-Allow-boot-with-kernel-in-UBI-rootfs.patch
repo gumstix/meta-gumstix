@@ -1,7 +1,7 @@
-From 33c87c3a116ec28b49009b29ba48951e9ed8f84f Mon Sep 17 00:00:00 2001
+From d4a19c55b0dc6d8b369a281ead7756563dbfed11 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 18 Feb 2015 15:44:38 -0800
-Subject: [PATCH 6/7] omap3: overo: Allow boot with kernel in UBI rootfs
+Subject: [PATCH 07/10] omap3: overo: Allow boot with kernel in UBI rootfs
 
 If regular NAND booting fails to find a valid uImage in the
 kernel partition in NAND, try to boot using a zImage and dtb found
@@ -9,15 +9,16 @@ in a UBI volume in the rootfs partition.  This is the NAND analog
 of mmc zImage booting for device-tree based kernels.
 
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
 ---
  include/configs/omap3_overo.h | 13 +++++++++++++
  1 file changed, 13 insertions(+)
 
 diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
-index c4922ad..9da3223 100644
+index 3d28f55..81d6ca2 100644
 --- a/include/configs/omap3_overo.h
 +++ b/include/configs/omap3_overo.h
-@@ -132,6 +132,8 @@
+@@ -140,6 +140,8 @@
  		"bootm ${loadaddr}\0" \
  	"loadzimage=load mmc ${mmcdev}:2 ${loadaddr} ${bootdir}/${bootfile}\0" \
  	"loadfdt=load mmc ${mmcdev}:2 ${fdtaddr} ${bootdir}/${fdtfile}\0" \
@@ -26,10 +27,10 @@ index c4922ad..9da3223 100644
  	"mmcbootfdt=echo Booting with DT from mmc ...; " \
  		"run mmcargs; " \
  		"bootz ${loadaddr} - ${fdtaddr}\0" \
-@@ -139,6 +141,13 @@
- 		"run nandargs; " \
- 		"nand read ${loadaddr} linux; " \
- 		"bootm ${loadaddr}\0" \
+@@ -148,6 +150,13 @@
+ 		"if nand read ${loadaddr} linux; then " \
+ 			"bootm ${loadaddr};" \
+ 		"fi;\0" \
 +	"nanddtsboot=echo Booting from nand with DTS...; " \
 +		"run nandargs; " \
 +		"ubi part rootfs; "\
@@ -40,7 +41,7 @@ index c4922ad..9da3223 100644
  
  #define CONFIG_BOOTCOMMAND \
  	"mmc dev ${mmcdev}; if mmc rescan; then " \
-@@ -166,6 +175,10 @@
+@@ -175,6 +184,10 @@
  		"fi;" \
  	"fi;" \
  	"run nandboot; " \
@@ -52,5 +53,5 @@ index c4922ad..9da3223 100644
  /*
   * Miscellaneous configurable options
 -- 
-2.1.0
+2.1.4
 

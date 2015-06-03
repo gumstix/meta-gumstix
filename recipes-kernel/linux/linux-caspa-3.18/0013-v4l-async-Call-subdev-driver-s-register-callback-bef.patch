@@ -1,0 +1,49 @@
+From 6564d22e232ed66624d987c74da3e5e28602ef67 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@iki.fi>
+Date: Sun, 14 Sep 2014 21:46:17 +0300
+Subject: [PATCH 13/16] v4l: async: Call subdev driver's register callback
+ before bound()
+
+Sub-devices
+
+Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
+---
+ drivers/media/v4l2-core/v4l2-async.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 85a6a34128a8..6e1a4ba606dd 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -97,21 +97,20 @@ static int v4l2_async_test_notify(struct v4l2_async_notifier *notifier,
+ 	sd->asd = asd;
+ 	sd->notifier = notifier;
+ 
++	ret = v4l2_device_register_subdev(notifier->v4l2_dev, sd);
++	if (ret < 0)
++		return ret;
++
+ 	if (notifier->bound) {
+ 		ret = notifier->bound(notifier, sd, asd);
+-		if (ret < 0)
++		if (ret < 0) {
+ 			return ret;
++			v4l2_device_unregister_subdev(sd);
++		}
+ 	}
+ 	/* Move from the global subdevice list to notifier's done */
+ 	list_move(&sd->async_list, &notifier->done);
+ 
+-	ret = v4l2_device_register_subdev(notifier->v4l2_dev, sd);
+-	if (ret < 0) {
+-		if (notifier->unbind)
+-			notifier->unbind(notifier, sd, asd);
+-		return ret;
+-	}
+-
+ 	if (list_empty(&notifier->waiting) && notifier->complete)
+ 		return notifier->complete(notifier);
+ 
+-- 
+2.1.4
+

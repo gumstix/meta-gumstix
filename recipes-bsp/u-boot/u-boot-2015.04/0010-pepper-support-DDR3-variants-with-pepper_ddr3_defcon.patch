@@ -1,0 +1,66 @@
+From b47f319102bf4f9780e57ab469e55b2ad875c4d8 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Tue, 28 Apr 2015 15:55:55 -0700
+Subject: [PATCH 10/10] pepper: support DDR3 variants with
+ pepper_ddr3_defconfig
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ board/gumstix/pepper/MAINTAINERS | 1 +
+ board/gumstix/pepper/board.c     | 2 --
+ configs/pepper_ddr3_defconfig    | 4 ++++
+ include/configs/pepper.h         | 2 --
+ 4 files changed, 5 insertions(+), 4 deletions(-)
+ create mode 100644 configs/pepper_ddr3_defconfig
+
+diff --git a/board/gumstix/pepper/MAINTAINERS b/board/gumstix/pepper/MAINTAINERS
+index ae860ec..7132095 100644
+--- a/board/gumstix/pepper/MAINTAINERS
++++ b/board/gumstix/pepper/MAINTAINERS
+@@ -4,3 +4,4 @@ S:	Maintained
+ F:	board/gumstix/pepper/
+ F:	include/configs/pepper.h
+ F:	configs/pepper_defconfig
++F:	configs/pepper_ddr3_defconfig
+diff --git a/board/gumstix/pepper/board.c b/board/gumstix/pepper/board.c
+index 1bb8fe9..b71ec42 100644
+--- a/board/gumstix/pepper/board.c
++++ b/board/gumstix/pepper/board.c
+@@ -117,11 +117,9 @@ const struct dpll_params *get_dpll_ddr_params(void)
+ void sdram_init(void)
+ {
+ #ifdef CONFIG_USE_DDR3
+-	printf("Booting with DDR3\n");
+ 	config_ddr(400, &ioregs_ddr, &ddr_data,
+ 		   &ddr_cmd_ctrl_data, &ddr_emif_reg_data, 0);
+ #else
+-	printf("Booting with DDR\n");
+ 	config_ddr(266, &ioregs_ddr, &ddr_data,
+ 		   &ddr_cmd_ctrl_data, &ddr_emif_reg_data, 0);
+ #endif
+diff --git a/configs/pepper_ddr3_defconfig b/configs/pepper_ddr3_defconfig
+new file mode 100644
+index 0000000..8077399
+--- /dev/null
++++ b/configs/pepper_ddr3_defconfig
+@@ -0,0 +1,4 @@
++CONFIG_SPL=y
++CONFIG_SYS_EXTRA_OPTIONS="USE_DDR3"
++CONFIG_ARM=y
++CONFIG_TARGET_PEPPER=y
+diff --git a/include/configs/pepper.h b/include/configs/pepper.h
+index c092e8a..cc153ab 100644
+--- a/include/configs/pepper.h
++++ b/include/configs/pepper.h
+@@ -17,8 +17,6 @@
+ #define V_OSCK				24000000  /* Clock output from T2 */
+ #define V_SCLK				(V_OSCK)
+ 
+-/*#define CONFIG_USE_DDR3 */
+-
+ #undef CONFIG_SYS_PROMPT
+ #define CONFIG_SYS_PROMPT		"pepper# "
+ 
+-- 
+2.1.4
+

@@ -1,0 +1,31 @@
+From 30d685b0fc71f4479d1d1f41f54be0cc9bc2f2c5 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@iki.fi>
+Date: Wed, 1 Jan 2014 16:49:08 +0200
+Subject: [PATCH 03/16] omap3isp: Rename regulators to better suit the Device
+ Tree
+
+Rename VDD_CSIPHY1 as vdd-csiphy1 and VDD_CSIPHY2 as vdd-csiphy2.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
+---
+ drivers/media/platform/omap3isp/isp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+index 9d5994a24ca2..dfe7dca9e76d 100644
+--- a/drivers/media/platform/omap3isp/isp.c
++++ b/drivers/media/platform/omap3isp/isp.c
+@@ -2254,8 +2254,8 @@ static int isp_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, isp);
+ 
+ 	/* Regulators */
+-	isp->isp_csiphy1.vdd = devm_regulator_get(&pdev->dev, "VDD_CSIPHY1");
+-	isp->isp_csiphy2.vdd = devm_regulator_get(&pdev->dev, "VDD_CSIPHY2");
++	isp->isp_csiphy1.vdd = devm_regulator_get(&pdev->dev, "vdd-csiphy1");
++	isp->isp_csiphy2.vdd = devm_regulator_get(&pdev->dev, "vdd-csiphy2");
+ 
+ 	/* Clocks
+ 	 *
+-- 
+2.1.4
+

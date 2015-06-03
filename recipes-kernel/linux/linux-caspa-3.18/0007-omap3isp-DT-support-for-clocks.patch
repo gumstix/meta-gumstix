@@ -1,0 +1,73 @@
+From 4d6a8182363205792b3e82c3b02d5666cfaa035a Mon Sep 17 00:00:00 2001
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Date: Thu, 2 Jan 2014 00:28:28 +0100
+Subject: [PATCH 07/16] omap3isp: DT support for clocks
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/omap3isp/isp.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+index eebb65a30256..14ec9b9ef98c 100644
+--- a/drivers/media/platform/omap3isp/isp.c
++++ b/drivers/media/platform/omap3isp/isp.c
+@@ -276,9 +276,21 @@ static const struct clk_init_data isp_xclk_init_data = {
+ 	.num_parents = 1,
+ };
+ 
++static struct clk *isp_xclk_src_get(struct of_phandle_args *clkspec, void *data)
++{
++	unsigned int idx = clkspec->args[0];
++	struct isp_device *isp = data;
++
++	if (idx >= ARRAY_SIZE(isp->xclks))
++		return ERR_PTR(-ENOENT);
++
++	return isp->xclks[idx].clk;
++}
++
+ static int isp_xclk_init(struct isp_device *isp)
+ {
+ 	struct isp_platform_data *pdata = isp->pdata;
++	struct device_node *np = isp->dev->of_node;
+ 	struct clk_init_data init;
+ 	unsigned int i;
+ 
+@@ -309,6 +321,12 @@ static int isp_xclk_init(struct isp_device *isp)
+ 		if (IS_ERR(xclk->clk))
+ 			return PTR_ERR(xclk->clk);
+ 
++		/* When instantiated from DT we don't need to register clock
++		 * aliases.
++		 */
++		if (np)
++			continue;
++
+ 		if (pdata->xclks[i].con_id == NULL &&
+ 		    pdata->xclks[i].dev_id == NULL)
+ 			continue;
+@@ -324,13 +342,20 @@ static int isp_xclk_init(struct isp_device *isp)
+ 		clkdev_add(xclk->lookup);
+ 	}
+ 
++	if (np)
++		of_clk_add_provider(np, isp_xclk_src_get, isp);
++
+ 	return 0;
+ }
+ 
+ static void isp_xclk_cleanup(struct isp_device *isp)
+ {
++	struct device_node *np = isp->dev->of_node;
+ 	unsigned int i;
+ 
++	if (np)
++		of_clk_del_provider(np);
++
+ 	for (i = 0; i < ARRAY_SIZE(isp->xclks); ++i) {
+ 		struct isp_xclk *xclk = &isp->xclks[i];
+ 
+-- 
+2.1.4
+

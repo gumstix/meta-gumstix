@@ -1,0 +1,34 @@
+From 9503871b5d533c917a370dd0411d69eb61985079 Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Mon, 27 Apr 2015 10:38:43 -0700
+Subject: [PATCH 08/10] overo: Override RAM setup for rev. 0 boards
+
+Overo boards with board revision 0 use a 256MB RAM + 256MB NAND chip.
+For an unknown reason, these boards fail to boot a 3.17.8 kernel based
+on the RAM size configuration in u-boot.  As a workaround, fake out the
+RAM setting in u-boot (discussion [1]).
+
+[1] http://gumstix.8.x6.nabble.com/running-built-images-tt4969794.html
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ board/overo/spl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/overo/spl.c b/board/overo/spl.c
+index 64c33d6..e1652c3 100644
+--- a/board/overo/spl.c
++++ b/board/overo/spl.c
+@@ -59,7 +59,7 @@ void get_board_mem_timings(struct board_sdrc_timings *timings)
+         timings->mr = MICRON_V_MR_165;
+         switch (get_board_revision()) {
+         case REVISION_0: /* Micron 1286MB/256MB, 1/2 banks of 128MB */
+-                timings->mcfg = MICRON_V_MCFG_165(128 << 20);
++                timings->mcfg = MICRON_V_MCFG_165(256 << 20);
+                 timings->ctrla = MICRON_V_ACTIMA_165;
+                 timings->ctrlb = MICRON_V_ACTIMB_165;
+                 timings->rfr_ctrl = SDP_3430_SDRC_RFR_CTRL_165MHz;
+-- 
+2.1.4
+
