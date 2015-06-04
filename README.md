@@ -19,6 +19,6 @@ This layer depends on:
 
 URI: git://git.yoctoproject.org/poky.git
 branch: dizzy
-revision: HEAD
+revision: 9c4ff467f66428488b1cd9798066a8cb5d6b4c3b
 
 Layer maintainer: Adam Lee <adam@gumstix.com> for Gumstix, Inc.
