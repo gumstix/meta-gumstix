@@ -9,4 +9,4 @@ To (re-)build just the bootloader or kernel, use these commands:
     $ bitbake virtual/bootloader
     $ bitbake virtual/kernel
 
-See https://github.com/gumstix/Gumstix-YoctoProject-Repo for more details.
+See https://github.com/gumstix/yocto-manifest for more details.
