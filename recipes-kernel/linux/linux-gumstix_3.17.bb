@@ -48,6 +48,7 @@ SRC_URI = " \
     file://0013-arm-DTS-Correct-audio-input-route-set-mic-bias.patch \
     file://0014-omap3-overo-Add-device-tree-for-Palo35-board.patch \
     file://0015-gpio-backlight-Discover-driver-during-boot-time.patch \
+    file://0016-Fix-frequency-scaling-on-Gumstix-Pepper.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
