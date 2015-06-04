@@ -1,0 +1,86 @@
+From ed884b344d8732f55ff9678fae2c8f22d4fa6e78 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Fri, 6 Feb 2015 09:55:01 -0800
+Subject: [PATCH 26/30] omap3: overo: Support PoP NAND
+
+Some Overo COM models include NAND flash in the on-board
+package-on-package (PoP) chip.  Add this to the base Overo devicetree.
+
+Most commonly, this is 512MB NAND from the Micron MT29C4G96MAZ family
+but, as discussed [1], several different sized are possible. To
+support different sizes, the last partition should fill to the end of
+the chip (i.e. MTDPART_SIZ_FULL).
+
+With thanks to Florian Vaussard for the original patch [2] and Adam Lee for
+updating it here.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+
+[1] http://lists.infradead.org/pipermail/linux-arm-kernel/2013-June/175760.html
+[2] http://lists.infradead.org/pipermail/linux-arm-kernel/2013-June/175449.html
+---
+ arch/arm/boot/dts/omap3-overo-base.dtsi | 51 +++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+
+diff --git a/arch/arm/boot/dts/omap3-overo-base.dtsi b/arch/arm/boot/dts/omap3-overo-base.dtsi
+index 9842650c5779..c44c841d2f32 100644
+--- a/arch/arm/boot/dts/omap3-overo-base.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-base.dtsi
+@@ -223,3 +223,54 @@
+     status = "okay";
+ };
+ 
++&gpmc {
++	ranges = <0 0 0x00000000 0x20000000>;
++
++	nand@0,0 {
++		linux,mtd-name= "micron,mt29c4g96maz";
++		reg = <0 0 0>;
++		nand-bus-width = <16>;
++		gpmc,device-width = <2>;
++		ti,nand-ecc-opt = "bch8";
++
++		gpmc,sync-clk-ps = <0>;
++		gpmc,cs-on-ns = <0>;
++		gpmc,cs-rd-off-ns = <44>;
++		gpmc,cs-wr-off-ns = <44>;
++		gpmc,adv-on-ns = <6>;
++		gpmc,adv-rd-off-ns = <34>;
++		gpmc,adv-wr-off-ns = <44>;
++		gpmc,we-off-ns = <40>;
++		gpmc,oe-off-ns = <54>;
++		gpmc,access-ns = <64>;
++		gpmc,rd-cycle-ns = <82>;
++		gpmc,wr-cycle-ns = <82>;
++		gpmc,wr-access-ns = <40>;
++		gpmc,wr-data-mux-bus-ns = <0>;
++
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		partition@0 {
++			label = "SPL";
++			reg = <0 0x80000>; /* 512KiB */
++		};
++		partition@80000 {
++			label = "U-Boot";
++			reg = <0x80000 0x1C0000>; /* 1792KiB */
++		};
++		partition@1c0000 {
++			label = "Environment";
++			reg = <0x240000 0x40000>; /* 256KiB */
++		};
++		partition@280000 {
++			label = "Kernel";
++			reg = <0x280000 0x800000>; /* 8192KiB */
++		};
++		partition@780000 {
++			label = "Filesystem";
++			reg = <0xA80000 0>;
++			/* HACK: MTDPART_SIZ_FULL=0 so fill to end */
++		};
++	};
++};
+-- 
+2.1.4
+

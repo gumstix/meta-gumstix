@@ -1,0 +1,48 @@
+From 601ad7c72fed44ef372ec9fb2fc3732be3084d95 Mon Sep 17 00:00:00 2001
+From: Adam YH Lee <adam.yh.lee@gmail.com>
+Date: Mon, 5 Jan 2015 17:45:49 -0800
+Subject: [PATCH 23/30] omap3: overo: Update LCD panel names
+
+For Gumstix Overo COMs, the u-boot bootloader typically passes an
+argument specifying the default display via the omapdss.def_disp
+parameter.  When a default display is specified, DSS2 tries to match
+this name with either the device tree label (e.g. label=dvi) or,
+failing this, the device tree alias (e.g. label=display0). Update the
+panel names for the 'lcd43' and 'lcd35' displays in the device tree
+such that they match the names passed by u-boot.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi | 2 +-
+ arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
+index 233c69e50ae3..df8908adb0cb 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
+@@ -120,7 +120,7 @@
+ 
+ 	lcd0: display@0 {
+ 		compatible = "lgphilips,lb035q02";
+-		label = "lcd";
++		label = "lcd35";
+ 
+ 		reg = <1>;					/* CS1 */
+ 		spi-max-frequency = <10000000>;
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+index f5395b7da912..048fd216970a 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+@@ -98,7 +98,7 @@
+ 
+ 	lcd0: display@0 {
+ 		compatible = "samsung,lte430wq-f0c", "panel-dpi";
+-		label = "lcd";
++		label = "lcd43";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&lte430_pins>;
+-- 
+2.1.4
+

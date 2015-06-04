@@ -1,0 +1,82 @@
+From 765dfa4c5164b2abfe14ea385d1a60b8cd1cfd05 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@iki.fi>
+Date: Tue, 30 Sep 2014 01:29:07 +0300
+Subject: [PATCH 09/30] v4l: of: Read data-lanes endpoint property
+
+Add lane_polarity field to struct v4l2_of_bus_mipi_csi2 and read them from
+the endpoint. The field tells the polarity of the physical lanes starting
+from the first one. Any unused lanes are ignored, i.e. only the polarity of
+the used lanes is specified.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
+---
+ drivers/media/v4l2-core/v4l2-of.c | 21 ++++++++++++++++-----
+ include/media/v4l2-of.h           |  3 +++
+ 2 files changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-of.c b/drivers/media/v4l2-core/v4l2-of.c
+index b4ed9a955fbe..a7a855ea4948 100644
+--- a/drivers/media/v4l2-core/v4l2-of.c
++++ b/drivers/media/v4l2-core/v4l2-of.c
+@@ -23,7 +23,6 @@ static void v4l2_of_parse_csi_bus(const struct device_node *node,
+ 				  struct v4l2_of_endpoint *endpoint)
+ {
+ 	struct v4l2_of_bus_mipi_csi2 *bus = &endpoint->bus.mipi_csi2;
+-	u32 data_lanes[ARRAY_SIZE(bus->data_lanes)];
+ 	struct property *prop;
+ 	bool have_clk_lane = false;
+ 	unsigned int flags = 0;
+@@ -34,14 +33,26 @@ static void v4l2_of_parse_csi_bus(const struct device_node *node,
+ 		const __be32 *lane = NULL;
+ 		int i;
+ 
+-		for (i = 0; i < ARRAY_SIZE(data_lanes); i++) {
+-			lane = of_prop_next_u32(prop, lane, &data_lanes[i]);
++		for (i = 0; i < ARRAY_SIZE(bus->data_lanes); i++) {
++			lane = of_prop_next_u32(prop, lane, &v);
+ 			if (!lane)
+ 				break;
++			bus->data_lanes[i] = v;
+ 		}
+ 		bus->num_data_lanes = i;
+-		while (i--)
+-			bus->data_lanes[i] = data_lanes[i];
++	}
++
++	prop = of_find_property(node, "lane-polarity", NULL);
++	if (prop) {
++		const __be32 *polarity = NULL;
++		int i;
++
++		for (i = 0; i < ARRAY_SIZE(bus->lane_polarity); i++) {
++			polarity = of_prop_next_u32(prop, polarity, &v);
++			if (!polarity)
++				break;
++			bus->lane_polarity[i] = v;
++		}
+ 	}
+ 
+ 	if (!of_property_read_u32(node, "clock-lanes", &v)) {
+diff --git a/include/media/v4l2-of.h b/include/media/v4l2-of.h
+index 70fa7b7b0487..a70eb5218433 100644
+--- a/include/media/v4l2-of.h
++++ b/include/media/v4l2-of.h
+@@ -29,12 +29,15 @@ struct device_node;
+  * @data_lanes: an array of physical data lane indexes
+  * @clock_lane: physical lane index of the clock lane
+  * @num_data_lanes: number of data lanes
++ * @lane_polarity: polarity of the lanes. The order is the same of
++ *		   the physical lanes.
+  */
+ struct v4l2_of_bus_mipi_csi2 {
+ 	unsigned int flags;
+ 	unsigned char data_lanes[4];
+ 	unsigned char clock_lane;
+ 	unsigned short num_data_lanes;
++	bool lane_polarity[5];
+ };
+ 
+ /**
+-- 
+2.1.4
+

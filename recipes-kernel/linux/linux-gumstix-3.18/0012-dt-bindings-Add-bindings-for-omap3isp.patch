@@ -1,0 +1,76 @@
+From 7b4953e940640425818807328165ebd5e6f7854f Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@iki.fi>
+Date: Mon, 29 Sep 2014 00:59:19 +0300
+Subject: [PATCH 12/30] dt: bindings: Add bindings for omap3isp
+
+Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
+---
+ .../devicetree/bindings/media/ti,omap3isp.txt      | 43 ++++++++++++++++++++++
+ MAINTAINERS                                        |  1 +
+ 2 files changed, 44 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/ti,omap3isp.txt
+
+diff --git a/Documentation/devicetree/bindings/media/ti,omap3isp.txt b/Documentation/devicetree/bindings/media/ti,omap3isp.txt
+new file mode 100644
+index 000000000000..27c76ce5545e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/ti,omap3isp.txt
+@@ -0,0 +1,43 @@
++omap3isp Device Tree bindings
++=============================
++
++The values below are for 3630. Other models of OMAP 3 may have a more
++limited set of valid values.
++
++Required properties
++===================
++
++compatible	: "ti,omap3-isp"
++reg		: a set of register block physical addresses and
++		  lengths.
++interrupts	: the interrupt number.
++iommus		: phandle of the IOMMU.
++#clock-cells	: 1 --- the ISP has two external clocks.
++
++Port nodes (optional)
++---------------------
++
++reg		: The interface:
++		  0 - parallel (CCDC)
++		  1 - CSI2A / PHY2
++		  2 - CCP2B / PHY1
++		  3 - CCP2B / PHY2
++		  4 - CSI2C / PHY1
++
++Endpoint nodes
++--------------
++
++data-lanes	: an array of data lanes from 1 to 3. The length can
++		  be either 1 or 2.
++clock-lanes	: the clock lane (from 1 to 3).
++
++Optional properties
++===================
++
++vdd-csiphy1-supply : voltage supply of the CSI-2 PHY 1
++vdd-csiphy2-supply : voltage supply of the CSI-2 PHY 2
++
++Endpoint nodes
++--------------
++
++lane-polarity	: lane polarity (CSI-2 only)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c721042e7e45..842cebbce15d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6728,6 +6728,7 @@ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	drivers/media/platform/omap3isp/
+ F:	drivers/staging/media/omap4iss/
++F:	Documentation/devicetree/bindings/media/ti,omap3isp.txt
+ 
+ OMAP USB SUPPORT
+ M:	Felipe Balbi <balbi@ti.com>
+-- 
+2.1.4
+
