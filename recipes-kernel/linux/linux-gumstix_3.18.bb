@@ -17,7 +17,9 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-summit.dtb omap3-overo-summit.dtb \
 "
 KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb"
-KERNEL_DEVICETREE_pepper = "am335x-pepper.dtb"
+KERNEL_DEVICETREE_pepper = "am335x-pepper.dtb \
+                            am335x-pepper-dvi.dtb \
+"
 
 
 LINUX_VERSION = "3.18"
@@ -63,6 +65,7 @@ SRC_URI = " \
     file://0028-Enable-wilink8-wifi-chip-for-Overo.patch \
     file://0029-Enable-wilink8-bluetooth-chip-for-Overo.patch \
     file://0030-omap3-overo-Add-device-tree-for-Arbor43C-board.patch \
+    file://0031-am335x-pepper-Add-support-for-Pepper-DVI.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
