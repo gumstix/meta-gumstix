@@ -1,0 +1,91 @@
+From 8f6131560387bba5eea90db8e8dd2090c82f7597 Mon Sep 17 00:00:00 2001
+From: Adam YH Lee <adam.yh.lee@gmail.com>
+Date: Thu, 18 Jun 2015 15:26:52 -0700
+Subject: [PATCH] Pepper: Load DTB based on the board ID
+
+U-Boot should set a device-tree blob based on the board ID acquired
+from the eeprom. Here it either selects a dtb for Pepper or Pepper-DVI.
+
+In the case where the eeprom does not contain a matching value, it
+should not make changes to the environment.
+
+Signed-off-by: Adam YH Lee <adam.yh.lee@gmail.com>
+---
+ board/gumstix/pepper/board.c | 27 +++++++++++++++++++++++++--
+ include/configs/pepper.h     |  1 +
+ 2 files changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/board/gumstix/pepper/board.c b/board/gumstix/pepper/board.c
+index acf1c64..529478b 100644
+--- a/board/gumstix/pepper/board.c
++++ b/board/gumstix/pepper/board.c
+@@ -105,6 +105,7 @@ const struct ctrl_ioregs ioregs_ddr2 = {
+ 	.dt0ioctl		= MT47H128M16RT25E_IOCTRL_VALUE,
+ 	.dt1ioctl		= MT47H128M16RT25E_IOCTRL_VALUE,
+ };
++#endif
+ 
+ static int read_eeprom(struct pepper_board_id *header)
+ {
+@@ -120,6 +121,7 @@ static int read_eeprom(struct pepper_board_id *header)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_SPL_BUILD
+ const struct dpll_params *get_dpll_ddr_params(void)
+ {
+ 	struct pepper_board_id header;
+@@ -177,8 +179,6 @@ void set_mux_conf_regs(void)
+ {
+ 	enable_board_pin_mux();
+ }
+-
+-
+ #endif
+ 
+ int board_init(void)
+@@ -193,6 +193,29 @@ int board_init(void)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_MISC_INIT_R
++int misc_init_r(void)
++{
++	struct pepper_board_id header;
++
++	if (read_eeprom(&header) < 0)
++		puts("Could not get board ID.\n");
++
++	switch (header.device_vendor) {
++	case GUMSTIX_PEPPER:
++		setenv("fdtfile", "am335x-pepper.dtb");
++		break;
++	case GUMSTIX_PEPPER_DVI:
++		setenv("fdtfile", "am335x-pepper-dvi.dtb");
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++#endif
++
+ #if (defined(CONFIG_DRIVER_TI_CPSW) && !defined(CONFIG_SPL_BUILD)) || \
+ 	(defined(CONFIG_SPL_ETH_SUPPORT) && defined(CONFIG_SPL_BUILD))
+ static struct ctrl_dev *cdev = (struct ctrl_dev *)CTRL_DEVICE_BASE;
+diff --git a/include/configs/pepper.h b/include/configs/pepper.h
+index 16149f6..730ae20 100644
+--- a/include/configs/pepper.h
++++ b/include/configs/pepper.h
+@@ -12,6 +12,7 @@
+ 
+ #undef CONFIG_BOARD_LATE_INIT
+ #undef CONFIG_SPL_OS_BOOT
++#define CONFIG_MISC_INIT_R
+ 
+ /* Clock defines */
+ #define V_OSCK				24000000  /* Clock output from T2 */
+-- 
+2.1.4
+

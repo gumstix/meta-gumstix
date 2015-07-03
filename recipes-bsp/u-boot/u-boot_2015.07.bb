@@ -10,4 +10,5 @@ SRC_URI = " \
 	git://git.denx.de/u-boot.git;protocol=git;branch=master \
         file://0001-Update-the-rootfs-type-to-ext4-for-Overo-and-Pepper.patch \
         file://0002-Update-rootfs-type-to-ext4-for-DuoVero.patch \
+        file://0003-Pepper-Load-DTB-based-on-the-board-ID.patch \
 "
