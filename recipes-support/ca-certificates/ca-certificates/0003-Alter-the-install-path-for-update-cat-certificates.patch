@@ -1,0 +1,33 @@
+From fcb264615116c9d105dd1cb249bad0b180df7a2e Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 8 Jul 2015 10:14:28 -0700
+Subject: [PATCH 3/3] Alter the install path for update-cat-certificates
+
+Rebase the 'sbindir.patch'.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ sbin/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/sbin/Makefile b/sbin/Makefile
+index a9658e7..a188804 100644
+--- a/sbin/Makefile
++++ b/sbin/Makefile
+@@ -2,10 +2,12 @@
+ # Makefile
+ #
+ #
++SBINDIR = /usr/sbin
+ 
+ all:
+ 
+ clean:
+ 
+ install:
+-	install -m755 update-ca-certificates $(DESTDIR)/usr/sbin/
++	install -d $(DESTDIR)$(SBINDIR)
++	install -m755 update-ca-certificates $(DESTDIR)$(SBINDIR)/
+-- 
+2.1.4
+
