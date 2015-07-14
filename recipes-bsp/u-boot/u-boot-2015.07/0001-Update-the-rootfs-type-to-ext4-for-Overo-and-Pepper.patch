@@ -1,4 +1,4 @@
-From 89a24212adeaf18ca9bf57c5e5b1d2ed13211c8a Mon Sep 17 00:00:00 2001
+From 1c563723a1d37e3f8ea7538af27389273554ebfa Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Wed, 24 Jun 2015 13:29:30 -0700
 Subject: [PATCH 1/2] Update the rootfs type to ext4 for Overo and Pepper
@@ -10,10 +10,10 @@ Gumstix is migrating from ext3 to ext4 file system.
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/include/configs/omap3_overo.h b/include/configs/omap3_overo.h
-index e1db29a..799b874 100644
+index 76bf3b6..a1a90ec 100644
 --- a/include/configs/omap3_overo.h
 +++ b/include/configs/omap3_overo.h
-@@ -108,7 +108,7 @@
+@@ -105,7 +105,7 @@
  	"defaultdisplay=dvi\0" \
  	"mmcdev=0\0" \
  	"mmcroot=/dev/mmcblk0p2 rw\0" \

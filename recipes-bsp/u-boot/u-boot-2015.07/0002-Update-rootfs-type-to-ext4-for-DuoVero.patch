@@ -1,4 +1,4 @@
-From 00a4328647439dcfd32f18f020446e73dc235921 Mon Sep 17 00:00:00 2001
+From 2a36a7f24e71e55df5ce470276ebb1c06416e585 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Wed, 24 Jun 2015 13:41:17 -0700
 Subject: [PATCH 2/2] Update rootfs type to ext4 for DuoVero
@@ -11,10 +11,10 @@ uses the default values defined in the ti_omap4_common.h file.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/include/configs/ti_omap4_common.h b/include/configs/ti_omap4_common.h
-index 6c33804..2429bcc 100644
+index e966134..f2673fc 100644
 --- a/include/configs/ti_omap4_common.h
 +++ b/include/configs/ti_omap4_common.h
-@@ -95,7 +95,7 @@
+@@ -92,7 +92,7 @@
  	"vram=16M\0" \
  	"mmcdev=0\0" \
  	"mmcroot=/dev/mmcblk0p2 rw\0" \
