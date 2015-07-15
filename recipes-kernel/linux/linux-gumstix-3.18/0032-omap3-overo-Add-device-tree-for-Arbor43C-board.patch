@@ -1,7 +1,7 @@
-From 0ac565feb9d8c01deb1fc5c201ee593b8dd5be3b Mon Sep 17 00:00:00 2001
+From 73cc2dd3cc873d485bbbf207f99eb4df5a8d71b9 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 8 Dec 2014 13:27:21 -0800
-Subject: [PATCH 30/30] omap3: overo: Add device tree for Arbor43C board
+Subject: [PATCH 32/32] omap3: overo: Add device tree for Arbor43C board
 
 Add a device tree supporting the Gumstix Arbor43C expansion board [1]
 for Gumstix Overo and Overo Storm COMs.  This board features a 4.3"
@@ -27,7 +27,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  create mode 100644 arch/arm/boot/dts/omap3-overo-storm-arbor43c.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 8409387321a7..373892b464e7 100644
+index 2578485d6f6b..67fbda4548e4 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -309,11 +309,13 @@ dtb-$(CONFIG_ARCH_OMAP3) += am3517-craneboard.dtb \

@@ -1,7 +1,7 @@
-From 6e8e0c92995c39843162fe607def0629af170cbb Mon Sep 17 00:00:00 2001
+From da92fb8a5b25c36420104ea554b1bb12662cbcf9 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Wed, 1 Jan 2014 16:49:08 +0200
-Subject: [PATCH 03/30] omap3isp: Rename regulators to better suit the Device
+Subject: [PATCH 02/32] omap3isp: Rename regulators to better suit the Device
  Tree
 
 Rename VDD_CSIPHY1 as vdd-csiphy1 and VDD_CSIPHY2 as vdd-csiphy2.

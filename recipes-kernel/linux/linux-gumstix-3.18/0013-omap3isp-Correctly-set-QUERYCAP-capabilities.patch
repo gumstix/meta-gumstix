@@ -1,7 +1,7 @@
-From 4833836948a927e560fa7addbb3cfebb7c3648e9 Mon Sep 17 00:00:00 2001
+From 5b5af2296d6a9ef0d049e430d950830c159aaad2 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Thu, 1 Jan 2015 23:07:54 +0200
-Subject: [PATCH 14/30] omap3isp: Correctly set QUERYCAP capabilities
+Subject: [PATCH 13/32] omap3isp: Correctly set QUERYCAP capabilities
 
 device_caps in struct v4l2_capability were inadequately set in
 VIDIOC_QUERYCAP. Fix this.

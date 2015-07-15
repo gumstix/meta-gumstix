@@ -1,7 +1,7 @@
-From 590f40225ff7544ceceea70da62af51f263ff9d5 Mon Sep 17 00:00:00 2001
+From ebdfe08a597cf27db9e61d3bb130ccf10d278a56 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Wed, 7 Jan 2015 10:40:42 -0800
-Subject: [PATCH 27/30] omap3: overo: Add device tree for Palo35 board
+Subject: [PATCH 26/32] omap3: overo: Add device tree for Palo35 board
 
 Also, reduce the maximum SPI device speed to the max. supported by the
 LCD controller used on the LGPhilips LB035Q02 panel for this board.

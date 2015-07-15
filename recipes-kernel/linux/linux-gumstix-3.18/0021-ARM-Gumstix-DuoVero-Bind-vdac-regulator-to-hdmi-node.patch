@@ -1,7 +1,7 @@
-From d1bd08bd46fb240aa577309467e89b811e655663 Mon Sep 17 00:00:00 2001
+From 133e127de214230e7333d8f8a017186ee08f981d Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Thu, 30 Oct 2014 17:02:15 -0700
-Subject: [PATCH 22/30] ARM: Gumstix DuoVero: Bind vdac regulator to hdmi node
+Subject: [PATCH 21/32] ARM: Gumstix DuoVero: Bind vdac regulator to hdmi node
 
 The HDMI node does not have a power supply attached. As a result its
 power regulator, VDAC, shuts off on boot and screen loses signal.

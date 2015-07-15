@@ -1,7 +1,7 @@
-From ed884b344d8732f55ff9678fae2c8f22d4fa6e78 Mon Sep 17 00:00:00 2001
+From a60efbf1b9d7bb0187e7076fa89f6eff2de2f02a Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 6 Feb 2015 09:55:01 -0800
-Subject: [PATCH 26/30] omap3: overo: Support PoP NAND
+Subject: [PATCH 25/32] omap3: overo: Support PoP NAND
 
 Some Overo COM models include NAND flash in the on-board
 package-on-package (PoP) chip.  Add this to the base Overo devicetree.

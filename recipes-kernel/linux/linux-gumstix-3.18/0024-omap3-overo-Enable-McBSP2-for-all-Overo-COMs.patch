@@ -1,7 +1,7 @@
-From 8e213c8996f720d3d8475b291411b22c988a74c2 Mon Sep 17 00:00:00 2001
+From 41f044e49308b5c1e1cfabef8bca71dac99de072 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 19 Jan 2015 16:53:53 -0800
-Subject: [PATCH 25/30] omap3: overo: Enable McBSP2 for all Overo COMs
+Subject: [PATCH 24/32] omap3: overo: Enable McBSP2 for all Overo COMs
 
 Both Gumstix Overo and Overo Storm COMs use TWL4030 audio module
 connected to the McBSP2.  As such, enable the McBSP2 module in the

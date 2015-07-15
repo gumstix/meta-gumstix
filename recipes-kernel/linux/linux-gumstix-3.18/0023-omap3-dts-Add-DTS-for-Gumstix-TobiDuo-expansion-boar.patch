@@ -1,7 +1,7 @@
-From b51ffbe72cd73d140860eaf39e1a963075fc5493 Mon Sep 17 00:00:00 2001
+From 96e340c1637888ddcac45320f4396f54c636a105 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 23 Jan 2015 17:10:10 -0800
-Subject: [PATCH 24/30] omap3: dts: Add DTS for Gumstix TobiDuo expansion board
+Subject: [PATCH 23/32] omap3: dts: Add DTS for Gumstix TobiDuo expansion board
 
 The Gumstix "Tobi-Duo" expansion board [1] can be used with either
 OMAP3 Overo or Overo Storm COMs.  It provides two NICs using LAN9221

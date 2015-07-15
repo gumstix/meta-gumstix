@@ -1,7 +1,7 @@
-From 6715e7211af15ac4456be2cdd50d6726e3f61f0a Mon Sep 17 00:00:00 2001
+From b3572ae9343c9054be410a55c99c84e820a6a584 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Wed, 1 Jan 2014 19:01:48 +0200
-Subject: [PATCH 04/30] omap3isp: Separate external link creation from platform
+Subject: [PATCH 03/32] omap3isp: Separate external link creation from platform
  data parsing
 
 Move the code which connects the external entity to an ISP entity into a

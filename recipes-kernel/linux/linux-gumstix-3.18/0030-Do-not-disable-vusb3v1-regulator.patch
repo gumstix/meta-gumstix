@@ -1,0 +1,56 @@
+From 938b0d40b504a60de6b17381b31015f294d71793 Mon Sep 17 00:00:00 2001
+From: Adam YH Lee <adam.yh.lee@gmail.com>
+Date: Tue, 14 Jul 2015 16:17:31 -0700
+Subject: [PATCH 30/32] Do not disable vusb3v1 regulator
+
+MADC reads incorrect values when it is not biased by the vusb3v1
+regulator. Therefore we should never disable this regulator, even if
+usb-otg shuts off or goes sleep.
+
+Note that this is a crude adaptation of an existing patch [1]. More
+correct version (device-tree compatible) would be better.
+
+[1] http://gumstix.8.x6.nabble.com/twl4030-madc-low-read-value-tp4967139p4967173.html
+
+Signed-off-by: Adam YH Lee <adam.yh.lee@gmail.com>
+---
+ drivers/phy/phy-twl4030-usb.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/phy/phy-twl4030-usb.c b/drivers/phy/phy-twl4030-usb.c
+index 7b04befd5271..7d25bac5fdcf 100644
+--- a/drivers/phy/phy-twl4030-usb.c
++++ b/drivers/phy/phy-twl4030-usb.c
+@@ -144,6 +144,9 @@
+ #define PMBR1				0x0D
+ #define GPIO_USB_4PIN_ULPI_2430C	(3 << 0)
+ 
++#define TWL4030_USB_SEL_MADC_MCPC	(1<<3)
++#define TWL4030_USB_CARKIT_ANA_CTRL	0xBB
++
+ struct twl4030_usb {
+ 	struct usb_phy		phy;
+ 	struct device		*dev;
+@@ -392,7 +395,6 @@ static int twl4030_usb_runtime_suspend(struct device *dev)
+ 	__twl4030_phy_power(twl, 0);
+ 	regulator_disable(twl->usb1v5);
+ 	regulator_disable(twl->usb1v8);
+-	regulator_disable(twl->usb3v1);
+ 
+ 	return 0;
+ }
+@@ -459,6 +461,11 @@ static int twl4030_phy_power_on(struct phy *phy)
+ 		twl4030_i2c_access(twl, 0);
+ 	schedule_delayed_work(&twl->id_workaround_work, 0);
+ 
++	twl4030_usb_write(twl, TWL4030_USB_CARKIT_ANA_CTRL,
++		twl4030_usb_read(twl, TWL4030_USB_CARKIT_ANA_CTRL) |
++		TWL4030_USB_SEL_MADC_MCPC);
++
++
+ 	return 0;
+ }
+ 
+-- 
+2.1.4
+
