@@ -9,6 +9,8 @@ SRC_URI += " \
 
 SYSTEMD_SERVICE_${PN} += "bluetooth-ttyO1-csr.service bluetooth-ttyO1-wilink.service"
 
+SYSTEMD_AUTO_ENABLE = "enable"
+
 do_install_append() {
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${WORKDIR}/bluetooth-ttyO1*.service ${D}${systemd_unitdir}/system
