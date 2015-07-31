@@ -1,7 +1,7 @@
 From 2a36a7f24e71e55df5ce470276ebb1c06416e585 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Wed, 24 Jun 2015 13:41:17 -0700
-Subject: [PATCH 2/2] Update rootfs type to ext4 for DuoVero
+Subject: [PATCH 2/3] Update rootfs type to ext4 for DuoVero
 
 Gumstix is migrating the file system type to ext4. Unlike Overo and
 Pepper, DuoVero does not have its own U-Boot environment variable. It

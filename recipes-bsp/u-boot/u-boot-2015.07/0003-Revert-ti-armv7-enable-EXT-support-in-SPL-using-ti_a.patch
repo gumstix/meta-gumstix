@@ -1,0 +1,30 @@
+From a674d5c014c45ff2e4cb2865194d14ece060b8b5 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 23 Jul 2015 17:14:44 -0700
+Subject: [PATCH 3/3] Revert "ti: armv7: enable EXT support in SPL (using
+ ti_armv7_common.h)"
+
+This reverts commit bd2c4522c26d535515aebca52d27c004a7e0c05c.
+---
+ include/configs/ti_armv7_common.h | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/include/configs/ti_armv7_common.h b/include/configs/ti_armv7_common.h
+index 0aea7d1..5978b4a 100644
+--- a/include/configs/ti_armv7_common.h
++++ b/include/configs/ti_armv7_common.h
+@@ -249,11 +249,6 @@
+ #define CONFIG_SPL_LIBDISK_SUPPORT
+ #define CONFIG_SPL_MMC_SUPPORT
+ #define CONFIG_SPL_FAT_SUPPORT
+-#define CONFIG_SPL_EXT_SUPPORT
+-#endif
+-
+-#ifdef CONFIG_SPL_BUILD
+-#define CONFIG_SYS_THUMB_BUILD	/* Thumbs mode to save space in SPL */
+ #endif
+ 
+ /* General parts of the framework, required. */
+-- 
+2.1.4
+
