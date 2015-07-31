@@ -1,7 +1,7 @@
-From 87a2c0243c92120322a8d6832f52ed7941cf2fd7 Mon Sep 17 00:00:00 2001
+From 598b206d65f358729f115cf8dcbbf49582f27d05 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Thu, 4 Jun 2015 11:08:18 -0700
-Subject: [PATCH 17/32] ARM: dts: configure regulators for Gumstix Pepper
+Subject: [PATCH 17/33] ARM: dts: configure regulators for Gumstix Pepper
 
 Boot process is halting in midway because some of the necessary voltage
 regulators are deemed unused and subsequently powered off, leading to

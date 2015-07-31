@@ -31,8 +31,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.18:"
 
 S = "${WORKDIR}/git"
 
-# v3.18.18 = 866cebe251f4fb2b435f4ecfe6d3bb4025938533
-SRCREV = "866cebe251f4fb2b435f4ecfe6d3bb4025938533"
+# v3.18.19 = 22a6cbf9f36ee3ae2878efcbdde33e6ca00b9c4b
+SRCREV = "22a6cbf9f36ee3ae2878efcbdde33e6ca00b9c4b"
 SRC_URI = " \
     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.18.y \
     file://0001-omap3isp-Fix-error-handling-in-probe.patch \
@@ -67,6 +67,7 @@ SRC_URI = " \
     file://0030-Do-not-disable-vusb3v1-regulator.patch \
     file://0031-overo-Enable-SDIO-interrupts-for-Wifi-interface.patch \
     file://0032-omap3-overo-Add-device-tree-for-Arbor43C-board.patch \
+    file://0033-Invert-the-y-axis-of-the-touchscreen-for-pepper.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

@@ -1,7 +1,7 @@
-From 12e5a3b82f03adb2bd1472591fe4071fcf353856 Mon Sep 17 00:00:00 2001
+From 20cc092966eab8acf3cb31265a949b66a3756bd0 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Tue, 20 Jan 2015 16:14:05 -0800
-Subject: [PATCH 28/32] Enable wilink8 bluetooth chip for Overo
+Subject: [PATCH 28/33] Enable wilink8 bluetooth chip for Overo
 
 Add platform data for Gumstix Overo COMs to support bluetooth from the
 Wilink WL18xx chips.  Here, board configuration data is encapsulated

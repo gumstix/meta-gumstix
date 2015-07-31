@@ -1,7 +1,7 @@
-From 16d62ffea83164498b5a60122e6abd9f0756b120 Mon Sep 17 00:00:00 2001
+From 84d81c802b0e87fda3b3ec5dd1aba49f9aaeefeb Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Thu, 4 Jun 2015 11:08:19 -0700
-Subject: [PATCH 18/32] ARM: dts: Fix frequency scaling on Gumstix Pepper.
+Subject: [PATCH 18/33] ARM: dts: Fix frequency scaling on Gumstix Pepper.
 
 The device tree for Gumstix Pepper has DCDC2 and
 DCDC3 correctly labelled but the upper limit values
