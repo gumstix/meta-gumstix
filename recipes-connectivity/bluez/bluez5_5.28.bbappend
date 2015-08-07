@@ -1,5 +1,5 @@
 # Add required hciattach for optional on-board Wi2Wi bluetooth adapter
-FILESEXTRAPATHS_prepend := "${THISDIR}/bluez4-4.101:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/bluez5-5.28:"
 
 SRC_URI += " \
   file://99-bluetooth-via-uart.rules \

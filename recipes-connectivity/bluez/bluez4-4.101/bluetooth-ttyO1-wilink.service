@@ -8,5 +8,5 @@ ExecStart=/usr/sbin/hciattach -n ttyO1 texas
 
 # The install section is not needed as this can be a static service
 # activated by udev.
-#[Install]                                                                       
+#[Install]
 #WantedBy=bluetooth.target

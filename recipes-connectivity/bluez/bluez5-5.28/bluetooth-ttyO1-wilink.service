@@ -1,0 +1,12 @@
+[Unit]
+Description=Attach WiLink8 Bluetooth Adapter hardwired to ttyO1
+Wants=bluetooth.service
+
+[Service]
+ExecStart=/usr/bin/hciattach -n ttyO1 texas
+# is UIM needed?
+
+# The install section is not needed as this can be a static service
+# activated by udev.
+#[Install]
+#WantedBy=bluetooth.target
