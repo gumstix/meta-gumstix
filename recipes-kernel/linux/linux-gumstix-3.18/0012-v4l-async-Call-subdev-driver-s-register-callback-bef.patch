@@ -1,7 +1,7 @@
-From 68adf3bc21b55efbde7ab30506c7e833ac19e205 Mon Sep 17 00:00:00 2001
+From 71d97eef54814dad9a91299f2568fc759de23a8c Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Sun, 14 Sep 2014 21:46:17 +0300
-Subject: [PATCH 12/33] v4l: async: Call subdev driver's register callback
+Subject: [PATCH 12/38] v4l: async: Call subdev driver's register callback
  before bound()
 
 Sub-devices

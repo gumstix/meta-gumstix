@@ -1,7 +1,7 @@
-From 44d61c062cbf78c9edd77a0dbebdeb9da6e1d7bd Mon Sep 17 00:00:00 2001
+From e1a7b4a6f3a5dde7865c81d89ec9b63f1b6406f6 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Sun, 28 Sep 2014 01:10:11 +0300
-Subject: [PATCH 10/33] omap3isp: Add DT entry for OMAP 3
+Subject: [PATCH 10/38] omap3isp: Add DT entry for OMAP 3
 
 The resources the ISP needs are slightly different on 3[45]xx and 3[67]xx.
 The range contains both.

@@ -1,7 +1,7 @@
-From 69463f25bccddc6c183ec238f845ec23fba2d820 Mon Sep 17 00:00:00 2001
+From be7acaed55105e65611aa6e09e34a961d5ba6510 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 29 Jun 2015 15:57:15 -0700
-Subject: [PATCH 29/33] am335x: pepper: Add support for Pepper-DVI
+Subject: [PATCH 29/38] am335x: pepper: Add support for Pepper-DVI
 
 Pepper DVI is an AM335x based single board computer (SBC) offered by
 Gumstix [1].
@@ -29,7 +29,7 @@ index 8409387321a7..2578485d6f6b 100644
  	omap4-panda-a4.dtb \
 diff --git a/arch/arm/boot/dts/am335x-pepper-dvi.dts b/arch/arm/boot/dts/am335x-pepper-dvi.dts
 new file mode 100644
-index 000000000000..7c27ede36fbf
+index 000000000000..ec775025c3ed
 --- /dev/null
 +++ b/arch/arm/boot/dts/am335x-pepper-dvi.dts
 @@ -0,0 +1,490 @@
@@ -235,14 +235,14 @@ index 000000000000..7c27ede36fbf
 +			0xd4 (PIN_OUTPUT | MUX_MODE0)	/* lcd_data13.lcd_data13 */
 +			0xd8 (PIN_OUTPUT | MUX_MODE0)	/* lcd_data14.lcd_data14 */
 +			0xdc (PIN_OUTPUT | MUX_MODE0)	/* lcd_data15.lcd_data15 */
-+			0x20 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad8.lcd_data16 */
-+			0x24 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad9.lcd_data17 */
-+			0x28 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad10.lcd_data18 */
-+			0x2c (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad11.lcd_data19 */
-+			0x30 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad12.lcd_data20 */
-+			0x34 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad13.lcd_data21 */
-+			0x38 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad14.lcd_data22 */
-+			0x3c (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad15.lcd_data23 */
++			0x20 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad8.lcd_data23 */
++			0x24 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad9.lcd_data22 */
++			0x28 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad10.lcd_data21 */
++			0x2c (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad11.lcd_data20 */
++			0x30 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad12.lcd_data19 */
++			0x34 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad13.lcd_data18 */
++			0x38 (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad14.lcd_data17 */
++			0x3c (PIN_OUTPUT | MUX_MODE1)	/* gpmc_ad15.lcd_data16 */
 +			0xe0 (PIN_OUTPUT | MUX_MODE0)	/* lcd_vsync.lcd_vsync */
 +			0xe4 (PIN_OUTPUT | MUX_MODE0)	/* lcd_hsync.lcd_hsync */
 +			0xe8 (PIN_OUTPUT | MUX_MODE0)	/* lcd_pclk.lcd_pclk */

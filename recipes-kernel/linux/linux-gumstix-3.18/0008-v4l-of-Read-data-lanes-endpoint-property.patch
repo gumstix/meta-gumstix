@@ -1,7 +1,7 @@
-From baaad570d0910a5655e1fb642bf2ea6da7645046 Mon Sep 17 00:00:00 2001
+From 03a62cfff38a74ef11b33816dce77b46a98c8225 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Tue, 30 Sep 2014 01:29:07 +0300
-Subject: [PATCH 08/33] v4l: of: Read data-lanes endpoint property
+Subject: [PATCH 08/38] v4l: of: Read data-lanes endpoint property
 
 Add lane_polarity field to struct v4l2_of_bus_mipi_csi2 and read them from
 the endpoint. The field tells the polarity of the physical lanes starting

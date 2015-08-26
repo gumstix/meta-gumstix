@@ -1,7 +1,7 @@
-From 6b46f301b2223b450b4e79de85792f6577485c06 Mon Sep 17 00:00:00 2001
+From 812a00a8f4015f2b53c897397c0e672c9153d86c Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 14 Jan 2015 10:51:25 -0800
-Subject: [PATCH 14/33] omap3isp: Add missing ioctls
+Subject: [PATCH 14/38] omap3isp: Add missing ioctls
 
 Add V4L2 ioctls for the OMAP3 ISP to report the video format as
 UYVY0.

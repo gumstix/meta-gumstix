@@ -1,7 +1,7 @@
-From 54c0e7d59f357fcc492fe38b1489faf7873e4448 Mon Sep 17 00:00:00 2001
+From 3b8e83861cb6b5090d429933ada20e944366d343 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Sat, 13 Sep 2014 23:24:08 +0300
-Subject: [PATCH 07/33] omap3isp: Platform data could be NULL
+Subject: [PATCH 07/38] omap3isp: Platform data could be NULL
 
 Only check for call platform data callback functions if there's platform
 data. Also take care of a few other cases where the NULL pdata pointer could

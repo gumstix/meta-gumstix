@@ -1,7 +1,7 @@
-From fe898a3d6244a776817d41bc7edde0f6bbd045df Mon Sep 17 00:00:00 2001
+From 3406b6807a5aeb390efa0782c4ab1d3d337584ce Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Thu, 8 Jan 2015 08:04:03 -0800
-Subject: [PATCH 27/33] Enable wilink8 wifi chip for Overo
+Subject: [PATCH 27/38] Enable wilink8 wifi chip for Overo
 
 A Wilink WL18xx chip can replace either the W2CBW003 or W2CBW0015
 wifi + bluetooth modules found on some Gumstix Overo COMs.  Add

@@ -1,7 +1,7 @@
-From fd059b937b3481c6e3b0f69c5aacb70f1abb790e Mon Sep 17 00:00:00 2001
+From 92fd863ce8f8fcc8ecc78a1e1be3c6a037bc5045 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Sat, 30 Nov 2013 15:16:27 +0200
-Subject: [PATCH 09/33] omap3isp: Add support for the Device Tree
+Subject: [PATCH 09/38] omap3isp: Add support for the Device Tree
 
 Add the ISP device to omap3 DT include file and add support to the driver to
 use it.

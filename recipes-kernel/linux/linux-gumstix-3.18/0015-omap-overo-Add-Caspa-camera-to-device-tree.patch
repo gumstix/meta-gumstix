@@ -1,7 +1,7 @@
-From 6991eb8733b49efcd5a219fc67eff3e82b72c41a Mon Sep 17 00:00:00 2001
+From 58b43c17857f7115fd17c736dd85a1329003a531 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 7 Jan 2015 08:52:23 -0800
-Subject: [PATCH 15/33] omap: overo: Add Caspa camera to device tree
+Subject: [PATCH 15/38] omap: overo: Add Caspa camera to device tree
 
 Overo boots and detects Caspa (mt9v032) via i2c.  After manually
 modprobing omap3-isp, the ISP pipeline is available and can be

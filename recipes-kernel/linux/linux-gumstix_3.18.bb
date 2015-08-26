@@ -11,6 +11,8 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-chestnut43.dtb omap3-overo-chestnut43.dtb \
     omap3-overo-storm-alto35.dtb omap3-overo-alto35.dtb \
     omap3-overo-storm-arbor43c.dtb omap3-overo-arbor43c.dtb \
+    omap3-overo-storm-arbor50c.dtb omap3-overo-arbor50c.dtb \
+    omap3-overo-storm-arbor70c.dtb omap3-overo-arbor70c.dtb \
     omap3-overo-storm-gallop43.dtb omap3-overo-gallop43.dtb \
     omap3-overo-storm-palo43.dtb omap3-overo-palo43.dtb \
     omap3-overo-storm-palo35.dtb omap3-overo-palo35.dtb \
@@ -18,6 +20,8 @@ KERNEL_DEVICETREE_overo = " \
 "
 KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb"
 KERNEL_DEVICETREE_pepper = "am335x-pepper.dtb \
+                            am335x-pepper-43r.dtb \
+                            am335x-pepper-43c.dtb \
                             am335x-pepper-dvi.dtb \
 "
 
@@ -31,8 +35,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-3.18:"
 
 S = "${WORKDIR}/git"
 
-# v3.18.19 = 22a6cbf9f36ee3ae2878efcbdde33e6ca00b9c4b
-SRCREV = "22a6cbf9f36ee3ae2878efcbdde33e6ca00b9c4b"
+# v3.18.21 = fcd9bfdb9d884f1aab89124dee894e7d821bb5dc
+SRCREV = "fcd9bfdb9d884f1aab89124dee894e7d821bb5dc"
 SRC_URI = " \
     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.18.y \
     file://0001-omap3isp-Fix-error-handling-in-probe.patch \
@@ -67,6 +71,12 @@ SRC_URI = " \
     file://0030-Do-not-disable-vusb3v1-regulator.patch \
     file://0031-overo-Enable-SDIO-interrupts-for-Wifi-interface.patch \
     file://0032-omap3-overo-Add-device-tree-for-Arbor43C-board.patch \
+    file://0033-Pepper-fix-pin-comments-in-DTS.patch \
+    file://0034-input-touchscreen-specify-screen-size-of-edt-ft5x06.patch \
+    file://0035-hack-omap-clockk-dpll5-apply-sprz319e-2.1-erratum.patch \
+    file://0036-Add-power-off-support-for-the-TWL4030.patch \
+    file://0037-omap3-overo-Add-device-tree-for-Arbor50C-and-70C.patch \
+    file://0038-arm-Add-Gumstix-Pepper43R-and-Pepper43C-boards.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

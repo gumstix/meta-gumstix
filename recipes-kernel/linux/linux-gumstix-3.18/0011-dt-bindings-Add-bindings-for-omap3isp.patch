@@ -1,7 +1,7 @@
-From b85a6729efaa02e46a9c866f86fec32db2cd2aed Mon Sep 17 00:00:00 2001
+From 8d4e10a66294740cf22906651cda5aadfabccb1e Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Mon, 29 Sep 2014 00:59:19 +0300
-Subject: [PATCH 11/33] dt: bindings: Add bindings for omap3isp
+Subject: [PATCH 11/38] dt: bindings: Add bindings for omap3isp
 
 Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
 ---

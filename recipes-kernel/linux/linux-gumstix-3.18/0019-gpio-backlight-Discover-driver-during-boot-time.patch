@@ -1,7 +1,7 @@
-From 2fa025961068dc3aae0fabfb003f34562c3374b2 Mon Sep 17 00:00:00 2001
+From ce615ee6324b28701e389d5ca454902320bca2cd Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Wed, 15 Apr 2015 16:24:04 -0700
-Subject: [PATCH 19/33] gpio-backlight: Discover driver during boot time
+Subject: [PATCH 19/38] gpio-backlight: Discover driver during boot time
 
 The gpio-backlight driver seems to be missing the
 MODULE_DEVICE_TABLE line which is preventing it from

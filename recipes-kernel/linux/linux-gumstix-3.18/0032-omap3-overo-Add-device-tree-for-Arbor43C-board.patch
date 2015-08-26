@@ -1,7 +1,7 @@
-From fb2283334213155202ffb165e85f3cabed1de274 Mon Sep 17 00:00:00 2001
+From 4dd7d9588f69c0b61ae544fe6f41a120d036355e Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 8 Dec 2014 13:27:21 -0800
-Subject: [PATCH 32/33] omap3: overo: Add device tree for Arbor43C board
+Subject: [PATCH 32/38] omap3: overo: Add device tree for Arbor43C board
 
 Add a device tree supporting the Gumstix Arbor43C expansion board [1]
 for Gumstix Overo and Overo Storm COMs.  This board features a 4.3"
