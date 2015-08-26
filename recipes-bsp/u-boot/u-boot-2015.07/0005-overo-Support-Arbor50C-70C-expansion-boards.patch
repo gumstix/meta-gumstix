@@ -1,0 +1,66 @@
+From f467cbfe3636c20688136649e4e71e4491a93832 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 7 Sep 2015 16:48:05 -0700
+Subject: [PATCH 5/6] overo: Support Arbor50C/70C expansion boards
+
+Arbor50C and Arbor70C are versions of the Arbor43C expansion board for
+the Gumstix Overo COM that support larger touchscreens (5" and 7"
+respectively).  As a few peripherals are wired differently, Linux
+uses a different device tree for each.  Detect the onboard EEPROM to
+detect the board and pass the correct devicetree name to Linux.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ board/overo/overo.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/board/overo/overo.c b/board/overo/overo.c
+index 04207c9..289993e 100644
+--- a/board/overo/overo.c
++++ b/board/overo/overo.c
+@@ -53,6 +53,8 @@ DECLARE_GLOBAL_DATA_PTR;
+ #define GUMSTIX_THUMBO			0x0B000200
+ #define GUMSTIX_TURTLECORE		0x0C000200
+ #define GUMSTIX_ARBOR43C		0x0D000200
++#define GUMSTIX_ARBOR50C		0x0E000200
++#define GUMSTIX_ARBOR70C		0x0F000200
+ 
+ #define ETTUS_USRP_E			0x01000300
+ 
+@@ -263,6 +265,24 @@ int misc_init_r(void)
+ 		setenv("defaultdisplay", "lcd43");
+ 		setenv("expansionname", "arbor43c");
+ 		break;
++	case GUMSTIX_ARBOR50C:
++		printf("Recognized Arbor50C expansion board (rev %d %s)\n",
++			expansion_config.revision,
++			expansion_config.fab_revision);
++		MUX_GUMSTIX();
++		MUX_ARBOR43C();
++		setenv("defaultdisplay", "lcd43");
++		setenv("expansionname", "arbor50c");
++		break;
++	case GUMSTIX_ARBOR70C:
++		printf("Recognized Arbor70C expansion board (rev %d %s)\n",
++			expansion_config.revision,
++			expansion_config.fab_revision);
++		MUX_GUMSTIX();
++		MUX_ARBOR43C();
++		setenv("defaultdisplay", "lcd43");
++		setenv("expansionname", "arbor70c");
++		break;
+ 	case ETTUS_USRP_E:
+ 		printf("Recognized Ettus Research USRP-E (rev %d %s)\n",
+ 			expansion_config.revision,
+@@ -359,6 +379,8 @@ int board_eth_init(bd_t *bis)
+ 	case GUMSTIX_CHESTNUT43:
+ 	case GUMSTIX_STAGECOACH:
+ 	case GUMSTIX_ARBOR43C:
++	case GUMSTIX_ARBOR50C:
++	case GUMSTIX_ARBOR70C:
+ 	case GUMSTIX_NO_EEPROM:
+ 	case GUMSTIX_EMPTY_EEPROM:
+ 		/* first lan chip */
+-- 
+2.1.4
+
