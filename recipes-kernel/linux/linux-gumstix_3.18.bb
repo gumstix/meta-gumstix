@@ -67,7 +67,6 @@ SRC_URI = " \
     file://0030-Do-not-disable-vusb3v1-regulator.patch \
     file://0031-overo-Enable-SDIO-interrupts-for-Wifi-interface.patch \
     file://0032-omap3-overo-Add-device-tree-for-Arbor43C-board.patch \
-    file://0033-Invert-the-y-axis-of-the-touchscreen-for-pepper.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
