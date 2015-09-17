@@ -79,6 +79,12 @@ SRC_URI = " \
     file://0038-arm-Add-Gumstix-Pepper43R-and-Pepper43C-boards.patch \
     file://0001-Pepper-Fixup-regulator-configuration-on-43R-and-43C.patch \
     file://0002-overo-Fix-up-device-tree-for-Arbor50C-and-Arbor70C.patch \
+    file://0039-HACK-drm-fb_helper-enable-panning-support.patch \
+    file://0040-HACK-drm-tilcdc-add-vsync-callback-for-use-in-omaplf.patch \
+    file://0041-drm-tilcdc-fix-the-ping-pong-dma-tearing-issue-seen-.patch \
+    file://0042-ARM-OMAP2-Use-pdata-quirks-for-sgx-deassert_hardrese.patch \
+    file://0043-ARM-dts-am33xx-add-DT-node-for-gpu.patch \
+    file://0044-gfx-sgx.h-sgx-omap.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
