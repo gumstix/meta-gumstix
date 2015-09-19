@@ -77,6 +77,8 @@ SRC_URI = " \
     file://0036-Add-power-off-support-for-the-TWL4030.patch \
     file://0037-omap3-overo-Add-device-tree-for-Arbor50C-and-70C.patch \
     file://0038-arm-Add-Gumstix-Pepper43R-and-Pepper43C-boards.patch \
+    file://0001-Pepper-Fixup-regulator-configuration-on-43R-and-43C.patch \
+    file://0002-overo-Fix-up-device-tree-for-Arbor50C-and-Arbor70C.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
