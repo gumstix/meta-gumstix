@@ -25,6 +25,10 @@ KERNEL_DEVICETREE_pepper = "am335x-pepper.dtb \
                             am335x-pepper-dvi.dtb \
 "
 
+# Auto-load a serial+ethernet connection on a USB OTG/peripheral
+# port if available
+KERNEL_MODULE_AUTOLOAD += "g_cdc"
+
 
 LINUX_VERSION = "3.18"
 LINUX_VERSION_EXTENSION = "-custom"
