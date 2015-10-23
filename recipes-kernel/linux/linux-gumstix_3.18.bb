@@ -11,6 +11,7 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-chestnut43.dtb omap3-overo-chestnut43.dtb \
     omap3-overo-storm-alto35.dtb omap3-overo-alto35.dtb \
     omap3-overo-storm-arbor43c.dtb omap3-overo-arbor43c.dtb \
+    omap3-overo-storm-arbor43c1.dtb omap3-overo-arbor43c1.dtb \
     omap3-overo-storm-arbor50c.dtb omap3-overo-arbor50c.dtb \
     omap3-overo-storm-arbor70c.dtb omap3-overo-arbor70c.dtb \
     omap3-overo-storm-gallop43.dtb omap3-overo-gallop43.dtb \
@@ -89,6 +90,8 @@ SRC_URI = " \
     file://0042-ARM-OMAP2-Use-pdata-quirks-for-sgx-deassert_hardrese.patch \
     file://0043-ARM-dts-am33xx-add-DT-node-for-gpu.patch \
     file://0044-gfx-sgx.h-sgx-omap.patch \
+    file://0001-Pepper-43C-and-43R-Remove-redundant-pinmux-lines.patch \
+    file://0002-omap3-overo-Update-device-tree-for-Arbor-expansion-b.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

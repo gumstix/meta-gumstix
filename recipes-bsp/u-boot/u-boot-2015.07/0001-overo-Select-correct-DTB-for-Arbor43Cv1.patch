@@ -1,0 +1,33 @@
+From cc1b49c9704565d00ec443b9799021b4b165646a Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 21 Oct 2015 17:05:17 -0700
+Subject: [PATCH] overo: Select correct DTB for Arbor43Cv1
+
+There are two version of the Gumstix Arbor43C board which require
+different device trees.  Select the correct device tree based on
+revision data preflashed to an EEPROM on the board.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ board/overo/overo.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/board/overo/overo.c b/board/overo/overo.c
+index 289993e..3c4c615 100644
+--- a/board/overo/overo.c
++++ b/board/overo/overo.c
+@@ -263,7 +263,10 @@ int misc_init_r(void)
+ 		MUX_GUMSTIX();
+ 		MUX_ARBOR43C();
+ 		setenv("defaultdisplay", "lcd43");
+-		setenv("expansionname", "arbor43c");
++		if (!strcmp(expansion_config.fab_revision, "R1"))
++			setenv("expansionname", "arbor43c1");
++		else
++			setenv("expansionname", "arbor43c");
+ 		break;
+ 	case GUMSTIX_ARBOR50C:
+ 		printf("Recognized Arbor50C expansion board (rev %d %s)\n",
+-- 
+2.1.4
+

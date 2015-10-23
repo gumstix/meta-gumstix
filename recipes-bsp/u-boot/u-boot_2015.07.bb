@@ -14,4 +14,5 @@ SRC_URI = " \
     file://0004-overo-Ensure-ethernet-is-initialized-for-Arbor43C.patch \
     file://0005-overo-Support-Arbor50C-70C-expansion-boards.patch \
     file://0006-pepper-Read-environment-from-EEPROM.patch \
+    file://0001-overo-Select-correct-DTB-for-Arbor43Cv1.patch \
 "
