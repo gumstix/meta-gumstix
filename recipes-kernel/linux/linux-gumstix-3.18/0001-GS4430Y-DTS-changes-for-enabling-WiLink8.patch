@@ -1,0 +1,183 @@
+From 99990d6fa22a4b0d2743a55ba51fb40277826936 Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Mon, 16 Nov 2015 15:17:01 -0800
+Subject: [PATCH] GS4430Y: DTS changes for enabling WiLink8.
+
+Update the regulator node for wlan and add a regulator for bt to
+enable WiLink8 on Duovero. Enable pin muxing for bt which is
+connected over UART2. Also add the required pdata quirks for
+supporting WiLink8.
+
+The default mmc clock speed of 50MHz results in kernel panic and
+sdio driver is unable to talk to the wlcore driver. Changing the
+max-frequency of mmc bus to 40MHz fixes this problem.
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/omap4-duovero.dtsi | 76 +++++++++++++++++++++++++++++-------
+ arch/arm/mach-omap2/pdata-quirks.c   | 26 ++++++++++++
+ 2 files changed, 88 insertions(+), 14 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap4-duovero.dtsi b/arch/arm/boot/dts/omap4-duovero.dtsi
+index e860ccd..3db9dea 100644
+--- a/arch/arm/boot/dts/omap4-duovero.dtsi
++++ b/arch/arm/boot/dts/omap4-duovero.dtsi
+@@ -48,18 +48,16 @@
+ 		clock-frequency = <19200000>;
+ 	};
+ 
+-	/* regulator for w2cbw0015 on sdio5 */
+-	w2cbw0015_vmmc: w2cbw0015_vmmc {
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&w2cbw0015_pins>;
++	vbat: fixedregulator@0 {
++		compatible = "regulator-fixed";
++	};
++
++	wlcore_wl_en: fixedregulator@1 {
++		compatible = "regulator-fixed";
++	};
++
++	wlcore_bt_en: fixedregulator@2 {
+ 		compatible = "regulator-fixed";
+-		regulator-name = "w2cbw0015";
+-		regulator-min-microvolt = <3000000>;
+-		regulator-max-microvolt = <3000000>;
+-		gpio = <&gpio2 11 GPIO_ACTIVE_LOW>;		/* gpio_43 */
+-		startup-delay-us = <70000>;
+-		enable-active-high;
+-		regulator-boot-on;
+ 	};
+ };
+ 
+@@ -159,6 +157,17 @@
+ 			OMAP4_IOPAD(0x14e, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc5_dat1 */
+ 			OMAP4_IOPAD(0x150, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc5_dat2 */
+ 			OMAP4_IOPAD(0x152, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc5_dat3 */
++			OMAP4_IOPAD(0x066, PIN_OUTPUT_PULLUP | MUX_MODE3)	/* gpio_43 */
++			OMAP4_IOPAD(0x06e, PIN_OUTPUT_PULLUP | MUX_MODE3)	/* gpio_47 */
++			OMAP4_IOPAD(0x072, PIN_INPUT | MUX_MODE3)			/* gpio_49 */
++		>;
++	};
++	uart2_pins: pinmux_uart2 {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x118, PIN_INPUT_PULLUP | MUX_MODE0)    /* uart2_cts.uart2_cts */
++			OMAP4_IOPAD(0x11a, PIN_OUTPUT_PULLDOWN | MUX_MODE0) /* uart2_rts.uart2_rts */
++			OMAP4_IOPAD(0x11c, PIN_INPUT_PULLUP | MUX_MODE0)    /* uart2_rx.uart2_rx */
++			OMAP4_IOPAD(0x11e, PIN_OUTPUT_PULLDOWN | MUX_MODE0) /* uart2_tx.uart2_tx */
+ 		>;
+ 	};
+ };
+@@ -192,7 +201,6 @@
+ #include "twl6030.dtsi"
+ #include "twl6030_omap4.dtsi"
+ 
+-/* on-board bluetooth / WiFi module */
+ &i2c4 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c4_pins>;
+@@ -232,14 +240,54 @@
+ };
+ 
+ /* on-board WiFi module */
++&vbat {
++	regulator-name = "vbat";
++	regulator-min-microvolt = <5000000>;
++	regulator-max-microvolt = <5000000>;
++};
++
++&wlcore_wl_en {
++        regulator-name = "regulator-wlcore-wl-en";
++        regulator-min-microvolt = <3300000>;
++        regulator-max-microvolt = <3300000>;
++        vin-supply = <&vbat>;
++        gpio = <&gpio2 11 0>;   /* gpio_43: WL Enable */
++        /* WLAN card specific delay */
++        startup-delay-us = <70000>;
++        enable-active-high;
++};
++
++&wlcore_bt_en {
++        regulator-name = "regulator-wlcore-bt-en";
++        regulator-min-microvolt = <3300000>;
++        regulator-max-microvolt = <3300000>;
++        vin-supply = <&vbat>;
++        gpio = <&gpio2 15 0>;	/* gpio_47: BT Enable */
++        startup-delay-us = <70000>;
++        enable-active-high;
++};
++
+ &mmc5 {
++	/* Wifi & Bluetooth on MMC #5 */
++	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc5_pins>;
+-
+-	vmmc-supply = <&w2cbw0015_vmmc>;
+ 	ti,bus-width = <4>;
++	vmmc-supply = <&wlcore_wl_en>;
++	vmmc_aux-supply = <&wlcore_bt_en>;
+ 	ti,non-removable;
++	ti,needs-special-hs-handling;
+ 	cap-power-off-card;
++	keep-power-in-suspend;
++	ti,dual-volt;
++	max-frequency = <40000000>;
++};
++
++&uart2 {
++	/* Wilink8 Bluetooth */
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart2_pins>;
+ };
+ 
+ &twl_usb_comparator {
+diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
+index 058685a..db1e669 100644
+--- a/arch/arm/mach-omap2/pdata-quirks.c
++++ b/arch/arm/mach-omap2/pdata-quirks.c
+@@ -301,6 +301,31 @@ static void __init var_som_om44_legacy_init(void)
+ {
+ 	legacy_init_wl12xx(WL12XX_REFCLOCK_38, 0, 41);
+ }
++
++struct ti_st_plat_data duovero_wilink_pdata = {
++        .nshutdown_gpio = 47,
++        .dev_name = "/dev/ttyO1",
++        .flow_cntrl = 1,
++        .baud_rate = 3000000,
++};
++
++static struct platform_device duovero_wl18xx_device = {
++        .name           = "kim",
++        .id             = -1,
++        .dev.platform_data = &duovero_wilink_pdata,
++};
++
++static struct platform_device duovero_btwilink_device = {
++        .name = "btwilink",
++        .id = -1,
++};
++
++static void __init omap4_duovero_legacy_init(void)
++{
++	platform_device_register(&duovero_btwilink_device);
++	platform_device_register(&duovero_wl18xx_device);
++	legacy_init_wl12xx(WL12XX_REFCLOCK_26, 0, 49);
++}
+ #endif
+ 
+ #if defined(CONFIG_ARCH_OMAP4) || defined(CONFIG_SOC_OMAP5)
+@@ -448,6 +473,7 @@ static struct pdata_init pdata_quirks[] __initdata = {
+ 	{ "gumstix,omap3-overo", overo_legacy_init, },
+ #endif
+ #ifdef CONFIG_ARCH_OMAP4
++	{ "gumstix,omap4-duovero", omap4_duovero_legacy_init, },
+ 	{ "ti,omap4-sdp", omap4_sdp_legacy_init, },
+ 	{ "ti,omap4-panda", omap4_panda_legacy_init, },
+ 	{ "variscite,var-dvk-om44", var_som_om44_legacy_init, },
+-- 
+2.1.4
+

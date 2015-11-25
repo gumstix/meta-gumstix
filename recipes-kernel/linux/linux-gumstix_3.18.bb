@@ -92,6 +92,7 @@ SRC_URI = " \
     file://0044-gfx-sgx.h-sgx-omap.patch \
     file://0001-Pepper-43C-and-43R-Remove-redundant-pinmux-lines.patch \
     file://0002-omap3-overo-Update-device-tree-for-Arbor-expansion-b.patch \
+    file://0001-GS4430Y-DTS-changes-for-enabling-WiLink8.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
