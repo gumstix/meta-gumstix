@@ -90,6 +90,7 @@ SRC_URI = " \
     file://0042-ARM-OMAP2-Use-pdata-quirks-for-sgx-deassert_hardrese.patch \
     file://0043-ARM-dts-am33xx-add-DT-node-for-gpu.patch \
     file://0044-gfx-sgx.h-sgx-omap.patch \
+    file://0045-edt-ft5x06-Handle-reset-wake-for-different-versions-.patch \
     file://0001-Pepper-43C-and-43R-Remove-redundant-pinmux-lines.patch \
     file://0002-omap3-overo-Update-device-tree-for-Arbor-expansion-b.patch \
     file://0001-GS4430Y-DTS-changes-for-enabling-WiLink8.patch \

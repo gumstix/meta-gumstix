@@ -1,0 +1,38 @@
+From 47f945767967208253602809f7e08c8bbbdec61f Mon Sep 17 00:00:00 2001
+From: Adam YH Lee <adam.yh.lee@gmail.com>
+Date: Fri, 22 Jan 2016 16:09:40 -0800
+Subject: [PATCH] edt-ft5x06: Handle reset/wake for different versions of
+ Newhaven displays
+
+On older versions of some Newhaven displays using the edt-ft5x06
+capative touch controller, the 'WAKE' pin is exposed on the flex
+connector. On newer versions of the same displays, the 'RESET' pin is
+broken out at the same place instead.  As the screen needs to be reset
+before any version information can be read, treat a 'wake-gpio' from the
+device tree as the reset pin (if one is not otherwise defined) to
+accommodate new and old screen versions with the same device tree.
+
+Signed-off-by: Adam YH Lee <adam.yh.lee@gmail.com>
+---
+ drivers/input/touchscreen/edt-ft5x06.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
+index ee3434f..a2a89f6 100644
+--- a/drivers/input/touchscreen/edt-ft5x06.c
++++ b/drivers/input/touchscreen/edt-ft5x06.c
+@@ -942,6 +942,11 @@ static int edt_ft5x06_i2c_ts_probe_dt(struct device *dev,
+ 	tsdata->reset_pin = of_get_named_gpio(np, "reset-gpios", 0);
+ 	tsdata->wake_pin = of_get_named_gpio(np, "wake-gpios", 0);
+ 
++	if(!gpio_is_valid(tsdata->reset_pin)) {
++		tsdata->reset_pin = tsdata->wake_pin;
++		tsdata->wake_pin = -EINVAL;
++	}
++
+ 	return 0;
+ }
+ #else
+-- 
+2.5.0
+
