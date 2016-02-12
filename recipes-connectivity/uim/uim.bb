@@ -14,16 +14,16 @@ SYSTEMD_AUTO_ENABLE = "disable"
 INITSCRIPT_NAME = "ti-uim"
 INITSCRIPT_PARAMS = "defaults 03"
 
+SRC_URI[md5sum] = "369b15488303682ea86bca5345b1641d"
+SRC_URI[sha256sum] = "ca8c8420f71eb2524c69cf2713dba637e5e36000cff9c22f0f2ac449ead2c420"
 
-SRCREV = "c73894456df5def97111cb33d2106b684b8b7959"
 SRC_URI = " \
-    git://gitorious.org/uim/uim.git \
+    https://s3.amazonaws.com/gumstix-misc/uim.tar.gz \
     file://0001-uim-Add-command-line-args-for-passing-sysfs-node-pat.patch \
     file://ti-uim \
     file://ti-uim.service \
 "
-
-S = "${WORKDIR}/git"
+S = "${WORKDIR}"
 
 do_install() {
 	install -d ${D}${bindir}
