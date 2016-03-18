@@ -1,0 +1,37 @@
+From 962744ed73491fa30eeaa5abbf373a5bff31d939 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Fri, 26 Feb 2016 14:57:28 -0800
+Subject: [PATCH 2/3] HACK: Correct the double pin allocation for cap. touch
+
+We also aren't using a SPI flash device so disable the QSPI interface.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/am437x-poblano.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/am437x-poblano.dts b/arch/arm/boot/dts/am437x-poblano.dts
+index f1c9a4e..775db4f 100644
+--- a/arch/arm/boot/dts/am437x-poblano.dts
++++ b/arch/arm/boot/dts/am437x-poblano.dts
+@@ -397,7 +397,7 @@
+ };
+ 
+ &qspi {
+-	status = "okay";
++	status = "disabled";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&qspi_pins>;
+ 
+@@ -695,7 +695,7 @@
+ 			0x1c (PIN_INPUT_PULLUP | MUX_MODE1) /* gpmc_ad7.mmc1_dat7 */
+ 			0x70 (PIN_INPUT_PULLUP | MUX_MODE4) /* gpmc_wait0.mmc1_sdcd */
+ 			/* EMMC nReset */
+-			0x9c (PIN_OUTPUT_PULLUP | MUX_MODE7) /* gpmc_be0n_cle.gpio2_5 */
++			0x24c (PIN_OUTPUT_PULLUP | MUX_MODE7) /* gpio5_13.gpio5_13 */
+ 		>;
+ 	};
+ 
+-- 
+2.5.0
+

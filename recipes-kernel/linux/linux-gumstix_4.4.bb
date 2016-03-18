@@ -24,6 +24,8 @@ SRC_URI = " \
     file://0002-edt-ft5x06-Add-missing-ids-to-edt_ft5x06-id-table.patch \
     file://0003-am437x-poblano-Add-support-for-accel-magn-gyro.patch \
     file://0004-am437x-poblano-Correct-gpio-pins-for-captouch.patch \
+    file://0005-HACK-Correct-the-double-pin-allocation-for-cap.-touc.patch \
+    file://0006-am437x-poblano-Add-support-for-OV7692-Tiny-Caspa-cam.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
