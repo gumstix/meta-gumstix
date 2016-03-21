@@ -1,7 +1,7 @@
-From cd33f76e9b38a670dc1fc59779cce789821625f0 Mon Sep 17 00:00:00 2001
+From f92201083064c5fefb516bb91d60bf108b559881 Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Thu, 17 Mar 2016 16:40:55 -0700
-Subject: [PATCH 3/3] am437x-poblano: Add support for OV7692 (Tiny Caspa)
+Subject: [PATCH 6/6] am437x-poblano: Add support for OV7692 (Tiny Caspa)
  camera sensor
 
 This is an experimental driver. Currently, we are able to capture

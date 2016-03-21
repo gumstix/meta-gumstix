@@ -1,7 +1,7 @@
-From 64af03b205f3f96d4e6075d28d73ebb138c63433 Mon Sep 17 00:00:00 2001
+From 60870a96db302dfd74bf206de03b512487a01576 Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Tue, 19 Jan 2016 12:18:00 -0800
-Subject: [PATCH 2/2] edt-ft5x06: Add missing ids to edt_ft5x06 id table
+Subject: [PATCH 2/6] edt-ft5x06: Add missing ids to edt_ft5x06 id table
 
 Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
 ---
@@ -9,10 +9,10 @@ Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-index 0b0f8c1..f86c364 100644
+index 23fbe38..5e2a978 100644
 --- a/drivers/input/touchscreen/edt-ft5x06.c
 +++ b/drivers/input/touchscreen/edt-ft5x06.c
-@@ -1058,6 +1058,9 @@ static const struct edt_i2c_chip_data edt_ft5506_data = {
+@@ -1064,6 +1064,9 @@ static const struct edt_i2c_chip_data edt_ft5506_data = {
  
  static const struct i2c_device_id edt_ft5x06_ts_id[] = {
  	{ .name = "edt-ft5x06", .driver_data = (long)&edt_ft5x06_data },
@@ -23,5 +23,5 @@ index 0b0f8c1..f86c364 100644
  	{ /* sentinel */ }
  };
 -- 
-2.1.4
+2.5.0
 

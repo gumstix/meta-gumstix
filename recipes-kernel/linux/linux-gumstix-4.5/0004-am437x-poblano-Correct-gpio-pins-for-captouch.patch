@@ -1,7 +1,7 @@
-From b595ec7595acd2de1f37a4361b279e9e8bb3eb13 Mon Sep 17 00:00:00 2001
+From 4f66e3f605b6f7168853db6c14a90bcbba986987 Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Thu, 18 Feb 2016 16:57:59 -0800
-Subject: [PATCH] am437x-poblano: Correct gpio pins for captouch
+Subject: [PATCH 4/6] am437x-poblano: Correct gpio pins for captouch
 
 Captouch gpios changed in the latest rev. Update accordingly.
 
@@ -40,5 +40,5 @@ index 9718b72..f1c9a4e 100644
  	};
  
 -- 
-2.1.4
+2.5.0
 

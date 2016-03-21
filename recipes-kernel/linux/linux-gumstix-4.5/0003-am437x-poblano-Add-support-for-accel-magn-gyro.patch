@@ -1,7 +1,7 @@
-From f54615856298518968d376117db25305dc377b2b Mon Sep 17 00:00:00 2001
+From ff6410b7daea0770d2f05ab972b55b1d94abab62 Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Thu, 18 Feb 2016 15:15:59 -0800
-Subject: [PATCH] am437x-poblano: Add support for accel, magn, gyro
+Subject: [PATCH 3/6] am437x-poblano: Add support for accel, magn, gyro
 
 LSM303D - Currently there is no mainline driver for
 this sensor. So download the driver from ST website:
@@ -106,7 +106,7 @@ index 02eddce..a83447e 100644
  #define ST_GYRO_2_ODR_MASK			0xc0
  #define ST_GYRO_2_ODR_AVL_95HZ_VAL		0x00
 diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-index d6d16fa..bd5757e 100644
+index 1f2337a..88c430e 100644
 --- a/drivers/input/misc/Kconfig
 +++ b/drivers/input/misc/Kconfig
 @@ -796,4 +796,11 @@ config INPUT_DRV2667_HAPTICS
@@ -3748,5 +3748,5 @@ index 0000000..d6bb9a0
 +#endif	/* __KERNEL__ */
 +#endif	/* __LSM303D_H__ */
 -- 
-2.1.4
+2.5.0
 
