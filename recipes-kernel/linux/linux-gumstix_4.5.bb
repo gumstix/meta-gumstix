@@ -26,6 +26,8 @@ SRC_URI = " \
     file://0004-am437x-poblano-Correct-gpio-pins-for-captouch.patch \
     file://0005-HACK-Correct-the-double-pin-allocation-for-cap.-touc.patch \
     file://0006-am437x-poblano-Add-support-for-OV7692-Tiny-Caspa-cam.patch \
+    file://0007-l3gd20h-Use-the-driver-from-ST-for-gyroscope.patch \
+    file://0008-am437x-poblano-Some-device-tree-fixes-for-v11.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
