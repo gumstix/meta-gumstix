@@ -94,6 +94,9 @@ SRC_URI = " \
     file://0001-Pepper-43C-and-43R-Remove-redundant-pinmux-lines.patch \
     file://0002-omap3-overo-Update-device-tree-for-Arbor-expansion-b.patch \
     file://0001-GS4430Y-DTS-changes-for-enabling-WiLink8.patch \
+    file://0048-Add-IMU-sensor-support.patch \
+    file://0049-l3gd20h-Use-the-driver-from-ST-for-gyroscope.patch \
+    file://0050-am335x-pepper-43c-Updated-device-tree-for-v12.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
