@@ -97,6 +97,7 @@ SRC_URI = " \
     file://0048-Add-IMU-sensor-support.patch \
     file://0049-l3gd20h-Use-the-driver-from-ST-for-gyroscope.patch \
     file://0050-am335x-pepper-43c-Updated-device-tree-for-v12.patch \
+    file://0051-am335x-pepper-43r-Device-tree-changes-for-v6.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
