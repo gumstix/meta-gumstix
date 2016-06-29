@@ -15,4 +15,5 @@ SRC_URI = " \
     file://0005-overo-Support-Arbor50C-70C-expansion-boards.patch \
     file://0006-pepper-Read-environment-from-EEPROM.patch \
     file://0001-overo-Select-correct-DTB-for-Arbor43Cv1.patch \
+    file://0007-duovero-Read-eeprom-over-i2c.patch \
 "

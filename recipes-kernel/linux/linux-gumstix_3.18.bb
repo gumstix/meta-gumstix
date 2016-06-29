@@ -19,7 +19,9 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-palo35.dtb omap3-overo-palo35.dtb \
     omap3-overo-storm-summit.dtb omap3-overo-summit.dtb \
 "
-KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb"
+KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb \
+                             omap4-duovero-garret50c.dtb \
+"
 KERNEL_DEVICETREE_pepper = "am335x-pepper.dtb \
                             am335x-pepper-43r.dtb \
                             am335x-pepper-43c.dtb \
@@ -98,6 +100,9 @@ SRC_URI = " \
     file://0049-l3gd20h-Use-the-driver-from-ST-for-gyroscope.patch \
     file://0050-am335x-pepper-43c-Updated-device-tree-for-v12.patch \
     file://0051-am335x-pepper-43r-Device-tree-changes-for-v6.patch \
+    file://0052-LSM303D-Use-the-correct-compatible-string-in-the-dri.patch \
+    file://0053-Garret50C-Add-correct-edid-settings-for-800x480-disp.patch \
+    file://0054-omap4-duovero-garret50c-Add-a-new-Gumstix-DuoVero-ex.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
