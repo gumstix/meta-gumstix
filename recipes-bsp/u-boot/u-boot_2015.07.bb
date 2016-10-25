@@ -16,4 +16,5 @@ SRC_URI = " \
     file://0006-pepper-Read-environment-from-EEPROM.patch \
     file://0001-overo-Select-correct-DTB-for-Arbor43Cv1.patch \
     file://0007-duovero-Read-eeprom-over-i2c.patch \
+    file://0008-U-Boot-1-3-Copy-gcc5-over-to-compiler-gcc6.h-as-a-beginning-of-support.patch \
 "
