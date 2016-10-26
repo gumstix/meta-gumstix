@@ -44,6 +44,8 @@ S = "${WORKDIR}/git"
 
 # v3.18.21 = fcd9bfdb9d884f1aab89124dee894e7d821bb5dc
 SRCREV = "fcd9bfdb9d884f1aab89124dee894e7d821bb5dc"
+PV = "3.18.21"
+
 SRC_URI = " \
     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.18.y \
     file://0001-omap3isp-Fix-error-handling-in-probe.patch \
@@ -103,6 +105,7 @@ SRC_URI = " \
     file://0052-LSM303D-Use-the-correct-compatible-string-in-the-dri.patch \
     file://0053-Garret50C-Add-correct-edid-settings-for-800x480-disp.patch \
     file://0054-omap4-duovero-garret50c-Add-a-new-Gumstix-DuoVero-ex.patch \
+    file://0055-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
