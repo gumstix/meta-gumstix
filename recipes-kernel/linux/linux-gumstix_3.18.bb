@@ -105,6 +105,7 @@ SRC_URI = " \
     file://0052-LSM303D-Use-the-correct-compatible-string-in-the-dri.patch \
     file://0053-Garret50C-Add-correct-edid-settings-for-800x480-disp.patch \
     file://0054-omap4-duovero-garret50c-Add-a-new-Gumstix-DuoVero-ex.patch \
+    file://0055-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
