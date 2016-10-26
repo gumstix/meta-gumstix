@@ -1,0 +1,36 @@
+From bde304575f3ecaa9570a9329196dffaadf3adafa Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 22 May 2015 09:56:29 -0700
+Subject: [PATCH] Input: sentelic - use "static inline" instead of "inline"
+
+gcc-5 defaults to gnu11 which used c99 inline semantics in c99 'inline' is
+not externally visible unlike gnu89, therefore we use 'static inline' which
+has same semantics between gnu89 and c99
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/input/mouse/sentelic.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/input/mouse/sentelic.h b/drivers/input/mouse/sentelic.h
+index aa697ec..42df9e3 100644
+--- a/drivers/input/mouse/sentelic.h
++++ b/drivers/input/mouse/sentelic.h
+@@ -123,11 +123,11 @@ struct fsp_data {
+ extern int fsp_detect(struct psmouse *psmouse, bool set_properties);
+ extern int fsp_init(struct psmouse *psmouse);
+ #else
+-inline int fsp_detect(struct psmouse *psmouse, bool set_properties)
++static inline int fsp_detect(struct psmouse *psmouse, bool set_properties)
+ {
+ 	return -ENOSYS;
+ }
+-inline int fsp_init(struct psmouse *psmouse)
++static inline int fsp_init(struct psmouse *psmouse)
+ {
+ 	return -ENOSYS;
+ }
+-- 
+2.10.1
+
