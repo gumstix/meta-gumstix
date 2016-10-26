@@ -44,6 +44,8 @@ S = "${WORKDIR}/git"
 
 # v3.18.21 = fcd9bfdb9d884f1aab89124dee894e7d821bb5dc
 SRCREV = "fcd9bfdb9d884f1aab89124dee894e7d821bb5dc"
+PV = "3.18.21"
+
 SRC_URI = " \
     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;nocheckout=1;branch=linux-3.18.y \
     file://0001-omap3isp-Fix-error-handling-in-probe.patch \
