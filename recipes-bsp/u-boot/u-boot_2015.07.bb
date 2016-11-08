@@ -1,4 +1,4 @@
-require u-boot.inc
+require u-boot-gumstix.inc
 
 PV = "2015.07"
 
