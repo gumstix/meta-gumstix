@@ -1,7 +1,7 @@
-From b36f942fb34ca2eb190b17875fd750bedc5c9cca Mon Sep 17 00:00:00 2001
+From d4123ca71273d6840a3f5a3d06b2971279193661 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Thu, 2 Jan 2014 00:28:28 +0100
-Subject: [PATCH 06/32] omap3isp: DT support for clocks
+Subject: [PATCH 06/38] omap3isp: DT support for clocks
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---

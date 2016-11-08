@@ -1,7 +1,7 @@
-From 60bb991a60d9d246e2550aabfabe00ccfefc01f5 Mon Sep 17 00:00:00 2001
+From be7acaed55105e65611aa6e09e34a961d5ba6510 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 29 Jun 2015 15:57:15 -0700
-Subject: [PATCH 29/32] am335x: pepper: Add support for Pepper-DVI
+Subject: [PATCH 29/38] am335x: pepper: Add support for Pepper-DVI
 
 Pepper DVI is an AM335x based single board computer (SBC) offered by
 Gumstix [1].
@@ -29,7 +29,7 @@ index 8409387321a7..2578485d6f6b 100644
  	omap4-panda-a4.dtb \
 diff --git a/arch/arm/boot/dts/am335x-pepper-dvi.dts b/arch/arm/boot/dts/am335x-pepper-dvi.dts
 new file mode 100644
-index 000000000000..7c27ede36fbf
+index 000000000000..ec775025c3ed
 --- /dev/null
 +++ b/arch/arm/boot/dts/am335x-pepper-dvi.dts
 @@ -0,0 +1,490 @@

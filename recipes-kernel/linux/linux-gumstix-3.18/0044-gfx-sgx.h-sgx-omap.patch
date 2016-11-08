@@ -1,0 +1,86 @@
+From c6cea0217232a0183363733924f17d8fb2119474 Mon Sep 17 00:00:00 2001
+From: Adam YH Lee <adam.yh.lee@gmail.com>
+Date: Tue, 15 Sep 2015 15:03:34 -0700
+Subject: [PATCH 6/6] gfx-sgx.h > sgx-omap
+
+Signed-off-by: Adam YH Lee <adam.yh.lee@gmail.com>
+---
+ arch/arm/mach-omap2/pdata-quirks.c     |  2 +-
+ include/linux/platform_data/gfx-sgx.h  | 22 ----------------------
+ include/linux/platform_data/sgx-omap.h | 22 ++++++++++++++++++++++
+ 3 files changed, 23 insertions(+), 23 deletions(-)
+ delete mode 100644 include/linux/platform_data/gfx-sgx.h
+ create mode 100644 include/linux/platform_data/sgx-omap.h
+
+diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
+index 2f061e6..b53231c 100644
+--- a/arch/arm/mach-omap2/pdata-quirks.c
++++ b/arch/arm/mach-omap2/pdata-quirks.c
+@@ -18,7 +18,7 @@
+ 
+ #include <linux/platform_data/pinctrl-single.h>
+ #include <linux/platform_data/iommu-omap.h>
+-#include <linux/platform_data/gfx-sgx.h>
++#include <linux/platform_data/sgx-omap.h>
+ 
+ #include "am35xx.h"
+ #include "common.h"
+diff --git a/include/linux/platform_data/gfx-sgx.h b/include/linux/platform_data/gfx-sgx.h
+deleted file mode 100644
+index aa59b2c..0000000
+--- a/include/linux/platform_data/gfx-sgx.h
++++ /dev/null
+@@ -1,22 +0,0 @@
+-/*
+- * SGX Graphics Driver Platform Data
+- *
+- * Copyright (C) 2014 Texas Instruments Incorporated - http://www.ti.com/
+- *	Darren Etheridge <detheridge@ti.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+- *
+- * This program is distributed "as is" WITHOUT ANY WARRANTY of any
+- * kind, whether express or implied; without even the implied warranty
+- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- */
+-#include <linux/platform_device.h>
+-
+-struct gfx_sgx_platform_data {
+-	const char *reset_name;
+-
+-	int (*deassert_reset)(struct platform_device *pdev, const char *name);
+-};
+diff --git a/include/linux/platform_data/sgx-omap.h b/include/linux/platform_data/sgx-omap.h
+new file mode 100644
+index 0000000..aa59b2c
+--- /dev/null
++++ b/include/linux/platform_data/sgx-omap.h
+@@ -0,0 +1,22 @@
++/*
++ * SGX Graphics Driver Platform Data
++ *
++ * Copyright (C) 2014 Texas Instruments Incorporated - http://www.ti.com/
++ *	Darren Etheridge <detheridge@ti.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed "as is" WITHOUT ANY WARRANTY of any
++ * kind, whether express or implied; without even the implied warranty
++ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++#include <linux/platform_device.h>
++
++struct gfx_sgx_platform_data {
++	const char *reset_name;
++
++	int (*deassert_reset)(struct platform_device *pdev, const char *name);
++};
+-- 
+2.1.4
+

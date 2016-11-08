@@ -1,0 +1,109 @@
+From e580e951aeccd3853fa7e772bd4dab3e1eddb577 Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Wed, 29 Jun 2016 10:49:30 -0700
+Subject: [PATCH] duovero: Read eeprom over i2c
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+---
+ board/gumstix/duovero/duovero.c | 45 +++++++++++++++++++++++++++++++++++++++++
+ include/configs/duovero.h       |  6 ++++++
+ 2 files changed, 51 insertions(+)
+
+diff --git a/board/gumstix/duovero/duovero.c b/board/gumstix/duovero/duovero.c
+index 81d6c82..3d1efe1 100644
+--- a/board/gumstix/duovero/duovero.c
++++ b/board/gumstix/duovero/duovero.c
+@@ -6,6 +6,7 @@
+  * SPDX-License-Identifier:     GPL-2.0+
+  */
+ #include <common.h>
++#include <errno.h>
+ #include <netdev.h>
+ #include <asm/arch/sys_proto.h>
+ #include <asm/arch/mmc_host_def.h>
+@@ -32,6 +33,33 @@ static void setup_net_chip(void);
+ 
+ DECLARE_GLOBAL_DATA_PTR;
+ 
++struct duovero_board_id {
++	unsigned int device_vendor;
++	unsigned char revision;
++	unsigned char content;
++	char fab_revision[8];
++	char env_var[16];
++	char env_setting[64];
++};
++
++static int read_eeprom(struct duovero_board_id *header)
++{
++	i2c_set_bus_num(CONFIG_SYS_I2C_EEPROM_BUS);
++
++	if (i2c_probe(CONFIG_SYS_I2C_EEPROM_ADDR)) {
++		return -ENODEV;
++	}
++
++	if (i2c_read(CONFIG_SYS_I2C_EEPROM_ADDR, 0, 1, (uchar *)header,
++		sizeof(struct duovero_board_id))) {
++		return -EIO;
++	}
++
++	i2c_set_bus_num(CONFIG_SYS_I2C_TWL6040_BUS);
++
++	return 0;
++}
++
+ const struct omap_sysinfo sysinfo = {
+ 	"Board: duovero\n"
+ };
+@@ -87,6 +115,23 @@ int misc_init_r(void)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_BOARD_LATE_INIT
++int board_late_init(void)
++{
++	struct duovero_board_id header;
++
++	if (read_eeprom(&header) < 0) {
++		puts("Could not get board ID.\n");
++		return 0;
++	}
++
++	if (header.content == 1)
++		setenv(header.env_var, header.env_setting);
++
++	return 0;
++}
++#endif
++
+ void set_muxconf_regs_essential(void)
+ {
+ 	do_set_mux((*ctrl)->control_padconf_core_base,
+diff --git a/include/configs/duovero.h b/include/configs/duovero.h
+index 6e53da5..859c4fd 100644
+--- a/include/configs/duovero.h
++++ b/include/configs/duovero.h
+@@ -21,6 +21,7 @@
+ 
+ #include <configs/ti_omap4_common.h>
+ 
++#define CONFIG_BOARD_LATE_INIT
+ #undef CONFIG_SPL_OS_BOOT
+ 
+ #undef CONFIG_SYS_EMIF_PRECALCULATED_TIMING_REGS
+@@ -53,7 +54,12 @@
+ /* GPIO */
+ #define CONFIG_CMD_GPIO
+ 
++#define CONFIG_SYS_I2C_TWL6040_BUS 	0
++#define CONFIG_SYS_I2C_EEPROM_BUS 	2
++#define CONFIG_SYS_I2C_EEPROM_ADDR  0x51
++
+ /* ENV related config options */
++#define CONFIG_ENV_SIZE         (128 << 10) /* 128 KiB */
+ #define CONFIG_ENV_IS_NOWHERE
+ 
+ #define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
+-- 
+2.7.4
+

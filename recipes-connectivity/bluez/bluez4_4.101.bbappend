@@ -1,5 +1,5 @@
 # Add required hciattach for optional on-board Wi2Wi bluetooth adapter
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/bluez4-4.101:"
 
 SRC_URI += " \
   file://99-bluetooth-via-uart.rules \
@@ -8,6 +8,8 @@ SRC_URI += " \
 "
 
 SYSTEMD_SERVICE_${PN} += "bluetooth-ttyO1-csr.service bluetooth-ttyO1-wilink.service"
+
+SYSTEMD_AUTO_ENABLE = "enable"
 
 do_install_append() {
     install -d ${D}${systemd_unitdir}/system

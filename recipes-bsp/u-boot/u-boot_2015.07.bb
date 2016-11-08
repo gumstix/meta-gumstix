@@ -1,4 +1,4 @@
-require u-boot.inc
+require u-boot-gumstix.inc
 
 PV = "2015.07"
 
@@ -11,4 +11,10 @@ SRC_URI = " \
     file://0001-Update-the-rootfs-type-to-ext4-for-Overo-and-Pepper.patch \
     file://0002-Update-rootfs-type-to-ext4-for-DuoVero.patch \
     file://0003-Revert-ti-armv7-enable-EXT-support-in-SPL-using-ti_a.patch \
+    file://0004-overo-Ensure-ethernet-is-initialized-for-Arbor43C.patch \
+    file://0005-overo-Support-Arbor50C-70C-expansion-boards.patch \
+    file://0006-pepper-Read-environment-from-EEPROM.patch \
+    file://0001-overo-Select-correct-DTB-for-Arbor43Cv1.patch \
+    file://0007-duovero-Read-eeprom-over-i2c.patch \
+    file://0008-U-Boot-1-3-Copy-gcc5-over-to-compiler-gcc6.h-as-a-beginning-of-support.patch \
 "

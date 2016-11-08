@@ -1,7 +1,7 @@
-From 938b0d40b504a60de6b17381b31015f294d71793 Mon Sep 17 00:00:00 2001
+From ec803e906eca91a0d07223556f43d90cc34b01ff Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Tue, 14 Jul 2015 16:17:31 -0700
-Subject: [PATCH 30/32] Do not disable vusb3v1 regulator
+Subject: [PATCH 30/38] Do not disable vusb3v1 regulator
 
 MADC reads incorrect values when it is not biased by the vusb3v1
 regulator. Therefore we should never disable this regulator, even if
@@ -18,7 +18,7 @@ Signed-off-by: Adam YH Lee <adam.yh.lee@gmail.com>
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/phy/phy-twl4030-usb.c b/drivers/phy/phy-twl4030-usb.c
-index 7b04befd5271..7d25bac5fdcf 100644
+index 13dd070a69da..52883260f217 100644
 --- a/drivers/phy/phy-twl4030-usb.c
 +++ b/drivers/phy/phy-twl4030-usb.c
 @@ -144,6 +144,9 @@
@@ -28,10 +28,10 @@ index 7b04befd5271..7d25bac5fdcf 100644
 +#define TWL4030_USB_SEL_MADC_MCPC	(1<<3)
 +#define TWL4030_USB_CARKIT_ANA_CTRL	0xBB
 +
- struct twl4030_usb {
- 	struct usb_phy		phy;
- 	struct device		*dev;
-@@ -392,7 +395,6 @@ static int twl4030_usb_runtime_suspend(struct device *dev)
+ /*
+  * If VBUS is valid or ID is ground, then we know a
+  * cable is present and we need to be runtime-enabled
+@@ -402,7 +405,6 @@ static int twl4030_usb_runtime_suspend(struct device *dev)
  	__twl4030_phy_power(twl, 0);
  	regulator_disable(twl->usb1v5);
  	regulator_disable(twl->usb1v8);
@@ -39,7 +39,7 @@ index 7b04befd5271..7d25bac5fdcf 100644
  
  	return 0;
  }
-@@ -459,6 +461,11 @@ static int twl4030_phy_power_on(struct phy *phy)
+@@ -469,6 +471,11 @@ static int twl4030_phy_power_on(struct phy *phy)
  		twl4030_i2c_access(twl, 0);
  	schedule_delayed_work(&twl->id_workaround_work, 0);
  

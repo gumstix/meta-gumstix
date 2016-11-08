@@ -1,7 +1,7 @@
-From d3fda98dc2c6765ec003ab8fdf53e4505a4fa182 Mon Sep 17 00:00:00 2001
+From ae434177b9ef7784b8e874419babc8d23dd9b56a Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 15 Jul 2015 14:20:47 -0700
-Subject: [PATCH 31/32] overo: Enable SDIO interrupts for Wifi interface
+Subject: [PATCH 31/38] overo: Enable SDIO interrupts for Wifi interface
 
 Signed-off-by: Ash Charles <ashcharles@gmail.com>
 ---

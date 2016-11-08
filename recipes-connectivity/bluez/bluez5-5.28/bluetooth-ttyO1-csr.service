@@ -1,0 +1,11 @@
+[Unit]
+Description=Attach W2CBW003 CSR Bluetooth Adapter hardwired to ttyO1
+Wants=bluetooth.service
+
+[Service]
+ExecStart=/usr/bin/hciattach -n ttyO1 csr
+
+# The install section is not needed as this can be a static service
+# activated by udev.
+#[Install]
+#WantedBy=bluetooth.target

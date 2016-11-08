@@ -1,7 +1,7 @@
-From fe215544766014c3996924d2154ee10e70592866 Mon Sep 17 00:00:00 2001
+From b91133993dc653d823085e068debb58afd7e6ad4 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Thu, 4 Jun 2015 11:08:17 -0700
-Subject: [PATCH 16/32] ARM: dts: Correct audio input route & set mic bias
+Subject: [PATCH 16/38] ARM: dts: Correct audio input route & set mic bias
 
 Audio-in was incorrectly routed to Line In. It should be Mic3L as per
 schematic.

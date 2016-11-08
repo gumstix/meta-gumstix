@@ -53,7 +53,14 @@ SRC_URI = " \
     file://0033-ARM-7668-1-fix-memset-related-crashes-caused-by-rece.patch \
     file://0034-ARM-7670-1-fix-the-memset-fix.patch \
     file://0035-OMAP2-3-clock-fix-sprz319-erratum-2.1.patch \
+    file://0036-Add-missing-SGX-header.patch \
     file://add_missing_ioctls.patch \
+    file://0037-kernel-add-support-for-gcc-5.patch \
+    file://0001-compiler-add-support-for-gcc-6.patch \
+    file://0001-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch \
+    file://0001-timeconst.pl-Eliminate-Perl-warning.patch \
+    file://0001-Input-lifebook-use-static-inline-instead-of-inline-i.patch \
+    file://0001-Input-sentelic-use-static-inline-instead-of-inline.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

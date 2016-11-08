@@ -1,7 +1,7 @@
-From 487224f39153aa7449fbda17ec171f9f6b1411a4 Mon Sep 17 00:00:00 2001
+From 0564d8341e67bf9c81e0fd69d270f1a563c00110 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 5 Jan 2015 17:45:49 -0800
-Subject: [PATCH 22/32] omap3: overo: Update LCD panel names
+Subject: [PATCH 22/38] omap3: overo: Update LCD panel names
 
 For Gumstix Overo COMs, the u-boot bootloader typically passes an
 argument specifying the default display via the omapdss.def_disp

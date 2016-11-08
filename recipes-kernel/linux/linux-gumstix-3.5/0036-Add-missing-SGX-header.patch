@@ -1,0 +1,43 @@
+From d990ff3155895a38ac1223fb7eba07c6d4ed9782 Mon Sep 17 00:00:00 2001
+From: Adam YH Lee <adam.yh.lee@gmail.com>
+Date: Thu, 15 Oct 2015 13:44:19 -0700
+Subject: [PATCH] Add missing SGX header
+
+Signed-off-by: Adam YH Lee <adam.yh.lee@gmail.com>
+---
+ include/linux/platform_data/sgx-omap.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 include/linux/platform_data/sgx-omap.h
+
+diff --git a/include/linux/platform_data/sgx-omap.h b/include/linux/platform_data/sgx-omap.h
+new file mode 100644
+index 0000000..53c4280
+--- /dev/null
++++ b/include/linux/platform_data/sgx-omap.h
+@@ -0,0 +1,23 @@
++/*
++ * SGX Graphics Driver Platform Data
++ *
++ * Copyright (C) 2014 Texas Instruments Incorporated - http://www.ti.com/
++ *     Darren Etheridge <detheridge@ti.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed "as is" WITHOUT ANY WARRANTY of any
++ * kind, whether express or implied; without even the implied warranty
++ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++#include <linux/platform_device.h>
++
++struct gfx_sgx_platform_data {
++       const char *reset_name;
++
++       int (*deassert_reset)(struct platform_device *pdev, const char *name);
++};
++
+-- 
+2.5.0
+

@@ -1,0 +1,211 @@
+From 815d1ae9015271543930ee5e691ee915a2998d53 Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Mon, 9 May 2016 10:40:36 -0700
+Subject: [PATCH 2/2] am437x-poblano: Some device tree fixes for v11
+
+* Rename all instances of -sk to -poblano
+* Edma crossbar syntax has changed from 4.4 to 4.5.
+* lsm303d was not getting probed on boot, fix that.
+* led triggers - red: heartbeat and blue: SD card activity.
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+---
+ arch/arm/boot/dts/am437x-poblano.dts | 57 ++++++++++++++++--------------------
+ drivers/input/misc/lsm303d.c         | 20 ++++---------
+ 2 files changed, 31 insertions(+), 46 deletions(-)
+
+diff --git a/arch/arm/boot/dts/am437x-poblano.dts b/arch/arm/boot/dts/am437x-poblano.dts
+index 92085cc..4677729 100644
+--- a/arch/arm/boot/dts/am437x-poblano.dts
++++ b/arch/arm/boot/dts/am437x-poblano.dts
+@@ -26,9 +26,9 @@
+ 
+ 	sound: sound_iface {
+ 		compatible = "ti,da830-evm-audio";
+-		ti,model = "AM437x-SK-EVM";
++		ti,model = "AM437x-poblano";
+ 		ti,audio-codec = <&audio_codec>;
+-		ti,mcasp-controller = <&mcasp1>;
++		ti,mcasp-controller = <&mcasp0>;
+ 		ti,codec-clock-rate = <12000000>;
+ 		ti,audio-routing =
+ 			"Headphone Jack",       "HPLOUT",
+@@ -43,16 +43,16 @@
+ 		pinctrl-0 = <&leds_pins>;
+ 
+ 		led@0 {
+-			label = "am437x-sk:blue";
++			label = "am437x-poblano:blue";
+ 			gpios = <&gpio1 20 GPIO_ACTIVE_HIGH>;
+-			linux,default-trigger = "none";
++			linux,default-trigger = "mmc1";
+ 			default-state = "off";
+ 		};
+ 
+ 		led@1 {
+-			label = "am437x-sk:red";
+-			gpios = <&gpio1 16 GPIO_ACTIVE_HIGH>;
+-			linux,default-trigger = "none";
++			label = "am437x-poblano:red";
++			gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
+ 			default-state = "off";
+ 		};
+ 	};
+@@ -258,7 +258,7 @@
+ 
+ /* Accelerometer/Magnetometer */
+ 	lsm303d: lsm303d@1e {
+-		compatible = "lsm303d-custom";
++		compatible = "lsm303d";
+ 		int1-gpio = <&gpio5 12 GPIO_ACTIVE_HIGH>;
+ 		int2-gpio = <&gpio0 19 GPIO_ACTIVE_HIGH>;
+ 		reg = <0x1e>;
+@@ -309,11 +309,6 @@
+ 	ti,non-removable;
+ };
+ 
+-&edma {
+-	ti,edma-xbar-event-map = /bits/ 16 <1 12
+-										2 13>;
+-};
+-
+ &mmc3 {
+ 	/* WiLink8 on MMC2 */
+ 	status = "okay";
+@@ -323,8 +318,8 @@
+ 	vmmc_aux-supply = <&wl18xx_bt_en>;
+ 	ti,bus-width = <4>;
+ 	ti,non-removable;
+-	dmas = <&edma 12
+-			&edma 13>;
++	dmas = <&edma_xbar 12 0 1>,
++		<&edma_xbar 13 0 2>;
+ 	dma-names = "tx", "rx";
+ 	cap-power-off-card;
+ 	keep-power-in-suspend;
+@@ -364,16 +359,16 @@
+ 	DVDD-supply = <&ldo1>;
+ };
+ 
+-&mcasp1 {
++&mcasp0 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&mcasp1_pins>;
++	pinctrl-0 = <&mcasp0_pins>;
+ 
+ 	status = "okay";
+ 
+ 	op-mode = <0>;
+ 	tdm-slots = <2>;
+ 	serial-dir = <
+-		0 0 1 2
++		1 2 0 0
+ 		0 0 0 0
+ 		0 0 0 0
+ 		0 0 0 0
+@@ -551,7 +546,7 @@
+ 	leds_pins: leds_pins {
+ 		pinctrl-single,pins = <
+ 			0x50  (PIN_OUTPUT | MUX_MODE7)	/* gpmc_a4.gpio1_20 */
+-			0x40  (PIN_OUTPUT | MUX_MODE7)	/* gpmc_a0.gpio1_16 */
++			0x1ac (PIN_OUTPUT | MUX_MODE7)	/* mcasp0_ahclkx.gpio3_21 */
+ 		>;
+ 	};
+ 
+@@ -672,12 +667,12 @@
+ 		>;
+ 	};
+ 
+-	mcasp1_pins: mcasp1_pins {
++	mcasp0_pins: mcasp0_pins {
+ 		pinctrl-single,pins = <
+-			0x10c (PIN_INPUT_PULLDOWN | MUX_MODE4)	/* mii1_crs.mcasp1_aclkx */
+-			0x110 (PIN_INPUT_PULLDOWN | MUX_MODE4)	/* mii1_rxerr.mcasp1_fsx */
+-			0x108 (PIN_OUTPUT_PULLDOWN | MUX_MODE4)	/* mii1_col.mcasp1_axr2 */
+-			0x144 (PIN_INPUT_PULLDOWN | MUX_MODE4)	/* rmii1_ref_clk.mcasp1_axr3 */
++			0x190 (PIN_INPUT_PULLDOWN | MUX_MODE0)	/* mcasp0_aclkx.mcasp0_aclkx */
++			0x194 (PIN_INPUT_PULLDOWN | MUX_MODE0)	/* mcasp0_fsx.mcasp0_fsx */
++			0x198 (PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* mcasp0_axr0.mcasp0_axr0 */
++			0x1a8 (PIN_INPUT_PULLDOWN | MUX_MODE0)	/* mcasp0_axr1.mcasp0_axr1 */
+ 			0x60 (PIN_OUTPUT | MUX_MODE7) /* gpmc_a8.gpio1_24 */
+ 		>;
+ 	};
+@@ -720,18 +715,18 @@
+ 	cpsw_pins: pinmux_cpsw_pins {
+ 		pinctrl-single,pins = <
+ 			/* Slave 1 */
+-			0x12c (PIN_INPUT_PULLUP| MUX_MODE2)	/* mii1_txclk.rgmii1_tclk */
++			0x12c (PIN_OUTPUT_PULLDOWN | MUX_MODE2)	/* mii1_txclk.rgmii1_tclk */
+ 			0x114 (PIN_OUTPUT_PULLDOWN | MUX_MODE2)	/* mii1_txen.rgmii1_tctl */
+ 			0x128 (PIN_OUTPUT_PULLDOWN | MUX_MODE2)	/* mii1_txd0.rgmii1_td0 */
+ 			0x124 (PIN_OUTPUT_PULLDOWN | MUX_MODE2)	/* mii1_txd1.rgmii1_td1 */
+ 			0x120 (PIN_OUTPUT_PULLDOWN | MUX_MODE2)	/* mii1_txd0.rgmii1_td2 */
+ 			0x11c (PIN_OUTPUT_PULLDOWN | MUX_MODE2)	/* mii1_txd1.rgmii1_td3 */
+-			0x130 (PIN_INPUT_PULLUP | MUX_MODE2)	/* mii1_rxclk.rmii1_rclk */
+-			0x118 (PIN_INPUT_PULLUP | MUX_MODE2)	/* mii1_rxdv.rgmii1_rctl */
+-			0x140 (PIN_INPUT_PULLUP | MUX_MODE2)	/* mii1_rxd0.rgmii1_rd0 */
+-			0x13c (PIN_INPUT_PULLUP | MUX_MODE2)	/* mii1_rxd1.rgmii1_rd1 */
+-			0x138 (PIN_INPUT_PULLUP | MUX_MODE2)	/* mii1_rxd0.rgmii1_rd2 */
+-			0x134 (PIN_INPUT_PULLUP | MUX_MODE2)	/* mii1_rxd1.rgmii1_rd3 */
++			0x130 (PIN_INPUT_PULLDOWN | MUX_MODE2)	/* mii1_rxclk.rmii1_rclk */
++			0x118 (PIN_INPUT_PULLDOWN | MUX_MODE2)	/* mii1_rxdv.rgmii1_rctl */
++			0x140 (PIN_INPUT_PULLDOWN | MUX_MODE2)	/* mii1_rxd0.rgmii1_rd0 */
++			0x13c (PIN_INPUT_PULLDOWN | MUX_MODE2)	/* mii1_rxd1.rgmii1_rd1 */
++			0x138 (PIN_INPUT_PULLDOWN | MUX_MODE2)	/* mii1_rxd0.rgmii1_rd2 */
++			0x134 (PIN_INPUT_PULLDOWN | MUX_MODE2)	/* mii1_rxd1.rgmii1_rd3 */
+ 			/* ethernet interrupt */
+ 			0x240 (PIN_INPUT_PULLUP | MUX_MODE7)	/* gpio5_10.gpio5_10 */
+ 			/* ethernet PHY nReset */
+diff --git a/drivers/input/misc/lsm303d.c b/drivers/input/misc/lsm303d.c
+index e5110d3..c63d4b7 100644
+--- a/drivers/input/misc/lsm303d.c
++++ b/drivers/input/misc/lsm303d.c
+@@ -59,6 +59,7 @@ Revision 1-0-5 2013/10/23
+ #include <linux/of.h>
+ #include <linux/of_gpio.h>
+ #include <linux/of_graph.h>
++#include <linux/of_device.h>
+ 
+ //#include <linux/input/lsm303d.h>
+ #include "lsm303d.h"
+@@ -3427,11 +3428,13 @@ static const struct i2c_device_id lsm303d_id[]
+ 
+ MODULE_DEVICE_TABLE(i2c, lsm303d_id);
+ 
++#ifdef CONFIG_OF
+ static const struct of_device_id lsm303d_of_match[] = {
+-	{ .compatible = "lsm303d-custom" },
++	{ .compatible = "lsm303d" },
+ 	{ /* Sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, lsm303d_of_match);
++#endif
+ 
+ static struct i2c_driver lsm303d_driver = {
+ 	.driver = {
+@@ -3444,20 +3447,7 @@ static struct i2c_driver lsm303d_driver = {
+ 	.id_table = lsm303d_id,
+ };
+ 
+-static int __init lsm303d_init(void)
+-{
+-	pr_info("%s driver: init\n", LSM303D_DEV_NAME);
+-	return i2c_add_driver(&lsm303d_driver);
+-}
+-
+-static void __exit lsm303d_exit(void)
+-{
+-	pr_info("%s driver exit\n", LSM303D_DEV_NAME);
+-	i2c_del_driver(&lsm303d_driver);
+-}
+-
+-module_init(lsm303d_init);
+-module_exit(lsm303d_exit);
++module_i2c_driver(lsm303d_driver);
+ 
+ MODULE_DESCRIPTION("lsm303d accelerometer and magnetometer driver");
+ MODULE_AUTHOR("Matteo Dameno, Denis Ciocca, STMicroelectronics");
+-- 
+2.7.4
+

@@ -1,7 +1,7 @@
-From 47e7c315a2e35ffea45ac2dc985b5d93b395e95e Mon Sep 17 00:00:00 2001
+From 15619750e729bfa75f5f127127725cefbc693d8e Mon Sep 17 00:00:00 2001
 From: Robert Nelson <robertcnelson@gmail.com>
 Date: Wed, 2 Jul 2014 10:28:32 -0500
-Subject: [PATCH 20/32] deb-pkg: install dtbs in linux-image package
+Subject: [PATCH 20/38] deb-pkg: install dtbs in linux-image package
 
 Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
 ---

@@ -1,7 +1,7 @@
-From 5f472d780cc40d547604e88a57b8d728ae5d1e50 Mon Sep 17 00:00:00 2001
+From 9367334ebab0a1376204c482bb19130b9b9831ed Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Fri, 28 Mar 2014 01:18:57 +0200
-Subject: [PATCH 04/32] omap3isp: Refactor device configuration structs for
+Subject: [PATCH 04/38] omap3isp: Refactor device configuration structs for
  Device Tree
 
 Make omap3isp configuration data structures more suitable for consumption by

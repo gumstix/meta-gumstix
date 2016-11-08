@@ -1,0 +1,26 @@
+From c3bde99b777a6d465b54c7b39eb7797f0f024782 Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Fri, 10 Jun 2016 15:24:17 -0700
+Subject: [PATCH 1/3] LSM303D: Use the correct compatible string in the driver.
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+---
+ drivers/input/misc/lsm303d.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/input/misc/lsm303d.c b/drivers/input/misc/lsm303d.c
+index e5110d3..3f092ba 100644
+--- a/drivers/input/misc/lsm303d.c
++++ b/drivers/input/misc/lsm303d.c
+@@ -3428,7 +3428,7 @@ static const struct i2c_device_id lsm303d_id[]
+ MODULE_DEVICE_TABLE(i2c, lsm303d_id);
+ 
+ static const struct of_device_id lsm303d_of_match[] = {
+-	{ .compatible = "lsm303d-custom" },
++	{ .compatible = "lsm303d" },
+ 	{ /* Sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, lsm303d_of_match);
+-- 
+2.7.4
+

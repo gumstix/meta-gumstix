@@ -1,0 +1,61 @@
+From 51d6ad8773dfc12bd8661eb1cfea752d1f0738d0 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Fri, 18 Sep 2015 11:51:26 -0700
+Subject: [PATCH 1/2] Pepper: Fixup regulator configuration on 43R and 43C
+
+These boards use the conventional mapping for VDD_MPU and VDD_CORE, not
+the mapping used on the original Gumstix Pepper.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/am335x-pepper-43c.dts | 4 ++--
+ arch/arm/boot/dts/am335x-pepper-43r.dts | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/am335x-pepper-43c.dts b/arch/arm/boot/dts/am335x-pepper-43c.dts
+index 987d67dd5883..28601a4ecbf5 100644
+--- a/arch/arm/boot/dts/am335x-pepper-43c.dts
++++ b/arch/arm/boot/dts/am335x-pepper-43c.dts
+@@ -468,7 +468,7 @@
+ 			/* VDD_CORE voltage limits 0.95V - 1.26V with +/-4% tolerance */
+ 			regulator-name = "vdd_core";
+ 			regulator-min-microvolt = <925000>;
+-			regulator-max-microvolt = <1150000>;
++			regulator-max-microvolt = <1325000>;
+ 			regulator-boot-on;
+ 			regulator-always-on;
+ 		};
+@@ -477,7 +477,7 @@
+ 			/* VDD_MPU voltage limits 0.95V - 1.1V with +/-4% tolerance */
+ 			regulator-name = "vdd_mpu";
+ 			regulator-min-microvolt = <925000>;
+-			regulator-max-microvolt = <1325000>;
++			regulator-max-microvolt = <1150000>;
+ 			regulator-boot-on;
+ 			regulator-always-on;
+ 		};
+diff --git a/arch/arm/boot/dts/am335x-pepper-43r.dts b/arch/arm/boot/dts/am335x-pepper-43r.dts
+index c524bb5b57e9..55f18a40e002 100644
+--- a/arch/arm/boot/dts/am335x-pepper-43r.dts
++++ b/arch/arm/boot/dts/am335x-pepper-43r.dts
+@@ -453,7 +453,7 @@
+ 			/* VDD_CORE voltage limits 0.95V - 1.26V with +/-4% tolerance */
+ 			regulator-name = "vdd_core";
+ 			regulator-min-microvolt = <925000>;
+-			regulator-max-microvolt = <1150000>;
++			regulator-max-microvolt = <1325000>;
+ 			regulator-boot-on;
+ 			regulator-always-on;
+ 		};
+@@ -462,7 +462,7 @@
+ 			/* VDD_MPU voltage limits 0.95V - 1.1V with +/-4% tolerance */
+ 			regulator-name = "vdd_mpu";
+ 			regulator-min-microvolt = <925000>;
+-			regulator-max-microvolt = <1325000>;
++			regulator-max-microvolt = <1150000>;
+ 			regulator-boot-on;
+ 			regulator-always-on;
+ 		};
+-- 
+2.1.4
+

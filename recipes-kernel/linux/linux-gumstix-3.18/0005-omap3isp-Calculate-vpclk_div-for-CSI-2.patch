@@ -1,7 +1,7 @@
-From 4c9ff47fe5dc32171a217506d5897c0094fe6539 Mon Sep 17 00:00:00 2001
+From 09bffb27dcff6e9027b50e99d3d1c5afd21e9faf Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Sat, 4 Oct 2014 19:20:12 +0300
-Subject: [PATCH 05/32] omap3isp: Calculate vpclk_div for CSI-2
+Subject: [PATCH 05/38] omap3isp: Calculate vpclk_div for CSI-2
 
 The video port clock is l3_ick divided by vpclk_div. This clock must be high
 enough for the external pixel rate. The video port requires two clock cycles

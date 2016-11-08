@@ -1,7 +1,7 @@
-From 5bbf5e78e2e134fe762adc0d3f2124f3742902d1 Mon Sep 17 00:00:00 2001
+From 6ad8bfd4c1b10b032aeb56a6974f6492454ec359 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Fri, 26 Sep 2014 16:57:11 +0300
-Subject: [PATCH 01/32] omap3isp: Fix error handling in probe
+Subject: [PATCH 01/38] omap3isp: Fix error handling in probe
 
 The mutex was not destroyed correctly if dma_coerce_mask_and_coherent()
 failed for some reason.
