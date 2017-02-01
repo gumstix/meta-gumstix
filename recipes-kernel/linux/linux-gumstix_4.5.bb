@@ -40,7 +40,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-4.5:"
 S = "${WORKDIR}/git"
 
 # v4.4.y = b562e44f507e863c6792946e4e1b1449fbbac85d
-SRCREV = "c157e550151060b371e61ecc0341356d4cca8041"
+SRCREV = "b53c4395fc43952cc0280d26ecbcc6a49015efa1"
 SRC_URI = " \
     git://github.com/gumstix/linux.git;protocol=git;branch=yocto-v4.5.y \
     file://defconfig \
