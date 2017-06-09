@@ -10,7 +10,7 @@ Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
  2 files changed, 51 insertions(+)
 
 diff --git a/board/gumstix/duovero/duovero.c b/board/gumstix/duovero/duovero.c
-index 81d6c82..3d1efe1 100644
+index 9671c5a..f6979ec 100644
 --- a/board/gumstix/duovero/duovero.c
 +++ b/board/gumstix/duovero/duovero.c
 @@ -6,6 +6,7 @@
@@ -76,7 +76,7 @@ index 81d6c82..3d1efe1 100644
 +}
 +#endif
 +
- void set_muxconf_regs_essential(void)
+ void set_muxconf_regs(void)
  {
  	do_set_mux((*ctrl)->control_padconf_core_base,
 diff --git a/include/configs/duovero.h b/include/configs/duovero.h

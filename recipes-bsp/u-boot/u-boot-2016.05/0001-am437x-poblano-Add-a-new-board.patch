@@ -13,7 +13,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  board/gumstix/poblano/board.c     | 516 ++++++++++++++++++++++++++++++++++++++
  board/gumstix/poblano/board.h     |  16 ++
  board/gumstix/poblano/mux.c       |  91 +++++++
- configs/poblano_defconfig         |  13 +
+ configs/poblano_defconfig         |  29 ++
  include/configs/poblano.h         | 356 ++++++++++++++++++++++++++
  9 files changed, 1032 insertions(+)
  create mode 100644 board/gumstix/poblano/Kconfig
@@ -747,20 +747,36 @@ new file mode 100644
 index 0000000..1dd80f3
 --- /dev/null
 +++ b/configs/poblano_defconfig
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,29 @@
 +CONFIG_ARM=y
 +CONFIG_TARGET_POBLANO=y
 +CONFIG_SPL=y
++CONFIG_HUSH_PARSER=y
++CONFIG_SYS_PROMPT="poblano# "
++CONFIG_CMD_BOOTZ=y
 +CONFIG_SYS_EXTRA_OPTIONS="SERIAL1,CONS_INDEX=1"
 +# CONFIG_CMD_IMLS is not set
++CONFIG_CMD_ASKENV=y
 +# CONFIG_CMD_FLASH is not set
++CONFIG_CMD_MMC=y
++CONFIG_CMD_SPI=y
++CONFIG_CMD_I2C=y
 +CONFIG_CMD_GPIO=y
 +# CONFIG_CMD_SETEXPR is not set
 +CONFIG_SPI_FLASH=y
 +CONFIG_SPI_FLASH_BAR=y
 +CONFIG_SPI_FLASH_MACRONIX=y
++CONFIG_CMD_DHCP=y
++CONFIG_CMD_MII=y
++CONFIG_CMD_PING=y
++CONFIG_CMD_EXT2=y
++CONFIG_CMD_EXT4=y
++CONFIG_CMD_EXT4_WRITE=y
++CONFIG_CMD_FAT=y
++CONFIG_CMD_FS_GENERIC=y
 +CONFIG_SYS_NS16550=y
 +CONFIG_TI_QSPI=y
++CONFIG_OF_LIBFDT=y
 diff --git a/include/configs/poblano.h b/include/configs/poblano.h
 new file mode 100644
 index 0000000..f6994a4
