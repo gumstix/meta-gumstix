@@ -18,7 +18,7 @@ and feature-requests/issues can be raised against the top-level
 This layer depends on:
 
 URI: git://git.yoctoproject.org/poky.git
-branch: fido
+branch: morty
 revision: HEAD
 
-Layer maintainer: Arun Bharadwaj <arun@gumstix.com> for Gumstix, Inc.
+Layer maintainer: Jason Liu <jason.liu@gumstix.com> for Gumstix, Inc.

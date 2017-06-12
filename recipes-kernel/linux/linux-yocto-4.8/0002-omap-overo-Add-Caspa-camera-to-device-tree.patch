@@ -1,0 +1,130 @@
+From a36f80623877a575b5a55ccdc30413866b95881d Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Fri, 4 Nov 2016 13:13:27 -0700
+Subject: [PATCH 02/13] omap: overo: Add Caspa camera to device tree
+
+Overo boots and detects Caspa (mt9v032) via i2c.  After manually
+modprobing omap3-isp, the ISP pipeline is available and can be
+configured using media-ctl.  The device is available at '2-005c'.
+
+Modified 58b43c17857f7115fd17c736dd85a1329003a531 to port it
+for Linux 4.5
+
+See [1] for branch data and discussion.
+
+[1] http://www.spinics.net/lists/linux-omap/msg114378.html
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ .../boot/dts/omap3-overo-common-peripherals.dtsi   | 31 ++++++++++++++++++++++
+ drivers/media/i2c/mt9v032.c                        | 30 +++++++--------------
+ drivers/media/platform/omap3isp/isphist.c          |  2 +-
+ 3 files changed, 42 insertions(+), 21 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
+index 520453d..10101d2 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
+@@ -81,6 +81,37 @@
+ 		st,max-limit-y = <550>;
+ 		st,max-limit-z = <750>;
+ 	};
++
++	/* optional Caspa (MT9V032) camera */
++	mt9v032_1: camera@5c {
++		compatible = "aptina,mt9v032";
++		reg = <0x5c>;
++		clocks = <&isp 0>;
++		clock-names = "cam_xclka";
++		clock-frequency = <26600000>;
++		port {
++			mt9v032_1_1: endpoint {
++				remote-endpoint = <&ccdc_ep>;
++				clk-pol = <0>;
++				link-frequencies = /bits/ 64 <13000000 26600000 27000000>;
++			};
++		};
++	};
++};
++
++&isp {
++	vdd-csiphy1-supply = <&vaux2>;
++	vdd-csiphy2-supply = <&vaux2>;
++	ports {
++		port@0 {
++			reg = <0>;
++			ccdc_ep: endpoint {
++				remote-endpoint = <&mt9v032_1_1>;
++				bus-width = <12>;
++				data-shift = <0>;
++			};
++		};
++	};
+ };
+ 
+ &mmc3 {
+diff --git a/drivers/media/i2c/mt9v032.c b/drivers/media/i2c/mt9v032.c
+index 58eb62f..3980d70 100644
+--- a/drivers/media/i2c/mt9v032.c
++++ b/drivers/media/i2c/mt9v032.c
+@@ -976,6 +976,13 @@ static const struct regmap_config mt9v032_regmap_config = {
+  * Driver initialization and probing
+  */
+ 
++static const s64 mt9v032_link_freqs[] = {
++	13000000,
++	26600000,
++	27000000,
++	0,
++};
++
+ static struct mt9v032_platform_data *
+ mt9v032_get_pdata(struct i2c_client *client)
+ {
+@@ -998,26 +1005,9 @@ mt9v032_get_pdata(struct i2c_client *client)
+ 	if (!pdata)
+ 		goto done;
+ 
+-	prop = of_find_property(np, "link-frequencies", NULL);
+-	if (prop) {
+-		u64 *link_freqs;
+-		size_t size = prop->length / sizeof(*link_freqs);
+-
+-		link_freqs = devm_kcalloc(&client->dev, size,
+-					  sizeof(*link_freqs), GFP_KERNEL);
+-		if (!link_freqs)
+-			goto done;
+-
+-		if (of_property_read_u64_array(np, "link-frequencies",
+-					       link_freqs, size) < 0)
+-			goto done;
+-
+-		pdata->link_freqs = link_freqs;
+-		pdata->link_def_freq = link_freqs[0];
+-	}
+-
+-	pdata->clk_pol = !!(endpoint.bus.parallel.flags &
+-			    V4L2_MBUS_PCLK_SAMPLE_RISING);
++	pdata->clk_pol = 0;
++	pdata->link_freqs = mt9v032_link_freqs;
++	pdata->link_def_freq = 26600000;
+ 
+ done:
+ 	of_node_put(np);
+diff --git a/drivers/media/platform/omap3isp/isphist.c b/drivers/media/platform/omap3isp/isphist.c
+index 7138b04..9a5ac86 100644
+--- a/drivers/media/platform/omap3isp/isphist.c
++++ b/drivers/media/platform/omap3isp/isphist.c
+@@ -26,7 +26,7 @@
+ #include "ispreg.h"
+ #include "isphist.h"
+ 
+-#define HIST_CONFIG_DMA	1
++#define HIST_CONFIG_DMA	0
+ 
+ /*
+  * hist_reset_mem - clear Histogram memory before start stats engine.
+-- 
+2.7.4
+

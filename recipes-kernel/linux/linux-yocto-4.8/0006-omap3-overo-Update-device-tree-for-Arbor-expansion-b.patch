@@ -1,0 +1,579 @@
+From 89e7427ebe281538b3233d2478bd3c044b783ac9 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 22 Oct 2015 18:54:15 -0700
+Subject: [PATCH 06/13] omap3-overo: Update device tree for Arbor expansion
+ boards
+
+Make a few pin allocation tweaks to support the production rev. of
+the Arbor43C (v1), Arbor50C and Arbor70C boards.  IMU chips are added
+on a SPI bus and this is reflected in the device trees however bindings
+for the driver are still needed.
+
+Additionally, correct screen panel timings that were erroneously
+altered in omap3-overo-common-lcd43 rather than on a more
+screen-specific level.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/Makefile                         |   2 +
+ arch/arm/boot/dts/omap3-overo-arbor43c1.dts        |  60 +++++++
+ arch/arm/boot/dts/omap3-overo-arbor50c.dts         |  26 ++-
+ arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi | 174 ++++++++++-----------
+ arch/arm/boot/dts/omap3-overo-arbor70c.dts         |  26 ++-
+ arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi    |  20 +--
+ arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts  |  60 +++++++
+ arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts   |  26 ++-
+ arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts   |  26 ++-
+ 9 files changed, 295 insertions(+), 125 deletions(-)
+ create mode 100644 arch/arm/boot/dts/omap3-overo-arbor43c1.dts
+ create mode 100644 arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 50c7ea6..21c6e8b 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -499,6 +499,7 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
+ 	omap3-n950.dtb \
+ 	omap3-overo-alto35.dtb \
+ 	omap3-overo-arbor43c.dtb \
++	omap3-overo-arbor43c1.dtb \
+ 	omap3-overo-arbor50c.dtb \
+ 	omap3-overo-arbor70c.dtb \
+ 	omap3-overo-chestnut43.dtb \
+@@ -507,6 +508,7 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
+ 	omap3-overo-palo43.dtb \
+ 	omap3-overo-storm-alto35.dtb \
+ 	omap3-overo-storm-arbor43c.dtb \
++	omap3-overo-storm-arbor43c1.dtb \
+ 	omap3-overo-storm-arbor50c.dtb \
+ 	omap3-overo-storm-arbor70c.dtb \
+ 	omap3-overo-storm-chestnut43.dtb \
+diff --git a/arch/arm/boot/dts/omap3-overo-arbor43c1.dts b/arch/arm/boot/dts/omap3-overo-arbor43c1.dts
+new file mode 100644
+index 0000000..4aa2824
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-arbor43c1.dts
+@@ -0,0 +1,60 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Arbor43C expansion board is manufactured by Gumstix Inc.
++ * This is for the 2nd revision of the board (v1)
++ */
++
++/dts-v1/;
++
++#include "omap3-overo.dtsi"
++#include "omap3-overo-arbor57c-common.dtsi"
++
++/ {
++	model = "OMAP35xx Gumstix Overo on Arbor43C-v1";
++	compatible = "gumstix,omap3-overo-arbor43c1", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3";
++};
++
++&captouch {
++	touchscreen-size-x = <480>;
++	touchscreen-size-y = <272>;
++};  
++
++&omap3_pmx_core2 {
++	led_pins2: pinmux_led_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25EA, PIN_OUTPUT | MUX_MODE4)    /* etx_d7.gpio_21 */
++			OMAP3430_CORE2_IOPAD(0x25EC, PIN_OUTPUT | MUX_MODE4)    /* etx_d8.gpio_22 */
++		>;
++	};
++
++	button_pins2: pinmux_button_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25DC, PIN_INPUT | MUX_MODE4)    /* etx_d0.gpio_14 */
++		>;
++	};
++
++	accel_mag_pins2: pinmux_accel_mag_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++		>;
++	};
++};
++
++&lcd0_timing {
++	clock-frequency = <9200000>;
++	hactive = <480>;
++	vactive = <272>;
++	hfront-porch = <8>;
++	hback-porch = <4>;
++	hsync-len = <41>;
++	vback-porch = <2>;
++	vfront-porch = <4>;
++	vsync-len = <10>;
++};
+diff --git a/arch/arm/boot/dts/omap3-overo-arbor50c.dts b/arch/arm/boot/dts/omap3-overo-arbor50c.dts
+index cf93268..bda9530 100644
+--- a/arch/arm/boot/dts/omap3-overo-arbor50c.dts
++++ b/arch/arm/boot/dts/omap3-overo-arbor50c.dts
+@@ -20,12 +20,24 @@
+ 	compatible = "gumstix,omap3-overo-arbor50c", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3";
+ };
+ 
+-&omap3_pmx_core2 { 
+-        led_pins2: pinmux_led_pins2 { 
+-                pinctrl-single,pins = <
+-                        OMAP3430_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
+-                        OMAP3430_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)    /* etx_d9.gpio_23 */
+-                >;
+-        };
++&omap3_pmx_core2 {
++	led_pins2: pinmux_led_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25EA, PIN_OUTPUT | MUX_MODE4)    /* etx_d7.gpio_21 */
++			OMAP3430_CORE2_IOPAD(0x25EC, PIN_OUTPUT | MUX_MODE4)    /* etx_d8.gpio_22 */
++		>;
++	};
++
++	button_pins2: pinmux_button_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25DC, PIN_INPUT | MUX_MODE4)    /* etx_d0.gpio_14 */
++		>;
++	};
++
++	accel_mag_pins2: pinmux_accel_mag_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++		>;
++	};
+ };
+ 
+diff --git a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
+index 10c78b5..5c65bb8 100644
+--- a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
+@@ -7,8 +7,8 @@
+  */
+ 
+ /*
+- * The Arbor50C and Arbor70C expansion boards differ only by the supported
+- * screen size and are manufactured by Gumstix Inc.
++ * The Arbor50C, Arbor70C and Arbor43C (v1) expansion boards differ only
++ * by the supported screen size and are manufactured by Gumstix Inc.
+  */
+ 
+ #include "omap3-overo-common-peripherals.dtsi"
+@@ -16,33 +16,6 @@
+ 
+ #include <dt-bindings/input/input.h>
+ 
+-&omap3_pmx_core {
+-        led_pins: pinmux_led_pins {
+-                pinctrl-single,pins = <
+-                        OMAP3_CORE1_IOPAD(0x2138, PIN_OUTPUT | MUX_MODE4)	/* csi2_dx1.gpio_114 */
+-                        OMAP3_CORE1_IOPAD(0x2180, PIN_OUTPUT | MUX_MODE4)	/* uart1_cts.gpio_150 */
+-                        OMAP3_CORE1_IOPAD(0x219A, PIN_OUTPUT | MUX_MODE4)	/* uart3_cts_rctx.gpio_163 */
+-                        OMAP3_CORE1_IOPAD(0x21E2, PIN_OUTPUT | MUX_MODE4)	/* sys_clkout2.gpio_186 */
+-                >;
+-        };
+-
+-        button_pins: pinmux_button_pins {
+-                pinctrl-single,pins = <
+-                        OMAP3_CORE1_IOPAD(0x21CA, PIN_INPUT_PULLUP | MUX_MODE4)	/* mcspi1_simo.gpio_172 */
+-                        OMAP3_CORE1_IOPAD(0x21CC, PIN_INPUT_PULLUP | MUX_MODE4)	/* mcspi1_somi.gpio_173 */
+-                >;
+-        };
+-};
+-
+-&omap3_pmx_core2 {
+-        led_pins2: pinmux_led_pins2 {
+-                pinctrl-single,pins = <
+-                        OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)	/* etx_d4.gpio_18 */
+-                        OMAP3630_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)	/* etx_d9.gpio_23 */
+-                >;
+-        };
+-};
+-
+ &captouch {
+ 	touchscreen-size-x = <800>;
+ 	touchscreen-size-y = <480>;
+@@ -52,83 +25,110 @@
+ 	leds {
+ 		compatible = "gpio-leds";
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&led_pins &led_pins2>;
+-		gpio18 {
+-			label = "overo:yellow:gpio18";
+-			gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;	/* gpio_18 */
+-			linux,default-trigger = "heartbeat";
+-		};
+-		// shared with S1
+-		gpio23 {
+-			label = "overo:green:gpio23";
+-			gpios = <&gpio1 23 GPIO_ACTIVE_HIGH>;	/* gpio_23 */
+-			linux,default-trigger = "heartbeat";
+-		};
+-		// Error---this is an input-only GPIO
+-		gpio114 {
+-			label = "overo:blue:gpio114";
+-			gpios = <&gpio4 18 GPIO_ACTIVE_HIGH>;	/* gpio_114 */
+-			linux,default-trigger = "heartbeat";
+-		};
+-		gpio150 {
+-			label = "overo:blue:gpio150";
+-			gpios = <&gpio5 22 GPIO_ACTIVE_HIGH>;	/* gpio_150 */
+-			linux,default-trigger = "heartbeat";
+-		};
+-		gpio163 {
+-			label = "overo:red:gpio163";
+-			gpios = <&gpio6 3 GPIO_ACTIVE_HIGH>;	/* gpio_163 */
++		pinctrl-0 = <&led_pins2>;
++		gpio21 {
++			label = "overo:red:gpio21";
++			gpios = <&gpio1 21 GPIO_ACTIVE_HIGH>;	/* gpio_21 */
+ 			linux,default-trigger = "heartbeat";
+ 		};
+-		// Wired to two LEDs
+-		gpio186 {
+-			label = "overo:green_yellow:gpio186";
+-			gpios = <&gpio6 26 GPIO_ACTIVE_HIGH>;	/* gpio_186 */
++		gpio22 {
++			label = "overo:blue:gpio22";
++			gpios = <&gpio1 22 GPIO_ACTIVE_HIGH>;	/* gpio_22 */
+ 			linux,default-trigger = "heartbeat";
+ 		};
++
+ 	};
+ 
+ 	gpio_keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&button_pins>;
++		pinctrl-0 = <&button_pins2>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-		// Shared with an LED on GPIO #23
+-		//s1@23 {
+-		//	label = "S1";
+-		//	linux,code = <BTN_1>;
+-		//	gpios = <&gpio1 23 GPIO_ACTIVE_LOW>;	/* gpio_23 */
+-		//	gpio-key,wakeup;
+-		//};
+-		s4@173 {
+-			label = "S4";
++		s1@14 {
++			label = "S1";
+ 			linux,code = <BTN_2>;
+-			gpios = <&gpio6 13 GPIO_ACTIVE_LOW>;	/* gpio_173 */
+-			gpio-key,wakeup;
+-		};
+-		s3@172 {
+-			label = "S3";
+-			linux,code = <BTN_1>;
+-			gpios = <&gpio6 12 GPIO_ACTIVE_LOW>;	/* gpio_172 */
++			gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;	/* gpio_14 */
+ 			gpio-key,wakeup;
+ 		};
+ 	};
+ };
+ 
+-//#include "omap-gpmc-smsc9221.dtsi"
+-//
+-//&gpmc {
+-//	ranges = <5 0 0x2c000000 0x1000000>;	/* CS5 */
+-//
+-//	ethernet@gpmc {
+-//		reg = <5 0 0xff>;
+-//		interrupt-parent = <&gpio6>;
+-//		interrupts = <16 IRQ_TYPE_LEVEL_LOW>;	/* GPIO 176 */
+-//	};
+-//};
++#include "omap-gpmc-smsc9221.dtsi"
++
++&gpmc {
++	ranges = <5 0 0x2c000000 0x1000000>;	/* CS5 */
++
++	ethernet@gpmc {
++		reg = <5 0 0xff>;
++		interrupt-parent = <&gpio6>;
++		interrupts = <16 IRQ_TYPE_LEVEL_LOW>;	/* GPIO 176 */
++	};
++};
+ 
+ &lis33de {
+ 	status = "disabled";
+ };
+ 
++&omap3_pmx_core2 {
++	mcspi1a_pins: pinmux_mcspi1a_pins {
++		pinctrl-single,pins = <
++			OMAP3_CORE1_IOPAD(0x21c8, PIN_INPUT | MUX_MODE0)        /* mcspi1_clk.mcspi1_clk */
++			OMAP3_CORE1_IOPAD(0x21ca, PIN_INPUT | MUX_MODE0)        /* mcspi1_simo.mcspi1_simo */
++			OMAP3_CORE1_IOPAD(0x21cc, PIN_INPUT | MUX_MODE0)        /* mcspi1_somi.mcspi1_somi */
++			OMAP3_CORE1_IOPAD(0x21ce, PIN_INPUT | MUX_MODE0)        /* mcspi1_cs0.mcspi1_cs0 */
++			OMAP3_CORE1_IOPAD(0x21d0, PIN_INPUT | MUX_MODE0)        /* mcspi1_cs1.mcspi1_cs1 */
++		>;
++	};
++
++	accel_mag_pins: pinmux_accel_mag_pins {
++		pinctrl-single,pins = <
++			OMAP3_CORE1_IOPAD(0x219a, PIN_INPUT | MUX_MODE4)        /* uart3_cts_rctx.gpio_163 */
++		>;
++	};
++
++	gyro_pins: pinmux_gyro_pins {
++		pinctrl-single,pins = <
++			OMAP3_CORE1_IOPAD(0x2138, PIN_INPUT | MUX_MODE4)        /* csi2_dx1.gpio_114 */
++		>;
++	};
++};
++
++&mcspi1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&mcspi1a_pins>;
++
++	// TODO: we need SPI binding for the IMU components
++	/* LSM303D 3-axis Accel + 3-axis Mag */
++	accel_mag@0 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&accel_mag_pins &accel_mag_pins2>;
++
++		compatible = "st,lsm303d";
++		reg = <0>;
++		// INT/DRDY #1 is gpio_18
++		// INT/DRDY #2 is gpio_163
++	};
++
++	/* L3GD20H 3-axis Gyro */
++	gyro@1 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&gyro_pins>;
++
++		compatible = "st,l3dg20";
++		reg = <1>;
++		// INT/DRDY is gpio_114
++	};
++};
++
++&lcd0_timing {
++	clock-frequency = <30000000>;
++	hactive = <800>;
++	vactive = <480>;
++	hfront-porch = <40>;
++	hback-porch = <40>;
++	hsync-len = <48>;
++	vback-porch = <29>;
++	vfront-porch = <13>;
++	vsync-len = <3>;
++};
+diff --git a/arch/arm/boot/dts/omap3-overo-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
+index 188ceb6..cafb818 100644
+--- a/arch/arm/boot/dts/omap3-overo-arbor70c.dts
++++ b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
+@@ -20,13 +20,25 @@
+ 	compatible = "gumstix,omap3-overo-arbor70c", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3";
+ };
+ 
+-&omap3_pmx_core2 { 
+-        led_pins2: pinmux_led_pins2 { 
+-                pinctrl-single,pins = <
+-                        OMAP3430_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
+-                        OMAP3430_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)    /* etx_d9.gpio_23 */
+-                >;
+-        };
++&omap3_pmx_core2 {
++	led_pins2: pinmux_led_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25EA, PIN_OUTPUT | MUX_MODE4)    /* etx_d7.gpio_21 */
++			OMAP3430_CORE2_IOPAD(0x25EC, PIN_OUTPUT | MUX_MODE4)    /* etx_d8.gpio_22 */
++		>;
++	};
++
++	button_pins2: pinmux_button_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25DC, PIN_INPUT | MUX_MODE4)    /* etx_d0.gpio_14 */
++		>;
++	};
++
++	accel_mag_pins2: pinmux_accel_mag_pins2 {
++		pinctrl-single,pins = <
++			OMAP3430_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++		>;
++	};
+ };
+ 
+ &captouch {
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+index 1a62500..586b7c6d 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+@@ -110,16 +110,16 @@
+ 			};
+ 		};
+ 
+-		panel-timing {
+-			clock-frequency = <30000000>;
+-			hactive = <800>;
+-			vactive = <480>;
+-			hfront-porch = <40>;
+-			hback-porch = <40>;
+-			hsync-len = <48>;
+-			vback-porch = <29>;
+-			vfront-porch = <13>;
+-			vsync-len = <3>;
++		lcd0_timing: panel-timing {
++			clock-frequency = <9200000>;
++			hactive = <480>;
++			vactive = <272>;
++			hfront-porch = <8>;
++			hback-porch = <4>;
++			hsync-len = <41>;
++			vback-porch = <2>;
++			vfront-porch = <4>;
++			vsync-len = <10>;
+ 
+ 			hsync-active = <0>;
+ 			vsync-active = <0>;
+diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts
+new file mode 100644
+index 0000000..9e70d84
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts
+@@ -0,0 +1,60 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Arbor43C expansion board is manufactured by Gumstix Inc.
++ * This is for the 2nd revision of the board (v1)
++ */
++
++/dts-v1/;
++
++#include "omap3-overo-storm.dtsi"
++#include "omap3-overo-arbor57c-common.dtsi"
++
++/ {
++	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Arbor43C-v1";
++	compatible = "gumstix,omap3-overo-arbor43c1", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
++};
++
++&captouch {
++	touchscreen-size-x = <480>;
++	touchscreen-size-y = <272>;
++};
++
++&omap3_pmx_core2 {
++	led_pins2: pinmux_led_pins2 {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25EA, PIN_OUTPUT | MUX_MODE4)    /* etx_d7.gpio_21 */
++			OMAP3630_CORE2_IOPAD(0x25EC, PIN_OUTPUT | MUX_MODE4)    /* etx_d8.gpio_22 */
++		>;
++	};
++
++	button_pins2: pinmux_button_pins2 { 
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25DC, PIN_INPUT | MUX_MODE4)    /* etx_d0.gpio_14 */
++		>;
++	};
++
++	accel_mag_pins2: pinmux_accel_mag_pins2 { 
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++		>;
++	};
++};
++
++&lcd0_timing {
++	clock-frequency = <9200000>;
++	hactive = <480>;
++	vactive = <272>;
++	hfront-porch = <8>;
++	hback-porch = <4>;
++	hsync-len = <41>;
++	vback-porch = <2>;
++	vfront-porch = <4>;
++	vsync-len = <10>;
++};
+diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
+index 74bef38..551468e 100644
+--- a/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
++++ b/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
+@@ -20,11 +20,23 @@
+ 	compatible = "gumstix,omap3-overo-arbor50c", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
+ };
+ 
+-&omap3_pmx_core2 { 
+-        led_pins2: pinmux_led_pins2 { 
+-                pinctrl-single,pins = <
+-                        OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
+-                        OMAP3630_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)    /* etx_d9.gpio_23 */
+-                >;
+-        };
++&omap3_pmx_core2 {
++	led_pins2: pinmux_led_pins2 {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25EA, PIN_OUTPUT | MUX_MODE4)    /* etx_d7.gpio_21 */
++			OMAP3630_CORE2_IOPAD(0x25EC, PIN_OUTPUT | MUX_MODE4)    /* etx_d8.gpio_22 */
++		>;
++	};
++
++	button_pins2: pinmux_button_pins2 {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25DC, PIN_INPUT | MUX_MODE4)    /* etx_d0.gpio_14 */
++		>;
++	};
++
++	accel_mag_pins2: pinmux_accel_mag_pins2 {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++		>;
++	};
+ };
+diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
+index 1de418d..a571525 100644
+--- a/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
++++ b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
+@@ -20,13 +20,25 @@
+ 	compatible = "gumstix,omap3-overo-arbor70c", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
+ };
+ 
+-&omap3_pmx_core2 { 
+-        led_pins2: pinmux_led_pins2 { 
+-                pinctrl-single,pins = <
+-                        OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
+-                        OMAP3630_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)    /* etx_d9.gpio_23 */
+-                >;
+-        };
++&omap3_pmx_core2 {
++	led_pins2: pinmux_led_pins2 {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25EA, PIN_OUTPUT | MUX_MODE4)    /* etx_d7.gpio_21 */
++			OMAP3630_CORE2_IOPAD(0x25EC, PIN_OUTPUT | MUX_MODE4)    /* etx_d8.gpio_22 */
++		>;
++	};
++
++	button_pins2: pinmux_button_pins2 {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25DC, PIN_INPUT | MUX_MODE4)    /* etx_d0.gpio_14 */
++		>;
++	};
++
++	accel_mag_pins2: pinmux_accel_mag_pins2 {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++		>;
++	};
+ };
+ 
+ &captouch {
+-- 
+2.7.4
+

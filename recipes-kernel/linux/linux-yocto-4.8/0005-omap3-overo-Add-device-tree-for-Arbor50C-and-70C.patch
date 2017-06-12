@@ -1,0 +1,438 @@
+From 5241c69a67e94f95ac0e79c7185a04a47c63b089 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Tue, 8 Sep 2015 17:21:13 -0700
+Subject: [PATCH 05/13] omap3: overo: Add device tree for Arbor50C and 70C
+
+Add device trees supporting the Gumstix Arbor50C and Arbor70C expansion
+boards for the Gumstix Overo and Overo Storm COMs.  These boards are
+similar to the already supported Arbor43 board but feature larger
+(respectively 5" and 7") capacitive touchscreens.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ arch/arm/boot/dts/Makefile                         |   4 +
+ arch/arm/boot/dts/omap3-overo-arbor50c.dts         |  31 +++++
+ arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi | 134 +++++++++++++++++++++
+ arch/arm/boot/dts/omap3-overo-arbor70c.dts         |  35 ++++++
+ arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi    |  77 ++++++------
+ arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts   |  30 +++++
+ arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts   |  35 ++++++
+ 7 files changed, 307 insertions(+), 39 deletions(-)
+ create mode 100644 arch/arm/boot/dts/omap3-overo-arbor50c.dts
+ create mode 100644 arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
+ create mode 100644 arch/arm/boot/dts/omap3-overo-arbor70c.dts
+ create mode 100644 arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
+ create mode 100644 arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 8566b4c..50c7ea6 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -499,12 +499,16 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
+ 	omap3-n950.dtb \
+ 	omap3-overo-alto35.dtb \
+ 	omap3-overo-arbor43c.dtb \
++	omap3-overo-arbor50c.dtb \
++	omap3-overo-arbor70c.dtb \
+ 	omap3-overo-chestnut43.dtb \
+ 	omap3-overo-gallop43.dtb \
+ 	omap3-overo-palo35.dtb \
+ 	omap3-overo-palo43.dtb \
+ 	omap3-overo-storm-alto35.dtb \
+ 	omap3-overo-storm-arbor43c.dtb \
++	omap3-overo-storm-arbor50c.dtb \
++	omap3-overo-storm-arbor70c.dtb \
+ 	omap3-overo-storm-chestnut43.dtb \
+ 	omap3-overo-storm-gallop43.dtb \
+ 	omap3-overo-storm-palo35.dtb \
+diff --git a/arch/arm/boot/dts/omap3-overo-arbor50c.dts b/arch/arm/boot/dts/omap3-overo-arbor50c.dts
+new file mode 100644
+index 0000000..cf93268
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-arbor50c.dts
+@@ -0,0 +1,31 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Arbor50C expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo.dtsi"
++#include "omap3-overo-arbor57c-common.dtsi"
++
++/ {
++	model = "OMAP35xx Gumstix Overo on Arbor50C";
++	compatible = "gumstix,omap3-overo-arbor50c", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3";
++};
++
++&omap3_pmx_core2 { 
++        led_pins2: pinmux_led_pins2 { 
++                pinctrl-single,pins = <
++                        OMAP3430_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++                        OMAP3430_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)    /* etx_d9.gpio_23 */
++                >;
++        };
++};
++
+diff --git a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
+new file mode 100644
+index 0000000..10c78b5
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
+@@ -0,0 +1,134 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * The Arbor50C and Arbor70C expansion boards differ only by the supported
++ * screen size and are manufactured by Gumstix Inc.
++ */
++
++#include "omap3-overo-common-peripherals.dtsi"
++#include "omap3-overo-common-lcd43c.dtsi"
++
++#include <dt-bindings/input/input.h>
++
++&omap3_pmx_core {
++        led_pins: pinmux_led_pins {
++                pinctrl-single,pins = <
++                        OMAP3_CORE1_IOPAD(0x2138, PIN_OUTPUT | MUX_MODE4)	/* csi2_dx1.gpio_114 */
++                        OMAP3_CORE1_IOPAD(0x2180, PIN_OUTPUT | MUX_MODE4)	/* uart1_cts.gpio_150 */
++                        OMAP3_CORE1_IOPAD(0x219A, PIN_OUTPUT | MUX_MODE4)	/* uart3_cts_rctx.gpio_163 */
++                        OMAP3_CORE1_IOPAD(0x21E2, PIN_OUTPUT | MUX_MODE4)	/* sys_clkout2.gpio_186 */
++                >;
++        };
++
++        button_pins: pinmux_button_pins {
++                pinctrl-single,pins = <
++                        OMAP3_CORE1_IOPAD(0x21CA, PIN_INPUT_PULLUP | MUX_MODE4)	/* mcspi1_simo.gpio_172 */
++                        OMAP3_CORE1_IOPAD(0x21CC, PIN_INPUT_PULLUP | MUX_MODE4)	/* mcspi1_somi.gpio_173 */
++                >;
++        };
++};
++
++&omap3_pmx_core2 {
++        led_pins2: pinmux_led_pins2 {
++                pinctrl-single,pins = <
++                        OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)	/* etx_d4.gpio_18 */
++                        OMAP3630_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)	/* etx_d9.gpio_23 */
++                >;
++        };
++};
++
++&captouch {
++	touchscreen-size-x = <800>;
++	touchscreen-size-y = <480>;
++};
++
++/ {
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&led_pins &led_pins2>;
++		gpio18 {
++			label = "overo:yellow:gpio18";
++			gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;	/* gpio_18 */
++			linux,default-trigger = "heartbeat";
++		};
++		// shared with S1
++		gpio23 {
++			label = "overo:green:gpio23";
++			gpios = <&gpio1 23 GPIO_ACTIVE_HIGH>;	/* gpio_23 */
++			linux,default-trigger = "heartbeat";
++		};
++		// Error---this is an input-only GPIO
++		gpio114 {
++			label = "overo:blue:gpio114";
++			gpios = <&gpio4 18 GPIO_ACTIVE_HIGH>;	/* gpio_114 */
++			linux,default-trigger = "heartbeat";
++		};
++		gpio150 {
++			label = "overo:blue:gpio150";
++			gpios = <&gpio5 22 GPIO_ACTIVE_HIGH>;	/* gpio_150 */
++			linux,default-trigger = "heartbeat";
++		};
++		gpio163 {
++			label = "overo:red:gpio163";
++			gpios = <&gpio6 3 GPIO_ACTIVE_HIGH>;	/* gpio_163 */
++			linux,default-trigger = "heartbeat";
++		};
++		// Wired to two LEDs
++		gpio186 {
++			label = "overo:green_yellow:gpio186";
++			gpios = <&gpio6 26 GPIO_ACTIVE_HIGH>;	/* gpio_186 */
++			linux,default-trigger = "heartbeat";
++		};
++	};
++
++	gpio_keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&button_pins>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		// Shared with an LED on GPIO #23
++		//s1@23 {
++		//	label = "S1";
++		//	linux,code = <BTN_1>;
++		//	gpios = <&gpio1 23 GPIO_ACTIVE_LOW>;	/* gpio_23 */
++		//	gpio-key,wakeup;
++		//};
++		s4@173 {
++			label = "S4";
++			linux,code = <BTN_2>;
++			gpios = <&gpio6 13 GPIO_ACTIVE_LOW>;	/* gpio_173 */
++			gpio-key,wakeup;
++		};
++		s3@172 {
++			label = "S3";
++			linux,code = <BTN_1>;
++			gpios = <&gpio6 12 GPIO_ACTIVE_LOW>;	/* gpio_172 */
++			gpio-key,wakeup;
++		};
++	};
++};
++
++//#include "omap-gpmc-smsc9221.dtsi"
++//
++//&gpmc {
++//	ranges = <5 0 0x2c000000 0x1000000>;	/* CS5 */
++//
++//	ethernet@gpmc {
++//		reg = <5 0 0xff>;
++//		interrupt-parent = <&gpio6>;
++//		interrupts = <16 IRQ_TYPE_LEVEL_LOW>;	/* GPIO 176 */
++//	};
++//};
++
++&lis33de {
++	status = "disabled";
++};
++
+diff --git a/arch/arm/boot/dts/omap3-overo-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
+new file mode 100644
+index 0000000..188ceb6
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
+@@ -0,0 +1,35 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Arbor70C expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo.dtsi"
++#include "omap3-overo-arbor57c-common.dtsi"
++
++/ {
++	model = "OMAP35xx Gumstix Overo on Arbor70C";
++	compatible = "gumstix,omap3-overo-arbor70c", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3";
++};
++
++&omap3_pmx_core2 { 
++        led_pins2: pinmux_led_pins2 { 
++                pinctrl-single,pins = <
++                        OMAP3430_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++                        OMAP3430_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)    /* etx_d9.gpio_23 */
++                >;
++        };
++};
++
++&captouch {
++	reset-gpios = <&gpio1 31 GPIO_ACTIVE_LOW>;
++	wake-gpios = <0>; // invalidate previous assignment
++};
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+index a5286f4..1a62500 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+@@ -111,15 +111,15 @@
+ 		};
+ 
+ 		panel-timing {
+-			clock-frequency = <9200000>;
+-			hactive = <480>;
+-			vactive = <272>;
+-			hfront-porch = <8>;
+-			hback-porch = <4>;
+-			hsync-len = <41>;
+-			vback-porch = <2>;
+-			vfront-porch = <4>;
+-			vsync-len = <10>;
++			clock-frequency = <30000000>;
++			hactive = <800>;
++			vactive = <480>;
++			hfront-porch = <40>;
++			hback-porch = <40>;
++			hsync-len = <48>;
++			vback-porch = <29>;
++			vfront-porch = <13>;
++			vsync-len = <3>;
+ 
+ 			hsync-active = <0>;
+ 			vsync-active = <0>;
+@@ -146,34 +146,33 @@
+ 		default-on;
+ 	};
+ };
+-
+-&mcspi1 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&mcspi1_pins>;
+-
+-	/* touch controller */
+-	ads7846@0 {
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&ads7846_pins>;
+-
+-		compatible = "ti,ads7846";
+-		vcc-supply = <&ads7846reg>;
+-
+-		reg = <0>;				/* CS0 */
+-		spi-max-frequency = <1500000>;
+-
+-		interrupt-parent = <&gpio4>;
+-		interrupts = <18 0>;			/* gpio_114 */
+-		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_HIGH>;
+-
+-		ti,x-min = /bits/ 16 <0x0>;
+-		ti,x-max = /bits/ 16 <0x0fff>;
+-		ti,y-min = /bits/ 16 <0x0>;
+-		ti,y-max = /bits/ 16 <0x0fff>;
+-		ti,x-plate-ohms = /bits/ 16 <180>;
+-		ti,pressure-max = /bits/ 16 <255>;
+-
+-		wakeup-source;
+-	};
+-};
++//&mcspi1 {
++//	pinctrl-names = "default";
++//	pinctrl-0 = <&mcspi1_pins>;
++//
++//	/* touch controller */
++//	ads7846@0 {
++//		pinctrl-names = "default";
++//		pinctrl-0 = <&ads7846_pins>;
++//
++//		compatible = "ti,ads7846";
++//		vcc-supply = <&ads7846reg>;
++//
++//		reg = <0>;				/* CS0 */
++//		spi-max-frequency = <1500000>;
++//
++//		interrupt-parent = <&gpio4>;
++//		interrupts = <18 0>;			/* gpio_114 */
++//		pendown-gpio = <&gpio4 18 0>;
++//
++//		ti,x-min = /bits/ 16 <0x0>;
++//		ti,x-max = /bits/ 16 <0x0fff>;
++//		ti,y-min = /bits/ 16 <0x0>;
++//		ti,y-max = /bits/ 16 <0x0fff>;
++//		ti,x-plate-ohms = /bits/ 16 <180>;
++//		ti,pressure-max = /bits/ 16 <255>;
++//
++//		linux,wakeup;
++//	};
++//};
+ 
+diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
+new file mode 100644
+index 0000000..74bef38
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
+@@ -0,0 +1,30 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Arbor50C expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo-storm.dtsi"
++#include "omap3-overo-arbor57c-common.dtsi"
++
++/ {
++	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Arbor50C";
++	compatible = "gumstix,omap3-overo-arbor50c", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
++};
++
++&omap3_pmx_core2 { 
++        led_pins2: pinmux_led_pins2 { 
++                pinctrl-single,pins = <
++                        OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++                        OMAP3630_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)    /* etx_d9.gpio_23 */
++                >;
++        };
++};
+diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
+new file mode 100644
+index 0000000..1de418d
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
+@@ -0,0 +1,35 @@
++/*
++ * Copyright (C) 2015 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * Arbor70C expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo-storm.dtsi"
++#include "omap3-overo-arbor57c-common.dtsi"
++
++/ {
++	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Arbor70C";
++	compatible = "gumstix,omap3-overo-arbor70c", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
++};
++
++&omap3_pmx_core2 { 
++        led_pins2: pinmux_led_pins2 { 
++                pinctrl-single,pins = <
++                        OMAP3630_CORE2_IOPAD(0x25E4, PIN_OUTPUT | MUX_MODE4)    /* etx_d4.gpio_18 */
++                        OMAP3630_CORE2_IOPAD(0x25EE, PIN_OUTPUT | MUX_MODE4)    /* etx_d9.gpio_23 */
++                >;
++        };
++};
++
++&captouch {
++	reset-gpios = <&gpio1 31 GPIO_ACTIVE_LOW>;
++	wake-gpios = <0>; // invalidate previous assignment
++};
+-- 
+2.7.4
+
