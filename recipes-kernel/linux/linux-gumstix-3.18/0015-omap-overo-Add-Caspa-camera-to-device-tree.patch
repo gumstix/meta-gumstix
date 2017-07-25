@@ -1,7 +1,7 @@
 From 58b43c17857f7115fd17c736dd85a1329003a531 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 7 Jan 2015 08:52:23 -0800
-Subject: [PATCH 15/38] omap: overo: Add Caspa camera to device tree
+Subject: [PATCH 15/57] omap: overo: Add Caspa camera to device tree
 
 Overo boots and detects Caspa (mt9v032) via i2c.  After manually
 modprobing omap3-isp, the ISP pipeline is available and can be
@@ -17,7 +17,7 @@ See [1] for branch data and discussion.
  3 files changed, 91 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
-index 520453d95704..7cfb808e8f5a 100644
+index 520453d..7cfb808e 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
 @@ -81,8 +81,40 @@
@@ -62,7 +62,7 @@ index 520453d95704..7cfb808e8f5a 100644
  	status = "disabled";
  };
 diff --git a/drivers/media/i2c/mt9v032.c b/drivers/media/i2c/mt9v032.c
-index d044bce312e0..575923e36b02 100644
+index d044bce..575923e 100644
 --- a/drivers/media/i2c/mt9v032.c
 +++ b/drivers/media/i2c/mt9v032.c
 @@ -22,6 +22,9 @@
@@ -156,7 +156,7 @@ index d044bce312e0..575923e36b02 100644
  	},
  	.probe		= mt9v032_probe,
 diff --git a/drivers/media/platform/omap3isp/isphist.c b/drivers/media/platform/omap3isp/isphist.c
-index ce822c34c843..e4c9c8032efd 100644
+index ce822c3..e4c9c80 100644
 --- a/drivers/media/platform/omap3isp/isphist.c
 +++ b/drivers/media/platform/omap3isp/isphist.c
 @@ -26,7 +26,7 @@
@@ -169,5 +169,5 @@ index ce822c34c843..e4c9c8032efd 100644
  #define HIST_USING_DMA(hist) ((hist)->dma_ch >= 0)
  
 -- 
-2.1.4
+2.7.4
 

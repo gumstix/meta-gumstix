@@ -1,7 +1,7 @@
 From ec803e906eca91a0d07223556f43d90cc34b01ff Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Tue, 14 Jul 2015 16:17:31 -0700
-Subject: [PATCH 30/38] Do not disable vusb3v1 regulator
+Subject: [PATCH 30/57] Do not disable vusb3v1 regulator
 
 MADC reads incorrect values when it is not biased by the vusb3v1
 regulator. Therefore we should never disable this regulator, even if
@@ -18,7 +18,7 @@ Signed-off-by: Adam YH Lee <adam.yh.lee@gmail.com>
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/phy/phy-twl4030-usb.c b/drivers/phy/phy-twl4030-usb.c
-index 13dd070a69da..52883260f217 100644
+index 13dd070..5288326 100644
 --- a/drivers/phy/phy-twl4030-usb.c
 +++ b/drivers/phy/phy-twl4030-usb.c
 @@ -144,6 +144,9 @@
@@ -52,5 +52,5 @@ index 13dd070a69da..52883260f217 100644
  }
  
 -- 
-2.1.4
+2.7.4
 

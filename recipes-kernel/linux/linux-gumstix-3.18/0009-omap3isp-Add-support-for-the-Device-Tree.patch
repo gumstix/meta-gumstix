@@ -1,7 +1,7 @@
 From 92fd863ce8f8fcc8ecc78a1e1be3c6a037bc5045 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Sat, 30 Nov 2013 15:16:27 +0200
-Subject: [PATCH 09/38] omap3isp: Add support for the Device Tree
+Subject: [PATCH 09/57] omap3isp: Add support for the Device Tree
 
 Add the ISP device to omap3 DT include file and add support to the driver to
 use it.
@@ -17,7 +17,7 @@ Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
  3 files changed, 187 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index 24560d548a91..37269a2e7b14 100644
+index 24560d5..37269a2 100644
 --- a/drivers/media/platform/omap3isp/isp.c
 +++ b/drivers/media/platform/omap3isp/isp.c
 @@ -63,6 +63,7 @@
@@ -276,7 +276,7 @@ index 24560d548a91..37269a2e7b14 100644
  };
  
 diff --git a/drivers/media/platform/omap3isp/isp.h b/drivers/media/platform/omap3isp/isp.h
-index b932a6f22b52..6fab22caaef8 100644
+index b932a6f..6fab22c 100644
 --- a/drivers/media/platform/omap3isp/isp.h
 +++ b/drivers/media/platform/omap3isp/isp.h
 @@ -18,6 +18,7 @@
@@ -312,7 +312,7 @@ index b932a6f22b52..6fab22caaef8 100644
  
  #define v4l2_dev_to_isp_device(dev) \
 diff --git a/drivers/media/platform/omap3isp/ispcsiphy.c b/drivers/media/platform/omap3isp/ispcsiphy.c
-index 4486e9f492df..9ca86ba2d9c3 100644
+index 4486e9f..9ca86ba 100644
 --- a/drivers/media/platform/omap3isp/ispcsiphy.c
 +++ b/drivers/media/platform/omap3isp/ispcsiphy.c
 @@ -175,6 +175,13 @@ static int omap3isp_csiphy_config(struct isp_csiphy *phy)
@@ -330,5 +330,5 @@ index 4486e9f492df..9ca86ba2d9c3 100644
  	    || buscfg->interface == ISP_INTERFACE_CCP2B_PHY2)
  		lanes = &buscfg->bus.ccp2.lanecfg;
 -- 
-2.1.4
+2.7.4
 

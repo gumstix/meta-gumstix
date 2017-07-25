@@ -1,7 +1,7 @@
 From 377dd7b47c6247d3df7d97f756141d04a1e1b8fe Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Fri, 10 Jun 2016 14:02:25 -0700
-Subject: [PATCH 3/3] omap4-duovero-garret50c: Add a new Gumstix DuoVero
+Subject: [PATCH 51/57] omap4-duovero-garret50c: Add a new Gumstix DuoVero
  expansion board
 
 Signed-off-by: Arun Bharadwaj <arun@gumstix.com>

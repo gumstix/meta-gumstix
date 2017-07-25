@@ -1,7 +1,7 @@
 From 8d4e10a66294740cf22906651cda5aadfabccb1e Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Mon, 29 Sep 2014 00:59:19 +0300
-Subject: [PATCH 11/38] dt: bindings: Add bindings for omap3isp
+Subject: [PATCH 11/57] dt: bindings: Add bindings for omap3isp
 
 Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
 ---
@@ -12,7 +12,7 @@ Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
 
 diff --git a/Documentation/devicetree/bindings/media/ti,omap3isp.txt b/Documentation/devicetree/bindings/media/ti,omap3isp.txt
 new file mode 100644
-index 000000000000..27c76ce5545e
+index 0000000..27c76ce
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/media/ti,omap3isp.txt
 @@ -0,0 +1,43 @@
@@ -60,7 +60,7 @@ index 000000000000..27c76ce5545e
 +
 +lane-polarity	: lane polarity (CSI-2 only)
 diff --git a/MAINTAINERS b/MAINTAINERS
-index c721042e7e45..842cebbce15d 100644
+index c721042..842cebb 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -6728,6 +6728,7 @@ L:	linux-media@vger.kernel.org
@@ -72,5 +72,5 @@ index c721042e7e45..842cebbce15d 100644
  OMAP USB SUPPORT
  M:	Felipe Balbi <balbi@ti.com>
 -- 
-2.1.4
+2.7.4
 

@@ -1,7 +1,7 @@
 From a3a99d4ce5e970d175a0c76d876a548e68a33e47 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Tue, 8 Sep 2015 17:21:13 -0700
-Subject: [PATCH 37/38] omap3: overo: Add device tree for Arbor50C and 70C
+Subject: [PATCH 37/57] omap3: overo: Add device tree for Arbor50C and 70C
 
 Add device trees supporting the Gumstix Arbor50C and Arbor70C expansion
 boards for the Gumstix Overo and Overo Storm COMs.  These boards are
@@ -25,7 +25,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  create mode 100644 arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 67fbda4548e4..529f286f857b 100644
+index 67fbda4..529f286 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -310,12 +310,16 @@ dtb-$(CONFIG_ARCH_OMAP3) += am3517-craneboard.dtb \
@@ -47,7 +47,7 @@ index 67fbda4548e4..529f286f857b 100644
  	omap3-overo-storm-palo35.dtb \
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor50c.dts b/arch/arm/boot/dts/omap3-overo-arbor50c.dts
 new file mode 100644
-index 000000000000..cf9326828029
+index 0000000..cf93268
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-arbor50c.dts
 @@ -0,0 +1,31 @@
@@ -84,7 +84,7 @@ index 000000000000..cf9326828029
 +
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
 new file mode 100644
-index 000000000000..54cec299a43e
+index 0000000..54cec29
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
 @@ -0,0 +1,134 @@
@@ -224,7 +224,7 @@ index 000000000000..54cec299a43e
 +
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
 new file mode 100644
-index 000000000000..49b0257001bc
+index 0000000..49b0257
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
 @@ -0,0 +1,31 @@
@@ -260,7 +260,7 @@ index 000000000000..49b0257001bc
 +};
 +
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
-index 606dfe83dca8..da49c4b979cf 100644
+index 606dfe8..da49c4b 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 @@ -111,15 +111,15 @@
@@ -353,7 +353,7 @@ index 606dfe83dca8..da49c4b979cf 100644
  
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
 new file mode 100644
-index 000000000000..74bef3848d3a
+index 0000000..74bef38
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
 @@ -0,0 +1,30 @@
@@ -389,7 +389,7 @@ index 000000000000..74bef3848d3a
 +};
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
 new file mode 100644
-index 000000000000..a5bfa9ac78d2
+index 0000000..a5bfa9ac
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
 @@ -0,0 +1,31 @@
@@ -425,5 +425,5 @@ index 000000000000..a5bfa9ac78d2
 +};
 +
 -- 
-2.1.4
+2.7.4
 

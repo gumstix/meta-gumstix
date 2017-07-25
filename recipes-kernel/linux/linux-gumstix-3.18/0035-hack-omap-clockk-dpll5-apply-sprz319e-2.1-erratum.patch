@@ -1,7 +1,7 @@
 From 9084a45df0d8130542ec18df1f255670c93a0f28 Mon Sep 17 00:00:00 2001
 From: Teknoman117 <linux.robotdude@gmail.com>
 Date: Wed, 24 Jul 2013 17:25:46 -0700
-Subject: [PATCH 35/38] hack: omap: clockk: dpll5: apply sprz319e 2.1 erratum
+Subject: [PATCH 35/57] hack: omap: clockk: dpll5: apply sprz319e 2.1 erratum
 
 Rebased on v3.17-rc1 by rcn-ee
 
@@ -15,7 +15,7 @@ Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
  4 files changed, 97 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/mach-omap2/cclock3xxx_data.c b/arch/arm/mach-omap2/cclock3xxx_data.c
-index eb8c75ec3b1a..7e17f9ef8c22 100644
+index eb8c75e..7e17f9e 100644
 --- a/arch/arm/mach-omap2/cclock3xxx_data.c
 +++ b/arch/arm/mach-omap2/cclock3xxx_data.c
 @@ -250,7 +250,9 @@ static struct dpll_data dpll1_dd = {
@@ -59,7 +59,7 @@ index eb8c75ec3b1a..7e17f9ef8c22 100644
  	/*
  	 * 3505 must be tested before 3517, since 3517 returns true
 diff --git a/arch/arm/mach-omap2/clkt_dpll.c b/arch/arm/mach-omap2/clkt_dpll.c
-index f251a14cbf16..177bf4732e04 100644
+index f251a14..177bf47 100644
 --- a/arch/arm/mach-omap2/clkt_dpll.c
 +++ b/arch/arm/mach-omap2/clkt_dpll.c
 @@ -52,6 +52,15 @@
@@ -142,7 +142,7 @@ index f251a14cbf16..177bf4732e04 100644
 +	return target_rate;
 +}
 diff --git a/arch/arm/mach-omap2/clock.h b/arch/arm/mach-omap2/clock.h
-index 4592a2762592..5fccf925ae2b 100644
+index 4592a27..5fccf92 100644
 --- a/arch/arm/mach-omap2/clock.h
 +++ b/arch/arm/mach-omap2/clock.h
 @@ -218,6 +218,9 @@ void omap2_clk_print_new_rates(const char *hfclkin_ck_name,
@@ -156,7 +156,7 @@ index 4592a2762592..5fccf925ae2b 100644
  
  /*
 diff --git a/arch/arm/mach-omap2/clock3xxx.c b/arch/arm/mach-omap2/clock3xxx.c
-index 0b02b4161d71..8ccf7c6c6e01 100644
+index 0b02b41..8ccf7c6 100644
 --- a/arch/arm/mach-omap2/clock3xxx.c
 +++ b/arch/arm/mach-omap2/clock3xxx.c
 @@ -60,7 +60,14 @@ void __init omap3_clk_lock_dpll5(void)
@@ -176,5 +176,5 @@ index 0b02b4161d71..8ccf7c6c6e01 100644
  
  	/* Program dpll5_m2_clk divider for no division */
 -- 
-2.1.4
+2.7.4
 

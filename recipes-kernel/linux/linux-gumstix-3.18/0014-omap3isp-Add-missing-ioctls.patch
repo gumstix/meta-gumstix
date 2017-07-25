@@ -1,7 +1,7 @@
 From 812a00a8f4015f2b53c897397c0e672c9153d86c Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 14 Jan 2015 10:51:25 -0800
-Subject: [PATCH 14/38] omap3isp: Add missing ioctls
+Subject: [PATCH 14/57] omap3isp: Add missing ioctls
 
 Add V4L2 ioctls for the OMAP3 ISP to report the video format as
 UYVY0.
@@ -16,7 +16,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  1 file changed, 43 insertions(+)
 
 diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/omap3isp/ispvideo.c
-index 948fbda797f4..04f6839a2c27 100644
+index 948fbda..04f6839 100644
 --- a/drivers/media/platform/omap3isp/ispvideo.c
 +++ b/drivers/media/platform/omap3isp/ispvideo.c
 @@ -1201,6 +1201,47 @@ isp_video_s_input(struct file *file, void *fh, unsigned int input)
@@ -77,5 +77,5 @@ index 948fbda797f4..04f6839a2c27 100644
  	.vidioc_g_crop			= isp_video_get_crop,
  	.vidioc_s_crop			= isp_video_set_crop,
 -- 
-2.1.4
+2.7.4
 

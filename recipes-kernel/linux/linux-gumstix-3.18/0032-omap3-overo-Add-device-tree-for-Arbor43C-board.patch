@@ -1,7 +1,7 @@
 From 4dd7d9588f69c0b61ae544fe6f41a120d036355e Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 8 Dec 2014 13:27:21 -0800
-Subject: [PATCH 32/38] omap3: overo: Add device tree for Arbor43C board
+Subject: [PATCH 32/57] omap3: overo: Add device tree for Arbor43C board
 
 Add a device tree supporting the Gumstix Arbor43C expansion board [1]
 for Gumstix Overo and Overo Storm COMs.  This board features a 4.3"
@@ -28,7 +28,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  create mode 100644 arch/arm/boot/dts/omap3-overo-storm-arbor43c.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 2578485d6f6b..67fbda4548e4 100644
+index 2578485..67fbda4 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -309,11 +309,13 @@ dtb-$(CONFIG_ARCH_OMAP3) += am3517-craneboard.dtb \
@@ -47,7 +47,7 @@ index 2578485d6f6b..67fbda4548e4 100644
  	omap3-overo-storm-palo35.dtb \
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor43c-common.dtsi b/arch/arm/boot/dts/omap3-overo-arbor43c-common.dtsi
 new file mode 100644
-index 000000000000..d869480924bd
+index 0000000..d869480
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-arbor43c-common.dtsi
 @@ -0,0 +1,69 @@
@@ -122,7 +122,7 @@ index 000000000000..d869480924bd
 +
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor43c.dts b/arch/arm/boot/dts/omap3-overo-arbor43c.dts
 new file mode 100644
-index 000000000000..203e24a5bbc3
+index 0000000..203e24a
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-arbor43c.dts
 @@ -0,0 +1,38 @@
@@ -165,7 +165,7 @@ index 000000000000..203e24a5bbc3
 +	};
 +};
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
-index 048fd216970a..606dfe83dca8 100644
+index 048fd21..606dfe8 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 @@ -133,6 +133,7 @@
@@ -178,7 +178,7 @@ index 048fd216970a..606dfe83dca8 100644
  	backlight {
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43c.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43c.dtsi
 new file mode 100644
-index 000000000000..89d7dbb1840c
+index 0000000..89d7dbb
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd43c.dtsi
 @@ -0,0 +1,18 @@
@@ -201,7 +201,7 @@ index 000000000000..89d7dbb1840c
 +	status = "disabled";
 +};
 diff --git a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
-index 7cfb808e8f5a..dca2b15b94aa 100644
+index 7cfb808e..dca2b15b 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
 @@ -40,6 +40,13 @@
@@ -240,7 +240,7 @@ index 7cfb808e8f5a..dca2b15b94aa 100644
  		compatible = "aptina,mt9v032";
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor43c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor43c.dts
 new file mode 100644
-index 000000000000..6c0349189521
+index 0000000..6c03491
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-storm-arbor43c.dts
 @@ -0,0 +1,39 @@
@@ -284,7 +284,7 @@ index 000000000000..6c0349189521
 +};
 +
 diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
-index eb0c54da3363..8a499019a080 100644
+index eb0c54d..8a49901 100644
 --- a/arch/arm/mach-omap2/pdata-quirks.c
 +++ b/arch/arm/mach-omap2/pdata-quirks.c
 @@ -421,7 +421,6 @@ static struct pdata_init pdata_quirks[] __initdata = {
@@ -296,7 +296,7 @@ index eb0c54da3363..8a499019a080 100644
  #ifdef CONFIG_ARCH_OMAP4
  	{ "ti,omap4-sdp", omap4_sdp_legacy_init, },
 diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-index ee3434f1e949..e90a81166a6d 100644
+index ee3434f..e90a811 100644
 --- a/drivers/input/touchscreen/edt-ft5x06.c
 +++ b/drivers/input/touchscreen/edt-ft5x06.c
 @@ -1119,6 +1119,9 @@ static SIMPLE_DEV_PM_OPS(edt_ft5x06_ts_pm_ops,
@@ -310,5 +310,5 @@ index ee3434f1e949..e90a81166a6d 100644
  };
  MODULE_DEVICE_TABLE(i2c, edt_ft5x06_ts_id);
 -- 
-2.1.4
+2.7.4
 

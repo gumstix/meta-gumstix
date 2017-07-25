@@ -1,7 +1,7 @@
 From 17274812488a14f49587735454b5d6536f4cb41f Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Tue, 15 Sep 2015 16:28:13 -0700
-Subject: [PATCH 34/38] input: touchscreen: specify screen size of edt-ft5x06
+Subject: [PATCH 34/57] input: touchscreen: specify screen size of edt-ft5x06
 
 The Newhaven touchscreens using this driver don't seem to provide a
 hardware description of the touch dimensions as the other supported
@@ -15,7 +15,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-index e90a81166a6d..f865cb7f8ec7 100644
+index e90a811..f865cb7 100644
 --- a/drivers/input/touchscreen/edt-ft5x06.c
 +++ b/drivers/input/touchscreen/edt-ft5x06.c
 @@ -111,6 +111,8 @@ struct edt_ft5x06_ts_data {
@@ -54,5 +54,5 @@ index e90a81166a6d..f865cb7f8ec7 100644
  	if (error) {
  		dev_err(&client->dev, "Unable to init MT slots.\n");
 -- 
-2.1.4
+2.7.4
 

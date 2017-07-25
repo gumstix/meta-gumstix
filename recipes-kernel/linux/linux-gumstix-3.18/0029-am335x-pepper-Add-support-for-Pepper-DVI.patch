@@ -1,7 +1,7 @@
 From be7acaed55105e65611aa6e09e34a961d5ba6510 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 29 Jun 2015 15:57:15 -0700
-Subject: [PATCH 29/38] am335x: pepper: Add support for Pepper-DVI
+Subject: [PATCH 29/57] am335x: pepper: Add support for Pepper-DVI
 
 Pepper DVI is an AM335x based single board computer (SBC) offered by
 Gumstix [1].
@@ -14,7 +14,7 @@ Gumstix [1].
  create mode 100644 arch/arm/boot/dts/am335x-pepper-dvi.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 8409387321a7..2578485d6f6b 100644
+index 8409387..2578485 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -335,7 +335,8 @@ dtb-$(CONFIG_SOC_AM33XX) += am335x-base0033.dtb \
@@ -29,7 +29,7 @@ index 8409387321a7..2578485d6f6b 100644
  	omap4-panda-a4.dtb \
 diff --git a/arch/arm/boot/dts/am335x-pepper-dvi.dts b/arch/arm/boot/dts/am335x-pepper-dvi.dts
 new file mode 100644
-index 000000000000..ec775025c3ed
+index 0000000..ec77502
 --- /dev/null
 +++ b/arch/arm/boot/dts/am335x-pepper-dvi.dts
 @@ -0,0 +1,490 @@
@@ -524,5 +524,5 @@ index 000000000000..ec775025c3ed
 +};
 +
 -- 
-2.1.4
+2.7.4
 

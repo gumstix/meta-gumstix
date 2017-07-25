@@ -1,7 +1,7 @@
 From d4123ca71273d6840a3f5a3d06b2971279193661 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Thu, 2 Jan 2014 00:28:28 +0100
-Subject: [PATCH 06/38] omap3isp: DT support for clocks
+Subject: [PATCH 06/57] omap3isp: DT support for clocks
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
@@ -9,7 +9,7 @@ Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
  1 file changed, 25 insertions(+)
 
 diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index eebb65a30256..14ec9b9ef98c 100644
+index eebb65a..14ec9b9 100644
 --- a/drivers/media/platform/omap3isp/isp.c
 +++ b/drivers/media/platform/omap3isp/isp.c
 @@ -276,9 +276,21 @@ static const struct clk_init_data isp_xclk_init_data = {
@@ -69,5 +69,5 @@ index eebb65a30256..14ec9b9ef98c 100644
  		struct isp_xclk *xclk = &isp->xclks[i];
  
 -- 
-2.1.4
+2.7.4
 

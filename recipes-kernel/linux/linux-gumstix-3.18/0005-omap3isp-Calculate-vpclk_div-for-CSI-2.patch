@@ -1,7 +1,7 @@
 From 09bffb27dcff6e9027b50e99d3d1c5afd21e9faf Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Sat, 4 Oct 2014 19:20:12 +0300
-Subject: [PATCH 05/38] omap3isp: Calculate vpclk_div for CSI-2
+Subject: [PATCH 05/57] omap3isp: Calculate vpclk_div for CSI-2
 
 The video port clock is l3_ick divided by vpclk_div. This clock must be high
 enough for the external pixel rate. The video port requires two clock cycles
@@ -14,7 +14,7 @@ Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
  2 files changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/platform/omap3isp/ispcsi2.c b/drivers/media/platform/omap3isp/ispcsi2.c
-index f562fe5b9a9e..68c922ab4542 100644
+index f562fe5..68c922a 100644
 --- a/drivers/media/platform/omap3isp/ispcsi2.c
 +++ b/drivers/media/platform/omap3isp/ispcsi2.c
 @@ -548,6 +548,7 @@ int omap3isp_csi2_reset(struct isp_csi2_device *csi2)
@@ -39,7 +39,7 @@ index f562fe5b9a9e..68c922ab4542 100644
  	csi2->ctrl.ecc_enable = buscfg->bus.csi2.crc;
  
 diff --git a/include/media/omap3isp.h b/include/media/omap3isp.h
-index 39e0748b0d31..0f0c08b48829 100644
+index 39e0748..0f0c08b 100644
 --- a/include/media/omap3isp.h
 +++ b/include/media/omap3isp.h
 @@ -129,11 +129,9 @@ struct isp_ccp2_cfg {
@@ -55,5 +55,5 @@ index 39e0748b0d31..0f0c08b48829 100644
  };
  
 -- 
-2.1.4
+2.7.4
 

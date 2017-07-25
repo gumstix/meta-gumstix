@@ -1,7 +1,7 @@
 From 0564d8341e67bf9c81e0fd69d270f1a563c00110 Mon Sep 17 00:00:00 2001
 From: Adam YH Lee <adam.yh.lee@gmail.com>
 Date: Mon, 5 Jan 2015 17:45:49 -0800
-Subject: [PATCH 22/38] omap3: overo: Update LCD panel names
+Subject: [PATCH 22/57] omap3: overo: Update LCD panel names
 
 For Gumstix Overo COMs, the u-boot bootloader typically passes an
 argument specifying the default display via the omapdss.def_disp
@@ -18,7 +18,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
-index 233c69e50ae3..df8908adb0cb 100644
+index 233c69e..df8908a 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
 @@ -120,7 +120,7 @@
@@ -31,7 +31,7 @@ index 233c69e50ae3..df8908adb0cb 100644
  		reg = <1>;					/* CS1 */
  		spi-max-frequency = <10000000>;
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
-index f5395b7da912..048fd216970a 100644
+index f5395b7..048fd21 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 @@ -98,7 +98,7 @@
@@ -44,5 +44,5 @@ index f5395b7da912..048fd216970a 100644
  		pinctrl-names = "default";
  		pinctrl-0 = <&lte430_pins>;
 -- 
-2.1.4
+2.7.4
 

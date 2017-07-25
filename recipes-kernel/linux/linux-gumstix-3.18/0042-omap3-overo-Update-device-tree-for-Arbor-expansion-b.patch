@@ -1,7 +1,7 @@
 From 054651592614439f8b075e04645479d9a9dda0d7 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Thu, 22 Oct 2015 18:54:15 -0700
-Subject: [PATCH 2/2] omap3-overo: Update device tree for Arbor expansion
+Subject: [PATCH 42/57] omap3-overo: Update device tree for Arbor expansion
  boards
 
 Make a few pin allocation tweaks to support the production rev. of
@@ -29,7 +29,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  create mode 100644 arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 594d03b69e03..51401fccf12e 100644
+index 594d03b..51401fc 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -310,6 +310,7 @@ dtb-$(CONFIG_ARCH_OMAP3) += am3517-craneboard.dtb \
@@ -50,7 +50,7 @@ index 594d03b69e03..51401fccf12e 100644
  	omap3-overo-storm-chestnut43.dtb \
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor43c1.dts b/arch/arm/boot/dts/omap3-overo-arbor43c1.dts
 new file mode 100644
-index 000000000000..4aa2824d66e5
+index 0000000..4aa2824
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-arbor43c1.dts
 @@ -0,0 +1,60 @@
@@ -115,7 +115,7 @@ index 000000000000..4aa2824d66e5
 +	vsync-len = <10>;
 +};
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor50c.dts b/arch/arm/boot/dts/omap3-overo-arbor50c.dts
-index cf9326828029..bda9530dd027 100644
+index cf93268..bda9530 100644
 --- a/arch/arm/boot/dts/omap3-overo-arbor50c.dts
 +++ b/arch/arm/boot/dts/omap3-overo-arbor50c.dts
 @@ -20,12 +20,24 @@
@@ -151,7 +151,7 @@ index cf9326828029..bda9530dd027 100644
  };
  
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
-index 10c78b52ee11..5c65bb8db3bc 100644
+index 10c78b5..5c65bb8 100644
 --- a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
 @@ -7,8 +7,8 @@
@@ -369,7 +369,7 @@ index 10c78b52ee11..5c65bb8db3bc 100644
 +	vsync-len = <3>;
 +};
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
-index 188ceb6578aa..cafb81823ed7 100644
+index 188ceb6..cafb818 100644
 --- a/arch/arm/boot/dts/omap3-overo-arbor70c.dts
 +++ b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
 @@ -20,13 +20,25 @@
@@ -406,7 +406,7 @@ index 188ceb6578aa..cafb81823ed7 100644
  
  &captouch {
 diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
-index da49c4b979cf..65dc39c6618d 100644
+index da49c4b..65dc39c 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
 @@ -110,16 +110,16 @@
@@ -438,7 +438,7 @@ index da49c4b979cf..65dc39c6618d 100644
  			vsync-active = <0>;
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts
 new file mode 100644
-index 000000000000..9e70d84a312d
+index 0000000..9e70d84
 --- /dev/null
 +++ b/arch/arm/boot/dts/omap3-overo-storm-arbor43c1.dts
 @@ -0,0 +1,60 @@
@@ -503,7 +503,7 @@ index 000000000000..9e70d84a312d
 +	vsync-len = <10>;
 +};
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
-index 74bef3848d3a..551468efcb99 100644
+index 74bef38..551468e 100644
 --- a/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
 +++ b/arch/arm/boot/dts/omap3-overo-storm-arbor50c.dts
 @@ -20,11 +20,23 @@
@@ -538,7 +538,7 @@ index 74bef3848d3a..551468efcb99 100644
 +	};
  };
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
-index 1de418dffe2d..a5715254142d 100644
+index 1de418d..a571525 100644
 --- a/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
 +++ b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
 @@ -20,13 +20,25 @@
@@ -575,5 +575,5 @@ index 1de418dffe2d..a5715254142d 100644
  
  &captouch {
 -- 
-2.1.4
+2.7.4
 

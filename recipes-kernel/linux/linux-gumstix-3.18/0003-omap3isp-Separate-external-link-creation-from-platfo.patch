@@ -1,7 +1,7 @@
 From 78d1fe9dfd89c68ce6dbd4d2edcb3eda774e0e61 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Wed, 1 Jan 2014 19:01:48 +0200
-Subject: [PATCH 03/38] omap3isp: Separate external link creation from platform
+Subject: [PATCH 03/57] omap3isp: Separate external link creation from platform
  data parsing
 
 Move the code which connects the external entity to an ISP entity into a
@@ -13,7 +13,7 @@ Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
  1 file changed, 62 insertions(+), 60 deletions(-)
 
 diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index dfe7dca9e76d..01cb530b6e68 100644
+index dfe7dca..01cb530 100644
 --- a/drivers/media/platform/omap3isp/isp.c
 +++ b/drivers/media/platform/omap3isp/isp.c
 @@ -1829,6 +1829,65 @@ isp_register_subdev_group(struct isp_device *isp,
@@ -159,5 +159,5 @@ index dfe7dca9e76d..01cb530b6e68 100644
  			goto done;
  	}
 -- 
-2.1.4
+2.7.4
 

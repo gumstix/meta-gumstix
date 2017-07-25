@@ -1,0 +1,129 @@
+From 351f2e25c0549795eae799a38368a8b96f5e6adf Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 26 Nov 2015 11:18:22 -0800
+Subject: [PATCH 52/57] drm/tilcdc: Defer TFP410 probing for i2c
+
+If DRM is initialized before i2c, the i2c node for the TFP410 will not
+be available.  In this case, defer probing the TFP410 as in:
+  commit 39de6194131c155901f96686a063212656d80c2e
+  Author: Darren Etheridge <detheridge@ti.com>
+  Date:   Fri Jun 21 13:52:27 2013 -0500
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ drivers/gpu/drm/tilcdc/tilcdc_tfp410.c | 68 ++++++++++++++++++----------------
+ 1 file changed, 37 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/gpu/drm/tilcdc/tilcdc_tfp410.c b/drivers/gpu/drm/tilcdc/tilcdc_tfp410.c
+index 354c47c..094fc12 100644
+--- a/drivers/gpu/drm/tilcdc/tilcdc_tfp410.c
++++ b/drivers/gpu/drm/tilcdc/tilcdc_tfp410.c
+@@ -314,6 +314,8 @@ static int tfp410_probe(struct platform_device *pdev)
+ 	struct tilcdc_module *mod;
+ 	struct pinctrl *pinctrl;
+ 	uint32_t i2c_phandle;
++	struct i2c_adapter *tfp410_i2c;
++	int tfp410_gpio;
+ 	int ret = -EINVAL;
+ 
+ 	/* bail out early if no DT data: */
+@@ -322,61 +324,65 @@ static int tfp410_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
+ 
+-	tfp410_mod = kzalloc(sizeof(*tfp410_mod), GFP_KERNEL);
+-	if (!tfp410_mod)
+-		return -ENOMEM;
+-
+-	mod = &tfp410_mod->base;
+-	pdev->dev.platform_data = mod;
+-
+-	tilcdc_module_init(mod, "tfp410", &tfp410_module_ops);
+-
+-	pinctrl = devm_pinctrl_get_select_default(&pdev->dev);
+-	if (IS_ERR(pinctrl))
+-		dev_warn(&pdev->dev, "pins are not configured\n");
+-
+ 	if (of_property_read_u32(node, "i2c", &i2c_phandle)) {
+ 		dev_err(&pdev->dev, "could not get i2c bus phandle\n");
+-		goto fail;
++		return ret;
+ 	}
+ 
+-	mod->preferred_bpp = dvi_info.bpp;
+-
+ 	i2c_node = of_find_node_by_phandle(i2c_phandle);
+ 	if (!i2c_node) {
+ 		dev_err(&pdev->dev, "could not get i2c bus node\n");
+-		goto fail;
++		return ret;
+ 	}
+ 
+-	tfp410_mod->i2c = of_find_i2c_adapter_by_node(i2c_node);
+-	if (!tfp410_mod->i2c) {
++	tfp410_i2c = of_find_i2c_adapter_by_node(i2c_node);
++	of_node_put(i2c_node);
++
++	if (!tfp410_i2c) {
++		ret = -EPROBE_DEFER;
++		tilcdc_slave_probedefer(true);
+ 		dev_err(&pdev->dev, "could not get i2c\n");
+-		of_node_put(i2c_node);
+-		goto fail;
++		return ret;
+ 	}
+ 
+-	of_node_put(i2c_node);
+-
+-	tfp410_mod->gpio = of_get_named_gpio_flags(node, "powerdn-gpio",
++	tfp410_gpio = of_get_named_gpio_flags(node, "powerdn-gpio",
+ 			0, NULL);
+-	if (IS_ERR_VALUE(tfp410_mod->gpio)) {
++	if (IS_ERR_VALUE(tfp410_gpio)) {
+ 		dev_warn(&pdev->dev, "No power down GPIO\n");
+ 	} else {
+-		ret = gpio_request(tfp410_mod->gpio, "DVI_PDn");
++		ret = gpio_request(tfp410_gpio, "DVI_PDn");
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "could not get DVI_PDn gpio\n");
+ 			goto fail_adapter;
+ 		}
+ 	}
+ 
++	tfp410_mod = kzalloc(sizeof(*tfp410_mod), GFP_KERNEL);
++	if (!tfp410_mod) {
++		ret = -ENOMEM;
++		goto fail_adapter;
++	}
++
++	mod = &tfp410_mod->base;
++	pdev->dev.platform_data = mod;
++
++	mod->preferred_bpp = dvi_info.bpp;
++
++	tfp410_mod->i2c = tfp410_i2c;
++	tfp410_mod->gpio = tfp410_gpio;
++
++	tilcdc_module_init(mod, "tfp410", &tfp410_module_ops);
++
++	pinctrl = devm_pinctrl_get_select_default(&pdev->dev);
++	if (IS_ERR(pinctrl))
++		dev_warn(&pdev->dev, "pins are not configured\n");
++
++	tilcdc_slave_probedefer(false);
++
+ 	return 0;
+ 
+ fail_adapter:
+-	i2c_put_adapter(tfp410_mod->i2c);
+-
+-fail:
+-	kfree(tfp410_mod);
+-	tilcdc_module_cleanup(mod);
++	i2c_put_adapter(tfp410_i2c);
+ 	return ret;
+ }
+ 
+-- 
+2.7.4
+

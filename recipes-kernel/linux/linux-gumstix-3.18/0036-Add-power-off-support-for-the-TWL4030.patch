@@ -1,7 +1,7 @@
 From e42305d970c71a0bce912acb0dfbd9b19d0a3c48 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Mon, 7 Sep 2015 11:58:34 -0700
-Subject: [PATCH 36/38] Add power-off support for the TWL4030
+Subject: [PATCH 36/57] Add power-off support for the TWL4030
 
 Originally proposed by Bernhard Aichriedled and Kris Duff [1] with thanks.
 
@@ -12,7 +12,7 @@ Originally proposed by Bernhard Aichriedled and Kris Duff [1] with thanks.
  2 files changed, 47 insertions(+)
 
 diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 1456ea70bbc7..5f094ab5652d 100644
+index 1456ea7..5f094ab 100644
 --- a/drivers/mfd/Kconfig
 +++ b/drivers/mfd/Kconfig
 @@ -1083,6 +1083,12 @@ config TWL4030_POWER
@@ -29,7 +29,7 @@ index 1456ea70bbc7..5f094ab5652d 100644
  	bool "TI TWL4030 Audio"
  	depends on TWL4030_CORE
 diff --git a/drivers/mfd/twl-core.c b/drivers/mfd/twl-core.c
-index db11b4f40611..149c8590f4e0 100644
+index db11b4f..149c859 100644
 --- a/drivers/mfd/twl-core.c
 +++ b/drivers/mfd/twl-core.c
 @@ -67,6 +67,12 @@
@@ -102,5 +102,5 @@ index db11b4f40611..149c8590f4e0 100644
  		if (pdata)
  			twl_auxdata_lookup[0].platform_data = pdata->gpio;
 -- 
-2.1.4
+2.7.4
 

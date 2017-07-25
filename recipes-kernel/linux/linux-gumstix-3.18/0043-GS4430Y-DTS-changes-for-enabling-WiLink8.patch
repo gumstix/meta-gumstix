@@ -1,7 +1,7 @@
 From 99990d6fa22a4b0d2743a55ba51fb40277826936 Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Mon, 16 Nov 2015 15:17:01 -0800
-Subject: [PATCH] GS4430Y: DTS changes for enabling WiLink8.
+Subject: [PATCH 43/57] GS4430Y: DTS changes for enabling WiLink8.
 
 Update the regulator node for wlan and add a regulator for bt to
 enable WiLink8 on Duovero. Enable pin muxing for bt which is
@@ -179,5 +179,5 @@ index 058685a..db1e669 100644
  	{ "ti,omap4-panda", omap4_panda_legacy_init, },
  	{ "variscite,var-dvk-om44", var_som_om44_legacy_init, },
 -- 
-2.1.4
+2.7.4
 

@@ -1,7 +1,7 @@
 From 1904871b5a3dbc7136cabe719d0008683c080bcc Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Thu, 4 Jun 2015 11:08:19 -0700
-Subject: [PATCH 18/38] ARM: dts: Fix frequency scaling on Gumstix Pepper.
+Subject: [PATCH 18/57] ARM: dts: Fix frequency scaling on Gumstix Pepper.
 
 The device tree for Gumstix Pepper has DCDC2 and
 DCDC3 correctly labelled but the upper limit values
@@ -15,7 +15,7 @@ Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
-index 99f855da298e..37b95f6f3f59 100644
+index 99f855d..37b95f6 100644
 --- a/arch/arm/boot/dts/am335x-pepper.dts
 +++ b/arch/arm/boot/dts/am335x-pepper.dts
 @@ -448,7 +448,7 @@
@@ -37,5 +37,5 @@ index 99f855da298e..37b95f6f3f59 100644
  			regulator-always-on;
  		};
 -- 
-2.1.4
+2.7.4
 

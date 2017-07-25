@@ -1,7 +1,7 @@
 From 0068db85c3088e7febf772a495b9b89b9aff8237 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Wed, 24 Jun 2015 16:07:05 -0700
-Subject: [PATCH 38/38] arm: Add Gumstix Pepper43R and Pepper43C boards
+Subject: [PATCH 38/57] arm: Add Gumstix Pepper43R and Pepper43C boards
 
 Add device tree supporting the Gumstix Pepper43C [1] and Pepper43R [2]
 boards.  These feature, respectively, a 4.3" capacitive or resistive
@@ -25,7 +25,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  create mode 100644 arch/arm/boot/dts/am335x-pepper-43r.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 529f286f857b..594d03b69e03 100644
+index 529f286..594d03b 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -342,6 +342,8 @@ dtb-$(CONFIG_SOC_AM33XX) += am335x-base0033.dtb \
@@ -39,7 +39,7 @@ index 529f286f857b..594d03b69e03 100644
  	omap4-panda.dtb \
 diff --git a/arch/arm/boot/dts/am335x-pepper-43c.dts b/arch/arm/boot/dts/am335x-pepper-43c.dts
 new file mode 100644
-index 000000000000..987d67dd5883
+index 0000000..987d67d
 --- /dev/null
 +++ b/arch/arm/boot/dts/am335x-pepper-43c.dts
 @@ -0,0 +1,700 @@
@@ -745,7 +745,7 @@ index 000000000000..987d67dd5883
 +};
 diff --git a/arch/arm/boot/dts/am335x-pepper-43r.dts b/arch/arm/boot/dts/am335x-pepper-43r.dts
 new file mode 100644
-index 000000000000..c524bb5b57e9
+index 0000000..c524bb5
 --- /dev/null
 +++ b/arch/arm/boot/dts/am335x-pepper-43r.dts
 @@ -0,0 +1,725 @@
@@ -1475,7 +1475,7 @@ index 000000000000..c524bb5b57e9
 +	};
 +};
 diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
-index 8a499019a080..058685a1ef62 100644
+index 8a49901..058685a 100644
 --- a/arch/arm/mach-omap2/pdata-quirks.c
 +++ b/arch/arm/mach-omap2/pdata-quirks.c
 @@ -316,6 +316,31 @@ static void __init am335x_evmsk_legacy_init(void)
@@ -1520,5 +1520,5 @@ index 8a499019a080..058685a1ef62 100644
  #ifdef CONFIG_SOC_OMAP5
  	{ "ti,omap5-uevm", omap5_uevm_legacy_init, },
 -- 
-2.1.4
+2.7.4
 

@@ -1,7 +1,7 @@
 From 9367334ebab0a1376204c482bb19130b9b9831ed Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@iki.fi>
 Date: Fri, 28 Mar 2014 01:18:57 +0200
-Subject: [PATCH 04/38] omap3isp: Refactor device configuration structs for
+Subject: [PATCH 04/57] omap3isp: Refactor device configuration structs for
  Device Tree
 
 Make omap3isp configuration data structures more suitable for consumption by
@@ -29,7 +29,7 @@ Signed-off-by: Sakari Ailus <sakari.ailus@iki.fi>
  7 files changed, 98 insertions(+), 100 deletions(-)
 
 diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index 01cb530b6e68..eebb65a30256 100644
+index 01cb530..eebb65a 100644
 --- a/drivers/media/platform/omap3isp/isp.c
 +++ b/drivers/media/platform/omap3isp/isp.c
 @@ -419,7 +419,7 @@ static void isp_core_init(struct isp_device *isp, int idle)
@@ -170,7 +170,7 @@ index 01cb530b6e68..eebb65a30256 100644
  			goto done;
  	}
 diff --git a/drivers/media/platform/omap3isp/isp.h b/drivers/media/platform/omap3isp/isp.h
-index cfdfc8714b6b..b932a6f22b52 100644
+index cfdfc87..b932a6f 100644
 --- a/drivers/media/platform/omap3isp/isp.h
 +++ b/drivers/media/platform/omap3isp/isp.h
 @@ -229,7 +229,7 @@ int omap3isp_pipeline_set_stream(struct isp_pipeline *pipe,
@@ -183,7 +183,7 @@ index cfdfc8714b6b..b932a6f22b52 100644
  
  struct isp_device *omap3isp_get(struct isp_device *isp);
 diff --git a/drivers/media/platform/omap3isp/ispccdc.c b/drivers/media/platform/omap3isp/ispccdc.c
-index 81a9dc053d58..41e65b51adfa 100644
+index 81a9dc0..41e65b5 100644
 --- a/drivers/media/platform/omap3isp/ispccdc.c
 +++ b/drivers/media/platform/omap3isp/ispccdc.c
 @@ -958,11 +958,11 @@ void omap3isp_ccdc_max_rate(struct isp_ccdc_device *ccdc,
@@ -271,7 +271,7 @@ index 81a9dc053d58..41e65b51adfa 100644
  		parallel_shift = 0;
  	}
 diff --git a/drivers/media/platform/omap3isp/ispccp2.c b/drivers/media/platform/omap3isp/ispccp2.c
-index 9cb49b3c04bd..24263b4280fb 100644
+index 9cb49b3..24263b4 100644
 --- a/drivers/media/platform/omap3isp/ispccp2.c
 +++ b/drivers/media/platform/omap3isp/ispccp2.c
 @@ -201,14 +201,14 @@ static void ccp2_mem_enable(struct isp_ccp2_device *ccp2, u8 enable)
@@ -347,7 +347,7 @@ index 9cb49b3c04bd..24263b4280fb 100644
  	ccp2->if_cfg.data_size = format->height;
  
 diff --git a/drivers/media/platform/omap3isp/ispcsi2.c b/drivers/media/platform/omap3isp/ispcsi2.c
-index 6530b255f103..f562fe5b9a9e 100644
+index 6530b25..f562fe5 100644
 --- a/drivers/media/platform/omap3isp/ispcsi2.c
 +++ b/drivers/media/platform/omap3isp/ispcsi2.c
 @@ -548,7 +548,7 @@ int omap3isp_csi2_reset(struct isp_csi2_device *csi2)
@@ -378,7 +378,7 @@ index 6530b255f103..f562fe5b9a9e 100644
  	timing->ionum = 1;
  	timing->force_rx_mode = 1;
 diff --git a/drivers/media/platform/omap3isp/ispcsiphy.c b/drivers/media/platform/omap3isp/ispcsiphy.c
-index e033f2237a72..4486e9f492df 100644
+index e033f22..4486e9f 100644
 --- a/drivers/media/platform/omap3isp/ispcsiphy.c
 +++ b/drivers/media/platform/omap3isp/ispcsiphy.c
 @@ -168,18 +168,18 @@ static int omap3isp_csiphy_config(struct isp_csiphy *phy)
@@ -432,7 +432,7 @@ index e033f2237a72..4486e9f492df 100644
  		csiphy_set_power(phy, ISPCSI2_PHY_CFG_PWR_CMD_OFF);
  		regulator_disable(phy->vdd);
 diff --git a/include/media/omap3isp.h b/include/media/omap3isp.h
-index 398279dd1922..39e0748b0d31 100644
+index 398279d..39e0748 100644
 --- a/include/media/omap3isp.h
 +++ b/include/media/omap3isp.h
 @@ -45,7 +45,7 @@ enum {
@@ -525,5 +525,5 @@ index 398279dd1922..39e0748b0d31 100644
  };
  
 -- 
-2.1.4
+2.7.4
 

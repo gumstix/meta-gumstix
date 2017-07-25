@@ -1,0 +1,150 @@
+From 7cda97359d9f385f9955024ea128dce2410b8f8f Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Wed, 13 Jul 2016 10:42:20 -0700
+Subject: [PATCH 54/57] am335x-pepper-dvi: Update device tree for v14
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+---
+ arch/arm/boot/dts/am335x-pepper-dvi.dts | 57 +++++++++++++++------------------
+ 1 file changed, 26 insertions(+), 31 deletions(-)
+
+diff --git a/arch/arm/boot/dts/am335x-pepper-dvi.dts b/arch/arm/boot/dts/am335x-pepper-dvi.dts
+index ec77502..aeb33b0 100644
+--- a/arch/arm/boot/dts/am335x-pepper-dvi.dts
++++ b/arch/arm/boot/dts/am335x-pepper-dvi.dts
+@@ -31,9 +31,10 @@
+ 
+ 	hdmi {
+ 		compatible = "ti,tilcdc,tfp410";
+-		i2c = <&i2c1>;
++		i2c = <&i2c2>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&lcd_pins>;
++		pinctrl-0 = <&lcd_pins &hdmi_pins>;
++		powerdn-gpio = <&gpio1 0 GPIO_ACTIVE_LOW>;
+ 		status = "okay";
+ 	};
+ 
+@@ -80,10 +81,9 @@
+ 		reg = <0x50>;
+ 	};
+ 
+-	audio_codec: tlv320aic3106@1b {
+-		compatible = "ti,tlv320aic3106";
+-		reg = <0x1b>;
+-		ai3x-micbias-vg = <0x2>;
++	ds_rtc: ds1340@68 {
++		compatible = "dallas,ds1340";
++		reg = <0x68>;
+ 	};
+ };
+ 
+@@ -92,6 +92,12 @@
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c1_pins>;
+ 	clock-frequency = <400000>;
++
++	audio_codec: tlv320aic3106@1b {
++		compatible = "ti,tlv320aic3106";
++		reg = <0x1b>;
++		ai3x-micbias-vg = <0x2>;
++	};
+ };
+ 
+ &i2c2 {
+@@ -112,15 +118,15 @@
+ 
+ 	i2c1_pins: pinmux_i2c1 {
+ 		pinctrl-single,pins = <
+-			0x10C (PIN_INPUT_PULLUP | MUX_MODE3)	/* mii1_crs.i2c1_sda */
+-			0x110 (PIN_INPUT_PULLUP | MUX_MODE3)	/* mii1_rx_er.i2c1_scl */
++			0x168 (PIN_INPUT_PULLUP | MUX_MODE3)	/* uart0_ctsn.i2c1_sda */
++			0x16c (PIN_INPUT_PULLUP | MUX_MODE3)	/* uart0_rtsn.i2c1_scl */
+ 		>;
+ 	};
+ 
+ 	i2c2_pins: pinmux_i2c2 {
+ 		pinctrl-single,pins = <
+-			0x178 (PIN_INPUT_PULLUP | MUX_MODE3)	/* uart1_ctsn.uart1_ctsn */
+-			0x17C (PIN_INPUT_PULLUP | MUX_MODE3)	/* uart1_rtsn.uart1_rtsn */
++			0x150 (PIN_INPUT_PULLUP | MUX_MODE2)	/* spi0_sclk.i2c2_sda */
++			0x154 (PIN_INPUT_PULLUP | MUX_MODE2)	/* spi0_d0.i2c2_scl */
+ 		>;
+ 	};
+ };
+@@ -144,7 +150,7 @@
+ 	ti,audio-routing =
+ 		"Headphone Jack",	"HPLOUT",
+ 		"Headphone Jack",	"HPROUT",
+-		"MIC3L",		"Mic3L Switch";
++		"MIC3L",		"Mic Jack";
+ };
+ 
+ &mcasp0 {
+@@ -212,8 +218,12 @@
+ 			0xe4 (PIN_OUTPUT | MUX_MODE0)	/* lcd_hsync.lcd_hsync */
+ 			0xe8 (PIN_OUTPUT | MUX_MODE0)	/* lcd_pclk.lcd_pclk */
+ 			0xec (PIN_OUTPUT | MUX_MODE0)	/* lcd_ac_bias_en.lcd_ac_bias_en */
+-			/* Display Enable */
+-			0x6c (PIN_OUTPUT_PULLUP | MUX_MODE7)	/* gpmc_a11.gpio1_27 */
++		>;
++	};
++
++	hdmi_pins: pinmux_hdmi {
++		pinctrl-single,pins = <
++			0x00 (PIN_OUTPUT_PULLUP | MUX_MODE7)	/* gpmc_ad0.gpio1_0 */
+ 		>;
+ 	};
+ };
+@@ -377,13 +387,6 @@
+ 	pinctrl-0 = <&uart0_pins>;
+ };
+ 
+-&uart1 {
+-	/* Broken out to J6 header */
+-	status = "okay";
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&uart1_pins>;
+-};
+-
+ &am33xx_pinmux {
+ 	uart0_pins: pinmux_uart0 {
+ 		pinctrl-single,pins = <
+@@ -391,14 +394,6 @@
+ 			0x174 (PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* uart0_txd.uart0_txd */
+ 		>;
+ 	};
+-	uart1_pins: pinmux_uart1 {
+-		pinctrl-single,pins = <
+-			0x178 (PIN_INPUT_PULLUP | MUX_MODE0)	/* uart1_ctsn.uart1_ctsn */
+-			0x17C (PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* uart1_rtsn.uart1_rtsn */
+-			0x180 (PIN_INPUT_PULLUP | MUX_MODE0)	/* uart1_rxd.uart1_rxd */
+-			0x184 (PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* uart1_txd.uart1_txd */
+-		>;
+-	};
+ };
+ 
+ /* USB */
+@@ -453,8 +448,8 @@
+ 
+ 	led@0 {
+ 		label = "pepper:user1:red";
+-		gpios = <&gpio1 21 GPIO_ACTIVE_HIGH>;
+-		linux,default-trigger = "none";
++		gpios = <&gpio1 20 GPIO_ACTIVE_HIGH>;
++		linux,default-trigger = "heartbeat";
+ 		default-state = "off";
+ 	};
+ };
+@@ -477,7 +472,7 @@
+ &am33xx_pinmux {
+ 	user_leds_pins: pinmux_user_leds {
+ 		pinctrl-single,pins = <
+-			0x54 (PIN_OUTPUT | MUX_MODE7)	/* gpmc_a5.gpio1_21 */
++			0x50 (PIN_OUTPUT | MUX_MODE7)	/* gpmc_a4.gpio1_20 */
+ 		>;
+ 	};
+ 
+-- 
+2.7.4
+

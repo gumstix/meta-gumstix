@@ -1,7 +1,7 @@
 From 915feabe38945799ff8145366a5d7ed79664b8b5 Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Fri, 2 Oct 2015 13:46:34 -0700
-Subject: [PATCH 1/2] Pepper 43C and 43R: Remove redundant pinmux lines
+Subject: [PATCH 41/57] Pepper 43C and 43R: Remove redundant pinmux lines
 
 uart0_pins was already defined previously. So remove these
 redundant lines.
@@ -13,7 +13,7 @@ Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
  2 files changed, 12 deletions(-)
 
 diff --git a/arch/arm/boot/dts/am335x-pepper-43c.dts b/arch/arm/boot/dts/am335x-pepper-43c.dts
-index 28601a4ecbf5..45b782e37ee6 100644
+index 28601a4..45b782e 100644
 --- a/arch/arm/boot/dts/am335x-pepper-43c.dts
 +++ b/arch/arm/boot/dts/am335x-pepper-43c.dts
 @@ -681,12 +681,6 @@
@@ -30,7 +30,7 @@ index 28601a4ecbf5..45b782e37ee6 100644
  		pinctrl-single,pins = <
  			0xf0 (PIN_INPUT_PULLUP | MUX_MODE0)	/* mmc0_dat0.mmc0_dat0 */
 diff --git a/arch/arm/boot/dts/am335x-pepper-43r.dts b/arch/arm/boot/dts/am335x-pepper-43r.dts
-index 55f18a40e002..6b44f95cf169 100644
+index 55f18a4..6b44f95 100644
 --- a/arch/arm/boot/dts/am335x-pepper-43r.dts
 +++ b/arch/arm/boot/dts/am335x-pepper-43r.dts
 @@ -706,12 +706,6 @@
@@ -47,5 +47,5 @@ index 55f18a40e002..6b44f95cf169 100644
  		pinctrl-single,pins = <
  			0xf0 (PIN_INPUT_PULLUP | MUX_MODE0)	/* mmc0_dat0.mmc0_dat0 */
 -- 
-2.1.4
+2.7.4
 

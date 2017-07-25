@@ -86,26 +86,26 @@ SRC_URI = " \
     file://0036-Add-power-off-support-for-the-TWL4030.patch \
     file://0037-omap3-overo-Add-device-tree-for-Arbor50C-and-70C.patch \
     file://0038-arm-Add-Gumstix-Pepper43R-and-Pepper43C-boards.patch \
-    file://0001-Pepper-Fixup-regulator-configuration-on-43R-and-43C.patch \
-    file://0002-overo-Fix-up-device-tree-for-Arbor50C-and-Arbor70C.patch \
-    file://0039-HACK-drm-fb_helper-enable-panning-support.patch \
-    file://0040-HACK-drm-tilcdc-add-vsync-callback-for-use-in-omaplf.patch \
-    file://0041-drm-tilcdc-fix-the-ping-pong-dma-tearing-issue-seen-.patch \
-    file://0042-ARM-OMAP2-Use-pdata-quirks-for-sgx-deassert_hardrese.patch \
-    file://0043-ARM-dts-am33xx-add-DT-node-for-gpu.patch \
-    file://0044-gfx-sgx.h-sgx-omap.patch \
-    file://0045-edt-ft5x06-Handle-reset-wake-for-different-versions-.patch \
-    file://0001-Pepper-43C-and-43R-Remove-redundant-pinmux-lines.patch \
-    file://0002-omap3-overo-Update-device-tree-for-Arbor-expansion-b.patch \
-    file://0001-GS4430Y-DTS-changes-for-enabling-WiLink8.patch \
-    file://0048-Add-IMU-sensor-support.patch \
-    file://0049-l3gd20h-Use-the-driver-from-ST-for-gyroscope.patch \
-    file://0050-am335x-pepper-43c-Updated-device-tree-for-v12.patch \
-    file://0051-am335x-pepper-43r-Device-tree-changes-for-v6.patch \
-    file://0052-LSM303D-Use-the-correct-compatible-string-in-the-dri.patch \
-    file://0053-Garret50C-Add-correct-edid-settings-for-800x480-disp.patch \
-    file://0054-omap4-duovero-garret50c-Add-a-new-Gumstix-DuoVero-ex.patch \
-    file://0055-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch \
+    file://0039-Pepper-Fixup-regulator-configuration-on-43R-and-43C.patch \
+    file://0040-overo-Fix-up-device-tree-for-Arbor50C-and-Arbor70C.patch \
+    file://0041-Pepper-43C-and-43R-Remove-redundant-pinmux-lines.patch \
+    file://0042-omap3-overo-Update-device-tree-for-Arbor-expansion-b.patch \
+    file://0043-GS4430Y-DTS-changes-for-enabling-WiLink8.patch \
+    file://0044-Add-IMU-sensor-support.patch \
+    file://0045-l3gd20h-Use-the-driver-from-ST-for-gyroscope.patch \
+    file://0046-edt-ft5x06-Handle-reset-wake-for-different-versions-.patch \
+    file://0047-am335x-pepper-43c-Updated-device-tree-for-v12.patch \
+    file://0048-am335x-pepper-43r-Device-tree-changes-for-v6.patch \
+    file://0049-LSM303D-Use-the-correct-compatible-string-in-the-dri.patch \
+    file://0050-Garret50C-Add-correct-edid-settings-for-800x480-disp.patch \
+    file://0051-omap4-duovero-garret50c-Add-a-new-Gumstix-DuoVero-ex.patch \
+    file://0052-drm-tilcdc-Defer-TFP410-probing-for-i2c.patch \
+    file://0053-tfp410-RGB888-not-RGB565-color-mapping-for-botball.patch \
+    file://0054-am335x-pepper-dvi-Update-device-tree-for-v14.patch \
+    file://0055-ARM-omap4-Fix-USB-audio.patch \
+    file://0056-rtc-ds1307-Initialize-trickle-charger-register.patch \
+    file://0057-overo-add-support-for-tiny-caspa-camera.patch \
+    file://0058-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

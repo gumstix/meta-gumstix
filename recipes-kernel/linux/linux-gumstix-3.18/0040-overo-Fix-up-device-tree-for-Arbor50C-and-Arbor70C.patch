@@ -1,7 +1,7 @@
 From 169462eac058fe7a52de255bd47e9d16bb4e47af Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Fri, 18 Sep 2015 14:33:53 -0700
-Subject: [PATCH 2/2] overo: Fix-up device tree for Arbor50C and Arbor70C
+Subject: [PATCH 40/57] overo: Fix-up device tree for Arbor50C and Arbor70C
 
 Correct a small pin-mux error for a pushbutton on Arbor50C and Arbor70C
 as well enabling the touchscreen for Arbor70C.  The 7" screen breaks
@@ -15,7 +15,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  3 files changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
-index 54cec299a43e..10c78b52ee11 100644
+index 54cec29..10c78b5 100644
 --- a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
 @@ -28,8 +28,8 @@
@@ -30,7 +30,7 @@ index 54cec299a43e..10c78b52ee11 100644
          };
  };
 diff --git a/arch/arm/boot/dts/omap3-overo-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
-index 49b0257001bc..188ceb6578aa 100644
+index 49b0257..188ceb6 100644
 --- a/arch/arm/boot/dts/omap3-overo-arbor70c.dts
 +++ b/arch/arm/boot/dts/omap3-overo-arbor70c.dts
 @@ -29,3 +29,7 @@
@@ -42,7 +42,7 @@ index 49b0257001bc..188ceb6578aa 100644
 +	wake-gpios = <0>; // invalidate previous assignment
 +};
 diff --git a/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
-index a5bfa9ac78d2..1de418dffe2d 100644
+index a5bfa9ac..1de418d 100644
 --- a/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
 +++ b/arch/arm/boot/dts/omap3-overo-storm-arbor70c.dts
 @@ -29,3 +29,7 @@
@@ -54,5 +54,5 @@ index a5bfa9ac78d2..1de418dffe2d 100644
 +	wake-gpios = <0>; // invalidate previous assignment
 +};
 -- 
-2.1.4
+2.7.4
 

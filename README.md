@@ -21,4 +21,4 @@ URI: git://git.yoctoproject.org/poky.git
 branch: fido
 revision: 83aa565d93aacae484976562ef1ae8dbbb6b2bc0
 
-Layer maintainer: Arun Bharadwaj <arun@gumstix.com> for Gumstix, Inc.
+Layer maintainer: Arun Bharadwaj <arun@gumstix.com> Jason Liu <jason.liu@gumstix.com> Michael Lew <michael.lew@gumstix.com> for Gumstix, Inc.

@@ -1,7 +1,7 @@
 From ab0ee597c569b9d5a371d14a65736fa74913658a Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Thu, 19 May 2016 13:24:00 -0700
-Subject: [PATCH 3/3] am335x-pepper-43c: Updated device tree for v12
+Subject: [PATCH 47/57] am335x-pepper-43c: Updated device tree for v12
 
 This patch contains the following changes:
   * Captouch has moved to i2c2

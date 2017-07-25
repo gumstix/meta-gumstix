@@ -1,0 +1,72 @@
+From 7eecfff7ed052c825d74f0c8f4247a61815c258f Mon Sep 17 00:00:00 2001
+From: Michael Lew <michael.lew@gumstix.com>
+Date: Wed, 19 Apr 2017 11:58:22 -0700
+Subject: [PATCH 56/57] rtc-ds1307: Initialize trickle charger register
+
+Added line in rtc-ds1307 for DS1340 variant in order to run
+trickle charge initialization. Added one line in Pepper
+device trees to set resistor value.
+
+Signed-off-by: Michael Lew <michael.lew@gumstix.com>
+---
+ arch/arm/boot/dts/am335x-pepper-43c.dts | 2 +-
+ arch/arm/boot/dts/am335x-pepper-43r.dts | 2 +-
+ arch/arm/boot/dts/am335x-pepper-dvi.dts | 1 +
+ drivers/rtc/rtc-ds1307.c                | 1 +
+ 4 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/am335x-pepper-43c.dts b/arch/arm/boot/dts/am335x-pepper-43c.dts
+index cb398b4..328ee16 100644
+--- a/arch/arm/boot/dts/am335x-pepper-43c.dts
++++ b/arch/arm/boot/dts/am335x-pepper-43c.dts
+@@ -104,8 +104,8 @@
+ 	ds_rtc: ds1340@68 {
+ 		compatible = "dallas,ds1340";
+ 		reg = <0x68>;
++		trickle-resistor-ohms = <2000>;
+ 	};
+-
+ };
+ 
+ &i2c1 {
+diff --git a/arch/arm/boot/dts/am335x-pepper-43r.dts b/arch/arm/boot/dts/am335x-pepper-43r.dts
+index 2f26a33..5baaebd 100644
+--- a/arch/arm/boot/dts/am335x-pepper-43r.dts
++++ b/arch/arm/boot/dts/am335x-pepper-43r.dts
+@@ -104,8 +104,8 @@
+ 	ds_rtc: ds1340@68 {
+ 		compatible = "dallas,ds1340";
+ 		reg = <0x68>;
++		trickle-resistor-ohms = <2000>;
+ 	};
+-
+ };
+ 
+ &i2c1 {
+diff --git a/arch/arm/boot/dts/am335x-pepper-dvi.dts b/arch/arm/boot/dts/am335x-pepper-dvi.dts
+index aeb33b0..cf3cd63 100644
+--- a/arch/arm/boot/dts/am335x-pepper-dvi.dts
++++ b/arch/arm/boot/dts/am335x-pepper-dvi.dts
+@@ -84,6 +84,7 @@
+ 	ds_rtc: ds1340@68 {
+ 		compatible = "dallas,ds1340";
+ 		reg = <0x68>;
++		trickle-resistor-ohms = <2000>;
+ 	};
+ };
+ 
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index bb43cf7..6782c00 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -152,6 +152,7 @@ static struct chip_desc chips[last_ds_type] = {
+ 	},
+ 	[ds_1340] = {
+ 		.trickle_charger_reg = 0x08,
++		.do_trickle_setup = &do_trickle_setup_ds1339,
+ 	},
+ 	[ds_1388] = {
+ 		.trickle_charger_reg = 0x0a,
+-- 
+2.7.4
+

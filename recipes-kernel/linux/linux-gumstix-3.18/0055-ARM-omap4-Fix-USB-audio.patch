@@ -1,0 +1,35 @@
+From f9e75651a861bf6404bf320fe2f3107a725041e7 Mon Sep 17 00:00:00 2001
+From: Arun Bharadwaj <arun@gumstix.com>
+Date: Fri, 30 Sep 2016 14:38:30 -0700
+Subject: [PATCH 55/57] ARM: omap4: Fix USB audio
+
+Taken from Scott Ellis as a fix for the
+incomplete commit 7136d457f36
+
+Signed-off-by: Arun Bharadwaj <arun@gumstix.com>
+---
+ arch/arm/boot/dts/omap4.dtsi | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap4.dtsi b/arch/arm/boot/dts/omap4.dtsi
+index 878c979..bfb62bb 100644
+--- a/arch/arm/boot/dts/omap4.dtsi
++++ b/arch/arm/boot/dts/omap4.dtsi
+@@ -787,14 +787,12 @@
+ 			usbhsohci: ohci@4a064800 {
+ 				compatible = "ti,ohci-omap3";
+ 				reg = <0x4a064800 0x400>;
+-				interrupt-parent = <&gic>;
+ 				interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+ 			};
+ 
+ 			usbhsehci: ehci@4a064c00 {
+ 				compatible = "ti,ehci-omap";
+ 				reg = <0x4a064c00 0x400>;
+-				interrupt-parent = <&gic>;
+ 				interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+ 			};
+ 		};
+-- 
+2.7.4
+

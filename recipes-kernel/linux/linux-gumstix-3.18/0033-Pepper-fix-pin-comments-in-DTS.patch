@@ -1,7 +1,7 @@
 From 9e3581462ddd89ea3c88b18ad87cbb2f104408b9 Mon Sep 17 00:00:00 2001
 From: Ash Charles <ashcharles@gmail.com>
 Date: Tue, 4 Aug 2015 10:01:37 -0700
-Subject: [PATCH 33/38] Pepper: fix pin comments in DTS
+Subject: [PATCH 33/57] Pepper: fix pin comments in DTS
 
 Correct a typo in the pin-muxing comments.  Thanks to Scott Ellis
 for catching the original error on another DTS [1].
@@ -14,7 +14,7 @@ Signed-off-by: Ash Charles <ashcharles@gmail.com>
  1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
-index 37b95f6f3f59..e6a35f676b1b 100644
+index 37b95f6..e6a35f6 100644
 --- a/arch/arm/boot/dts/am335x-pepper.dts
 +++ b/arch/arm/boot/dts/am335x-pepper.dts
 @@ -244,14 +244,14 @@
@@ -41,5 +41,5 @@ index 37b95f6f3f59..e6a35f676b1b 100644
  			0xe4 (PIN_OUTPUT | MUX_MODE0)	/* lcd_hsync.lcd_hsync */
  			0xe8 (PIN_OUTPUT | MUX_MODE0)	/* lcd_pclk.lcd_pclk */
 -- 
-2.1.4
+2.7.4
 

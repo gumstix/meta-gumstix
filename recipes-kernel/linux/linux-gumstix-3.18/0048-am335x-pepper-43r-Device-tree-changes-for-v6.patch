@@ -1,7 +1,7 @@
 From b989fe1c3e54184b4d12f490a6d56c4939f67928 Mon Sep 17 00:00:00 2001
 From: Arun Bharadwaj <arun@gumstix.com>
 Date: Mon, 23 May 2016 10:05:28 -0700
-Subject: [PATCH] am335x-pepper-43r: Device tree changes for v6
+Subject: [PATCH 48/57] am335x-pepper-43r: Device tree changes for v6
 
 This contains the following changes:
   * Audio codec has moved to i2c1
