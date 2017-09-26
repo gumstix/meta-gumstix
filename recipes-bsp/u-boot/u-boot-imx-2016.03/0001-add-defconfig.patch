@@ -1,0 +1,26 @@
+From: Jason Liu <jason.liu@gumstix.com>
+Date: Mon, 2 Otc 2017 15:15:02 -0800
+Subject: [PATCH] add defconfig
+
+Add a u-boot default configure file for gumstix NXP IMX6 SCM board.
+
+Signed-off-by: Jason Liu <jason.liu@gumstix.com>
+---
+ arch/arm/Kconfig                  |   5 +
+ 1 files changed, 5 insertions(+)
+ create mode 100644 configs/mx6dqscm_1gb_gumstix_defconfig
+
+diff --git a/configs/mx6dqscm_1gb_gumstix_defconfig b/configs/mx6dqscm_1gb_gumstix_defconfig
+new file mode 100644
+index 0000000..a363339
+--- /dev/null
++++ b/configs/mx6dqscm_1gb_gumstix_defconfig
+@@ -0,0 +1,5 @@
++CONFIG_ARM=y
++CONFIG_ARCH_MX6=y
++CONFIG_TARGET_MX6DQSCM=y
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscm/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,QWKS_REV3,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-gumstix.dtb\""
++CONFIG_CMD_GPIO=y
+---
+2.7.4
+

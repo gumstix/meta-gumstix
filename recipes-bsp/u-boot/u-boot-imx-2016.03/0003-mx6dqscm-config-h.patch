@@ -1,0 +1,31 @@
+From: Jason Liu <jason.liu@gumstix.com>
+Date: Mon, 2 Otc 2017 15:15:02 -0800
+Subject: [PATCH] add mx6dqscm config h
+
+Add a configure header for gumstix NXP imx6 SCM board.
+
+Signed-off-by: Jason Liu <jason.liu@gumstix.com>
+---
+ include/configs/mx6dqscm.h              |   4 +-
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/configs/mx6dqscm.h b/include/configs/mx6dqscm.h
+index a0374ab..30ea3c1 100644
+--- a/include/configs/mx6dqscm.h
++++ b/include/configs/mx6dqscm.h
+@@ -44,10 +44,10 @@
+ #define IMX_FEC_BASE                    ENET_BASE_ADDR
+ #define CONFIG_FEC_XCV_TYPE             RGMII
+ #define CONFIG_ETHPRIME                 "FEC"
+-#define CONFIG_FEC_MXC_PHYADDR          3
++#define CONFIG_FEC_MXC_PHYADDR          1
+ 
+ #define CONFIG_PHYLIB
+-#define CONFIG_PHY_MICREL
++#define CONFIG_PHY_ATHEROS
+ 
+ /* Command definition */
+ #define CONFIG_CMD_BMODE
+---
+2.7.4
+
