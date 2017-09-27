@@ -16,6 +16,7 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-palo43.dtb omap3-overo-palo43.dtb \
     omap3-overo-storm-palo35.dtb omap3-overo-palo35.dtb \
     omap3-overo-storm-summit.dtb omap3-overo-summit.dtb \
+    omap3-overo-storm-swd-jtag.dtb \
 "
 KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb \
                              omap4-duovero-garret50c.dtb \
@@ -49,6 +50,7 @@ SRC_URI += " \
     file://0012-iio-fix-whoami-for-accel-mag-gyro.patch \
     file://0013-input-add-driver-for-accel-mag-gyro-sensors.patch \
     file://0014-ov7692-add-driver-support.patch \
+    file://0015-Add-swd-jtag-device-tree-for-overo-storm.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

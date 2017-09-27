@@ -1,0 +1,99 @@
+From 4e08fc4cac89e5612640012aeb44b92a6a4fa564 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Tue, 26 Sep 2017 16:37:49 -0400
+Subject: [PATCH] Add swd-jtag device tree for overo storm.
+
+---
+ arch/arm/boot/dts/Makefile                       |  1 +
+ arch/arm/boot/dts/omap3-overo-storm-swd-jtag.dts | 67 ++++++++++++++++++++++++
+ 2 files changed, 68 insertions(+)
+ create mode 100644 arch/arm/boot/dts/omap3-overo-storm-swd-jtag.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index a43f084..ad2efda 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -517,6 +517,7 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
+ 	omap3-overo-storm-palo35.dtb \
+ 	omap3-overo-storm-palo43.dtb \
+ 	omap3-overo-storm-summit.dtb \
++	omap3-overo-storm-swd-jtag.dtb \
+ 	omap3-overo-storm-tobi.dtb \
+ 	omap3-overo-storm-tobiduo.dtb \
+ 	omap3-overo-summit.dtb \
+diff --git a/arch/arm/boot/dts/omap3-overo-storm-swd-jtag.dts b/arch/arm/boot/dts/omap3-overo-storm-swd-jtag.dts
+new file mode 100644
+index 0000000..a082973
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-storm-swd-jtag.dts
+@@ -0,0 +1,67 @@
++/*
++ * SWD/JTAG programmer expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo-storm.dtsi"
++#include "omap3-overo-common-peripherals.dtsi"
++
++#include <dt-bindings/input/input.h>
++
++/ {
++	leds {
++		compatible = "gpio-leds";
++		red {
++			label = "overo:red:gpio22";
++			gpios = <&gpio1 22 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "heartbeat";
++		};
++	};
++
++	gpio_keys {
++		compatible = "gpio-keys";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		gpio23@23 {
++			label = "GPIO23";
++			linux,code = <BTN_2>;
++			gpios = <&gpio1 23 GPIO_ACTIVE_LOW>;	/* gpio_23 */
++			gpio-key,wakeup;
++		};
++	};
++};
++
++&omap3_pmx_core {
++	pinctrl-0 = <
++		&hsusb2_pins
++		&swd_prog_pins
++	>;
++
++	swd_prog_pins: pinmux_swd_prog_pins {
++		pinctrl-single,pins = <
++			OMAP3_CORE1_IOPAD(0x217c, PIN_INPUT | MUX_MODE4)	/* uart1_tx.gpio_148 */
++			OMAP3_CORE1_IOPAD(0x2182, PIN_INPUT | MUX_MODE4)	/* uart1_rx.gpio_151 */
++			OMAP3_CORE1_IOPAD(0x21c6, PIN_OUTPUT | MUX_MODE4)	/* hdq_sio.gpio_170 */
++		>;
++	};
++};
++
++&omap3_pmx_core2 {
++	pinctrl-0 = <
++		&hsusb2_2_pins
++		&jtag_prog_pins
++	>;
++
++	jtag_prog_pins: pinmux_jtag_prog_pins {
++		pinctrl-single,pins = <
++			OMAP3630_CORE2_IOPAD(0x25d8, PIN_INPUT | MUX_MODE4)	/* etk_clk.gpio_12 */
++			OMAP3630_CORE2_IOPAD(0x25da, PIN_INPUT | MUX_MODE4)	/* etk_ctl.gpio_13 */
++		>;
++	};
++};
++
++/ {
++	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo Storm on SWD/JTAG Programmer";
++	compatible = "gumstix,omap3-overo-storm-swd", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
++};
+-- 
+2.7.4
+
