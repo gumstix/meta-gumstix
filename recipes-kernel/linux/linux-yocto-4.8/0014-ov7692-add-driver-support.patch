@@ -1,23 +1,23 @@
-From c5c9086fb39df770adab1b7b035cf1f399aabf18 Mon Sep 17 00:00:00 2001
+From 2e2c3c485108837641f1bd078281ceb2489275c0 Mon Sep 17 00:00:00 2001
 From: Jason Liu <jason.liu@gumstix.com>
 Date: Fri, 23 Jun 2017 11:19:46 -0700
-Subject: [PATCH 5/5] ov7692: add driver support
+Subject: [PATCH] ov7692: add driver support
 
 Add ov7692 camera driver support for tiny caspa camera device
 
 Signed-off-by: Jason Liu <jason.liu@gumstix.com>
 ---
- .../boot/dts/omap3-overo-common-peripherals.dtsi   |  34 +-
+ .../boot/dts/omap3-overo-common-peripherals.dtsi   |  33 +-
  drivers/media/i2c/Kconfig                          |  11 +
  drivers/media/i2c/Makefile                         |   1 +
  drivers/media/i2c/ov7692.c                         | 786 +++++++++++++++++++++
  include/media/i2c/ov7692.h                         |  33 +
- 5 files changed, 863 insertions(+), 2 deletions(-)
+ 5 files changed, 861 insertions(+), 3 deletions(-)
  create mode 100644 drivers/media/i2c/ov7692.c
  create mode 100644 include/media/i2c/ov7692.h
 
 diff --git a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
-index 37873be..f12cc8d 100644
+index 37873be..fc93610 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
 @@ -102,6 +102,7 @@
@@ -60,21 +60,20 @@ index 37873be..f12cc8d 100644
  };
  
  &isp {
-@@ -125,15 +144,26 @@
+@@ -124,16 +143,24 @@
+ 	vdd-csiphy2-supply = <&vaux2>;
  	ports {
  		port@0 {
- 			reg = <0>;
+-			reg = <0>;
 -			ccdc_ep: endpoint {
 +#ifndef CONFIG_OV7692
 +			ccdc_ep_0: endpoint@0 {
-+				reg = <0>;
  				remote-endpoint = <&mt9v032_1_1>;
  				bus-width = <12>;
  				data-shift = <0>;
  			};
 +#else
 +			ccdc_ep_1: endpoint@1 {
-+				reg = <1>;
 +				remote-endpoint = <&ov7692_1_1>;
 +				bus-width = <12>;
 +				data-shift = <0>;
