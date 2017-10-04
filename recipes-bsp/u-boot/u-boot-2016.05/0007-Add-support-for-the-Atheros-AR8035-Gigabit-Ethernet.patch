@@ -1,0 +1,24 @@
+From a3af38bbeda2e4e1929b618a00d2bc71ae09a5ce Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Wed, 4 Oct 2017 11:17:38 -0400
+Subject: [PATCH] Add support for the Atheros AR8035 Gigabit Ethernet PHY.
+
+---
+ include/configs/pepper.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/configs/pepper.h b/include/configs/pepper.h
+index ed3816c..0f6e4de 100644
+--- a/include/configs/pepper.h
++++ b/include/configs/pepper.h
+@@ -90,6 +90,7 @@
+ #define CONFIG_PHY_ADDR			0
+ #define CONFIG_PHY_MICREL
+ #define CONFIG_PHY_MICREL_KSZ9021
++#define CONFIG_PHY_ATHEROS
+ #define CONFIG_PHY_RESET_DELAY 1000
+ 
+ /* SPL */
+-- 
+2.7.4
+

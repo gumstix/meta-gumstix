@@ -14,6 +14,7 @@ SRC_URI = " \
     file://0004-pepper-Read-environment-from-EEPROM.patch \
     file://0005-overo-Select-correct-DTB-for-Arbor43Cv1.patch \
     file://0006-duovero-Read-eeprom-over-i2c.patch \
+    file://0007-Add-support-for-the-Atheros-AR8035-Gigabit-Ethernet.patch \
 "
 
 
