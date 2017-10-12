@@ -51,6 +51,10 @@ SRC_URI += " \
     file://0013-input-add-driver-for-accel-mag-gyro-sensors.patch \
     file://0014-ov7692-add-driver-support.patch \
     file://0015-Add-swd-jtag-device-tree-for-overo-storm.patch \
+    file://0016-tfp410-RGB888-not-RGB565-color-mapping-for-botball.patch \
+    file://0017-Garret50C-Add-correct-edid-settings-for-800x480-disp.patch \
+    file://0018-drm-tilcdc-Defer-TFP410-probing-for-i2c.patch \
+    file://0019-parlor-fix-HDMI-color-reverse-problem.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
