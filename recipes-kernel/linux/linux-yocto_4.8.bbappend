@@ -17,6 +17,7 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-palo35.dtb omap3-overo-palo35.dtb \
     omap3-overo-storm-summit.dtb omap3-overo-summit.dtb \
     omap3-overo-storm-swd-jtag.dtb \
+    omap3-overo-storm-thumbo.dtb omap3-overo-thumbo.dtb \
 "
 KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb \
                              omap4-duovero-garret50c.dtb \
@@ -55,6 +56,7 @@ SRC_URI += " \
     file://0017-Garret50C-Add-correct-edid-settings-for-800x480-disp.patch \
     file://0018-drm-tilcdc-Defer-TFP410-probing-for-i2c.patch \
     file://0019-parlor-fix-HDMI-color-reverse-problem.patch \
+    file://0020-Add-device-tree-for-thumbo.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

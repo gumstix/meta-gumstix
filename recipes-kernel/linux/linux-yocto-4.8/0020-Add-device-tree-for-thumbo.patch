@@ -1,0 +1,105 @@
+From 79e1068ad6b4ab5d602b307d1f8f851965635eb9 Mon Sep 17 00:00:00 2001
+From: Jason Liu <jason.liu@gumstix.com>
+Date: Mon, 23 Oct 2017 14:26:52 -0700
+Subject: [PATCH] Add device tree for thumbo
+
+Signed-off-by: Jason Liu <jason.liu@gumstix.com>
+---
+ arch/arm/boot/dts/Makefile                     |  2 ++
+ arch/arm/boot/dts/omap3-overo-storm-thumbo.dts | 29 ++++++++++++++++++++++++++
+ arch/arm/boot/dts/omap3-overo-thumbo.dts       | 29 ++++++++++++++++++++++++++
+ 3 files changed, 60 insertions(+)
+ create mode 100644 arch/arm/boot/dts/omap3-overo-storm-thumbo.dts
+ create mode 100644 arch/arm/boot/dts/omap3-overo-thumbo.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index a142382..5402c89 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -518,9 +518,11 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
+ 	omap3-overo-storm-palo43.dtb \
+ 	omap3-overo-storm-summit.dtb \
+ 	omap3-overo-storm-swd-jtag.dtb \
++	omap3-overo-storm-thumbo.dtb \
+ 	omap3-overo-storm-tobi.dtb \
+ 	omap3-overo-storm-tobiduo.dtb \
+ 	omap3-overo-summit.dtb \
++	omap3-overo-thumbo.dtb \
+ 	omap3-overo-tobi.dtb \
+ 	omap3-overo-tobiduo.dtb \
+ 	omap3-pandora-600mhz.dtb \
+diff --git a/arch/arm/boot/dts/omap3-overo-storm-thumbo.dts b/arch/arm/boot/dts/omap3-overo-storm-thumbo.dts
+new file mode 100644
+index 0000000..0aaa4d0
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-storm-thumbo.dts
+@@ -0,0 +1,29 @@
++/*
++ * Thumbo expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo-storm.dtsi"
++#include "omap3-overo-common-peripherals.dtsi"
++
++/ {
++	leds {
++		compatible = "gpio-leds";
++		red {
++			label = "overo:red:gpio21";
++			gpios = <&gpio1 21 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "heartbeat";
++		};
++        blue {
++        	label = "overo:blue:gpio22";
++			gpios = <&gpio1 22 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "mmc0";
++        };
++	};
++};
++
++/ {
++	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo Storm on Thumbo";
++	compatible = "gumstix,omap3-overo-thumbo", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
++};
+\ No newline at end of file
+diff --git a/arch/arm/boot/dts/omap3-overo-thumbo.dts b/arch/arm/boot/dts/omap3-overo-thumbo.dts
+new file mode 100644
+index 0000000..938a379
+--- /dev/null
++++ b/arch/arm/boot/dts/omap3-overo-thumbo.dts
+@@ -0,0 +1,29 @@
++/*
++ * Thumbo expansion board is manufactured by Gumstix Inc.
++ */
++
++/dts-v1/;
++
++#include "omap3-overo.dtsi"
++#include "omap3-overo-common-peripherals.dtsi"
++
++/ {
++	leds {
++		compatible = "gpio-leds";
++		red {
++			label = "overo:red:gpio21";
++			gpios = <&gpio1 21 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "heartbeat";
++		};
++        blue {
++        	label = "overo:blue:gpio22";
++			gpios = <&gpio1 22 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "mmc0";
++        };
++	};
++};
++
++/ {
++	model = "OMAP36xx/AM37xx/DM37xx Gumstix Overo on Thumbo";
++	compatible = "gumstix,omap3-overo-thumbo", "gumstix,omap3-overo", "ti,omap36xx", "ti,omap3";
++};
+\ No newline at end of file
+-- 
+2.7.4
+
