@@ -18,6 +18,7 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-palo43.dtb omap3-overo-palo43.dtb \
     omap3-overo-storm-palo35.dtb omap3-overo-palo35.dtb \
     omap3-overo-storm-summit.dtb omap3-overo-summit.dtb \
+    omap3-overo-storm-thumbo.dtb omap3-overo-thumbo.dtb \
 "
 KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb \
                              omap4-duovero-garret50c.dtb \
@@ -106,6 +107,7 @@ SRC_URI = " \
     file://0056-rtc-ds1307-Initialize-trickle-charger-register.patch \
     file://0057-overo-add-support-for-tiny-caspa-camera.patch \
     file://0058-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch \
+    file://0059-Add-device-tree-for-thumbo.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
