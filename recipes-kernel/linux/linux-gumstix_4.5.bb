@@ -18,6 +18,7 @@ KERNEL_DEVICETREE_overo = " \
     omap3-overo-storm-palo43.dtb omap3-overo-palo43.dtb \
     omap3-overo-storm-palo35.dtb omap3-overo-palo35.dtb \
     omap3-overo-storm-summit.dtb omap3-overo-summit.dtb \
+    omap3-overo-storm-thumbo.dtb omap3-overo-thumbo.dtb \
 "
 KERNEL_DEVICETREE_duovero = "omap4-duovero-parlor.dtb \
                              omap4-duovero-garret50c.dtb \
@@ -39,8 +40,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/linux-gumstix-4.5:"
 
 S = "${WORKDIR}/git"
 
-# v4.4.y = b562e44f507e863c6792946e4e1b1449fbbac85d
-SRCREV = "b53c4395fc43952cc0280d26ecbcc6a49015efa1"
+# v4.4.y = d0cfda6c925bfe66ff38fd07b641839f31fc1c9c
+SRCREV = "d0cfda6c925bfe66ff38fd07b641839f31fc1c9c"
 SRC_URI = " \
     git://github.com/gumstix/linux.git;protocol=git;branch=yocto-v4.5.y \
     file://defconfig \
