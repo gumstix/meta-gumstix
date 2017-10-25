@@ -76,7 +76,7 @@ index 9671c5a..f6979ec 100644
 +}
 +#endif
 +
- void set_muxconf_regs(void)
+ void set_muxconf_regs_essential(void)
  {
  	do_set_mux((*ctrl)->control_padconf_core_base,
 diff --git a/include/configs/duovero.h b/include/configs/duovero.h

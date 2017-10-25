@@ -1,11 +1,5 @@
-require u-boot.inc
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-PV = "2016.05"
-
-COMPATIBLE_MACHINE = "duovero|overo|pepper|poblano"
-
-# v2016.05 = aeaec0e682f45b9e0c62c522fafea353931f73ed
-SRCREV = "aeaec0e682f45b9e0c62c522fafea353931f73ed"
 SRC_URI = " \
     git://git.denx.de/u-boot.git;protocol=git;branch=master \
     file://0001-am437x-poblano-Add-a-new-board.patch \
@@ -15,6 +9,8 @@ SRC_URI = " \
     file://0005-overo-Select-correct-DTB-for-Arbor43Cv1.patch \
     file://0006-duovero-Read-eeprom-over-i2c.patch \
     file://0007-Add-support-for-the-Atheros-AR8035-Gigabit-Ethernet.patch \
+    file://0008-Revert-ti-armv7-enable-EXT-support-in-SPL-using-ti_a.patch \
+    file://0009-Update-uboot-config-for-DuoVero.patch \
 "
 
 
