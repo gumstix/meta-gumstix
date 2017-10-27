@@ -108,6 +108,7 @@ SRC_URI = " \
     file://0057-overo-add-support-for-tiny-caspa-camera.patch \
     file://0058-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch \
     file://0059-Add-device-tree-for-thumbo.patch \
+    file://0060-parlor-fix-color-reversed-problem.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

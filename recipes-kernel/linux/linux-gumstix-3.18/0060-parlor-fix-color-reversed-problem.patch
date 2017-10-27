@@ -1,0 +1,25 @@
+From 4447cdbb4c9b5a4bdb911b36f51c718090681b2e Mon Sep 17 00:00:00 2001
+From: Jason Liu <jason.liu@gumstix.com>
+Date: Fri, 27 Oct 2017 14:17:49 -0700
+Subject: [PATCH] parlor: fix color reversed problem
+
+Signed-off-by: Jason Liu <jason.liu@gumstix.com>
+---
+ arch/arm/boot/dts/omap4-duovero-parlor.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/omap4-duovero-parlor.dts b/arch/arm/boot/dts/omap4-duovero-parlor.dts
+index 1a78f01..ca32109 100644
+--- a/arch/arm/boot/dts/omap4-duovero-parlor.dts
++++ b/arch/arm/boot/dts/omap4-duovero-parlor.dts
+@@ -184,6 +184,7 @@
+ 
+ 	port {
+ 		hdmi_out: endpoint {
++			lanes = <1 0 3 2 5 4 7 6>;
+ 			remote-endpoint = <&hdmi_connector_in>;
+ 		};
+ 	};
+-- 
+2.7.4
+
