@@ -6,8 +6,8 @@ Add a device tree for gumstix Colibri IMX6 board.
 
 Signed-off-by: Jason Liu <jason.liu@gumstix.com>
 ---
- arch/arm/boot/dts/imx6dl-colibri-gumstix.dts      |   384 ++++++++++++++++++++++++++++
- 1 files changed, 384 insertions(+)
+ arch/arm/boot/dts/imx6dl-colibri-gumstix.dts      |   389 ++++++++++++++++++++++++++++
+ 1 files changed, 389 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
 
 diff --git a/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts b/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
@@ -15,7 +15,7 @@ new file mode 100644
 index 0000000..b41f83b
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
-@@ -0,0 +1,385 @@
+@@ -0,0 +1,389 @@
 +/*
 + * Copyright 2014-2015 Toradex AG
 + * Copyright 2012 Freescale Semiconductor, Inc.
@@ -286,6 +286,10 @@ index 0000000..b41f83b
 +};
 +
 +&mxcfb1 {
++	disp_dev = "hdmi";
++	interface_pix_fmt = "RGB24";
++	mode_str ="1920x1080M@60";
++	default_bpp = <32>;
 +	status = "okay";
 +};
 +
