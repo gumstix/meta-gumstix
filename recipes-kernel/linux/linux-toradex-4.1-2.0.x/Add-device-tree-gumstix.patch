@@ -6,16 +6,16 @@ Add a device tree for gumstix Colibri IMX6 board.
 
 Signed-off-by: Jason Liu <jason.liu@gumstix.com>
 ---
- arch/arm/boot/dts/imx6dl-colibri-gumstix.dts      |   389 ++++++++++++++++++++++++++++
+ arch/arm/boot/dts/imx6dl-colibri-gumstix.dts      |   368 +++++++++++++++++++++++++++
  1 files changed, 389 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
 
 diff --git a/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts b/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
 new file mode 100644
-index 0000000..b41f83b
+index 0000000..71234e6
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
-@@ -0,0 +1,389 @@
+@@ -0,0 +1,368 @@
 +/*
 + * Copyright 2014-2015 Toradex AG
 + * Copyright 2012 Freescale Semiconductor, Inc.
@@ -38,7 +38,7 @@ index 0000000..b41f83b
 +
 +/* Add the following define if you connect a Fusion display with a capacitive
 +   touch controller */
-+/* #define PCAP */
++#define PCAP
 +
 +/ {
 +	model = "Toradex Colibri iMX6DL/S on Gumstix Colibri Development Board";
@@ -90,33 +90,13 @@ index 0000000..b41f83b
 +			status = "okay";
 +			enable-active-high;
 +		};
-+
-+/*		wlan_en_reg: wlan_en {
-+			compatible = "regulator-fixed";
-+			regulator-name = "wlan-en-regulator";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			gpio = <&gpio3 24 0>;
-+			startup-delay-us = <70000>;
-+			enable-active-high;
-+		};
-+
-+		bt_en_reg: bt_en {
-+			compatible = "regulator-fixed";
-+			regulator-name = "bt-en-regulator";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			gpio = <&gpio3 23 0>;
-+			startup-delay-us = <70000>;
-+			enable-active-high;
-+		};
-+*/
-+		mmc2_pwrseq: mmc2_pwrseq {
-+			compatible = "mmc-pwrseq-simple";
-+			reset-gpios = <&gpio3 24 GPIO_ACTIVE_LOW>,
-+					<&gpio3 23 GPIO_ACTIVE_LOW>;
-+		};	
 +	};
++
++	mmc2_pwrseq: mmc2_pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpio3 24 GPIO_ACTIVE_LOW>,
++					<&gpio3 23 GPIO_ACTIVE_LOW>;
++	};	
 +};
 +
 +&backlight {
@@ -360,7 +340,6 @@ index 0000000..b41f83b
 +	pinctrl-0 = <&pinctrl_usdhc2>;
 +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
 +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
-+//	vmmc-supply = <&wlan_en_reg>;
 +	mmc-pwrseq = <&mmc2_pwrseq>;
 +	keep-power-in-suspend;
 +	enable-sdio-wakeup;
