@@ -1,11 +1,8 @@
 FILESEXTRAPATHS_append := "${THISDIR}/linux-raspberrypi-4.4:"
 
-SRC_URI += "file://defconfig"
+SRC_URI += "file://config.cfg"
 
-# Overwritting the defconf from our own one
-# Original configme function in linux-raspberrypi.inc
-
-do_kernel_configme_prepend() {
-    install -m 0644 ${WORKDIR}/defconfig ${S}/arch/${ARCH}/configs/${KERNEL_DEFCONFIG} || die "No default configuration for ${MACHINE} / ${KERNEL_DEFCONFIG} available."
+# Append configuration fragment to the upstream config file
+do_kernel_configme_append () {
+    cat ${WORKDIR}/*.cfg >> ${WORKDIR}/defconfig
 }
-
