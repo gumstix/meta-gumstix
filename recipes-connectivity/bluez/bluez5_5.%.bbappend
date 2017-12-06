@@ -39,6 +39,10 @@ do_install_append() {
             install -m 0644 ${WORKDIR}/bluetooth-ttymxc1-wilink.service ${D}${systemd_unitdir}/system
             install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-colibri.rules ${D}${sysconfdir}/udev/rules.d ;;
 
+        "colibri-imx7")
+            install -m 0644 ${WORKDIR}/bluetooth-ttymxc1-wilink.service ${D}${systemd_unitdir}/system
+            install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-colibri.rules ${D}${sysconfdir}/udev/rules.d ;;
+
         "imx6dqscm-1gb-gumstix")
             install -m 0644 ${WORKDIR}/bluetooth-ttymxc4-wilink.service ${D}${systemd_unitdir}/system
             install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-scm.rules ${D}${sysconfdir}/udev/rules.d ;;

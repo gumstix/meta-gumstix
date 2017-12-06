@@ -6,8 +6,8 @@ Add a device tree for gumstix Colibri IMX6 board.
 
 Signed-off-by: Jason Liu <jason.liu@gumstix.com>
 ---
- arch/arm/boot/dts/imx6dl-colibri-gumstix.dts      |   368 +++++++++++++++++++++++++++
- 1 files changed, 389 insertions(+)
+ arch/arm/boot/dts/imx6dl-colibri-gumstix.dts      |   369 +++++++++++++++++++++++++++
+ 1 files changed, 369 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
 
 diff --git a/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts b/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
@@ -15,8 +15,9 @@ new file mode 100644
 index 0000000..71234e6
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
-@@ -0,0 +1,368 @@
+@@ -0,0 +1,369 @@
 +/*
++ * Copyright 2017 Gumstix, Inc.
 + * Copyright 2014-2015 Toradex AG
 + * Copyright 2012 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -38,7 +39,7 @@ index 0000000..71234e6
 +
 +/* Add the following define if you connect a Fusion display with a capacitive
 +   touch controller */
-+#define PCAP
++/* #define PCAP */
 +
 +/ {
 +	model = "Toradex Colibri iMX6DL/S on Gumstix Colibri Development Board";
