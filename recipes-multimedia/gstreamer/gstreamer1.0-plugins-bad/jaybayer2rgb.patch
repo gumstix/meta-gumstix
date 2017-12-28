@@ -1,0 +1,754 @@
+Index: gst-plugins-bad-1.10.4/gst/bayer/gstbayerorc.orc
+===================================================================
+--- gst-plugins-bad-1.10.4/gst/bayer/gstbayerorc.orc
++++ gst-plugins-bad-1.10.4/gst/bayer/gstbayerorc.orc
+Index: gst-plugins-bad-1.10.4/gst/bayer/gstbayerorc-dist.c
+===================================================================
+--- gst-plugins-bad-1.10.4/gst/bayer/gstbayerorc-dist.c
++++ gst-plugins-bad-1.10.4/gst/bayer/gstbayerorc-dist.c
+@@ -183,7 +183,7 @@ void
+ bayer_orc_horiz_upsample_unaligned (guint8 * ORC_RESTRICT d1,
+     guint8 * ORC_RESTRICT d2, const guint8 * ORC_RESTRICT s1, int n)
+ {
+-  int i;
++    int i;
+   orc_union16 *ORC_RESTRICT ptr0;
+   orc_union16 *ORC_RESTRICT ptr1;
+   const orc_union16 *ORC_RESTRICT ptr4;
+@@ -191,12 +191,22 @@ bayer_orc_horiz_upsample_unaligned (guint8 * ORC_RESTRICT d1,
+   orc_union16 var38;
+   orc_union16 var39;
+   orc_int8 var40;
++  orc_uint8 var40temp;
+   orc_int8 var41;
++  orc_uint8 var41temp;
+   orc_union16 var42;
++  orc_union16 var48;
+   orc_int8 var43;
++  orc_uint8 var43temp;
+   orc_int8 var44;
++  orc_uint8 var44temp;
+   orc_int8 var45;
+   orc_int8 var46;
++  orc_uint8 var47temp;
++  orc_uint16 var1;
++  orc_uint16 var2;
++  orc_uint16 var3;
++  orc_uint16 var4;
+ 
+   ptr0 = (orc_union16 *) d1;
+   ptr1 = (orc_union16 *) d2;
+@@ -206,22 +216,31 @@ bayer_orc_horiz_upsample_unaligned (guint8 * ORC_RESTRICT d1,
+   for (i = 0; i < n; i++) {
+     /* 0: loadw */
+     var37 = ptr4[i];
+-    /* 1: splitwb */
+-    {
+-      orc_union16 _src;
+-      _src.i = var37.i;
+-      var40 = _src.x2[1];
+-      var41 = _src.x2[0];
+-    }
+-    /* 2: loadoffw */
+     var42 = ptr4[i + 1];
+-    /* 3: splitwb */
++    var48 = ptr4[i + 2];
++    /* 1: splitwb */
+     {
+-      orc_union16 _src;
+-      _src.i = var42.i;
+-      var43 = _src.x2[1];
+-      var44 = _src.x2[0];
+-    }
++      orc_union16 _src1;
++      _src1.i = var37.i;
++      var40temp = _src1.x2[1];
++      var41temp = _src1.x2[0];
++      orc_union16 _src2;
++      _src2.i = var42.i;
++      var43temp = _src2.x2[1];
++      var44temp = _src2.x2[0];
++      orc_union16 _src3;
++      _src3.i = var48.i;
++      var47temp = _src3.x2[1];
++    }
++    var1 = ((orc_uint16)var40temp << 2) + (orc_uint16)(var41temp >> 6);
++    var2 = ((orc_uint16)(var41temp << 2) << 4) + (orc_uint16)(var43temp >> 4);
++    var3 = ((orc_uint16)(var43temp << 4) << 6) + (orc_uint16)(var41temp >> 2);
++    var4 = ((orc_uint16)(var44temp << 6) << 8) + (orc_uint16)(var47temp);
++
++    var40 = (orc_int8)(var1/1023*255);
++    var41 = (orc_int8)(var2/1023*255);
++    var43 = (orc_int8)(var3/1023*255);
++    var44 = (orc_int8)(var4/1023*255);
+     /* 4: avgub */
+     var45 = ((orc_uint8) var40 + (orc_uint8) var43 + 1) >> 1;
+     /* 5: mergebw */
+@@ -253,7 +272,6 @@ static void
+ _backup_bayer_orc_horiz_upsample_unaligned (OrcExecutor * ORC_RESTRICT ex)
+ {
+   int i;
+-  int n = ex->n;
+   orc_union16 *ORC_RESTRICT ptr0;
+   orc_union16 *ORC_RESTRICT ptr1;
+   const orc_union16 *ORC_RESTRICT ptr4;
+@@ -261,37 +279,56 @@ _backup_bayer_orc_horiz_upsample_unaligned (OrcExecutor * ORC_RESTRICT ex)
+   orc_union16 var38;
+   orc_union16 var39;
+   orc_int8 var40;
++  orc_uint8 var40temp;
+   orc_int8 var41;
++  orc_uint8 var41temp;
+   orc_union16 var42;
++  orc_union16 var48;
+   orc_int8 var43;
++  orc_uint8 var43temp;
+   orc_int8 var44;
++  orc_uint8 var44temp;
+   orc_int8 var45;
+   orc_int8 var46;
++  orc_uint8 var47temp;
++  orc_uint16 var1;
++  orc_uint16 var2;
++  orc_uint16 var3;
++  orc_uint16 var4;
+ 
+-  ptr0 = (orc_union16 *) ex->arrays[0];
+-  ptr1 = (orc_union16 *) ex->arrays[1];
+-  ptr4 = (orc_union16 *) ex->arrays[4];
++  ptr0 = (orc_union16 *) d1;
++  ptr1 = (orc_union16 *) d2;
++  ptr4 = (orc_union16 *) s1;
+ 
+ 
+   for (i = 0; i < n; i++) {
+     /* 0: loadw */
+     var37 = ptr4[i];
+-    /* 1: splitwb */
+-    {
+-      orc_union16 _src;
+-      _src.i = var37.i;
+-      var40 = _src.x2[1];
+-      var41 = _src.x2[0];
+-    }
+-    /* 2: loadoffw */
+     var42 = ptr4[i + 1];
+-    /* 3: splitwb */
++    var48 = ptr4[i + 2];
++    /* 1: splitwb */
+     {
+-      orc_union16 _src;
+-      _src.i = var42.i;
+-      var43 = _src.x2[1];
+-      var44 = _src.x2[0];
+-    }
++      orc_union16 _src1;
++      _src1.i = var37.i;
++      var40temp = _src1.x2[1];
++      var41temp = _src1.x2[0];
++      orc_union16 _src2;
++      _src2.i = var42.i;
++      var43temp = _src2.x2[1];
++      var44temp = _src2.x2[0];
++      orc_union16 _src3;
++      _src3.i = var48.i;
++      var47temp = _src3.x2[1];
++    }
++    var1 = ((orc_uint16)var40temp << 2) + (orc_uint16)(var41temp >> 6);
++    var2 = ((orc_uint16)(var41temp << 2) << 4) + (orc_uint16)(var43temp >> 4);
++    var3 = ((orc_uint16)(var43temp << 4) << 6) + (orc_uint16)(var41temp >> 2);
++    var4 = ((orc_uint16)(var44temp << 6) << 8) + (orc_uint16)(var47temp);
++
++    var40 = (orc_int8)(var1/1023*255);
++    var41 = (orc_int8)(var2/1023*255);
++    var43 = (orc_int8)(var3/1023*255);
++    var44 = (orc_int8)(var4/1023*255);
+     /* 4: avgub */
+     var45 = ((orc_uint8) var40 + (orc_uint8) var43 + 1) >> 1;
+     /* 5: mergebw */
+@@ -322,77 +359,88 @@ void
+ bayer_orc_horiz_upsample_unaligned (guint8 * ORC_RESTRICT d1,
+     guint8 * ORC_RESTRICT d2, const guint8 * ORC_RESTRICT s1, int n)
+ {
+-  OrcExecutor _ex, *ex = &_ex;
+-  static volatile int p_inited = 0;
+-  static OrcCode *c = 0;
+-  void (*func) (OrcExecutor *);
+-
+-  if (!p_inited) {
+-    orc_once_mutex_lock ();
+-    if (!p_inited) {
+-      OrcProgram *p;
++   int i;
++  orc_union16 *ORC_RESTRICT ptr0;
++  orc_union16 *ORC_RESTRICT ptr1;
++  const orc_union16 *ORC_RESTRICT ptr4;
++  orc_union16 var37;
++  orc_union16 var38;
++  orc_union16 var39;
++  orc_int8 var40;
++  orc_uint8 var40temp;
++  orc_int8 var41;
++  orc_uint8 var41temp;
++  orc_union16 var42;
++  orc_union16 var48;
++  orc_int8 var43;
++  orc_uint8 var43temp;
++  orc_int8 var44;
++  orc_uint8 var44temp;
++  orc_int8 var45;
++  orc_int8 var46;
++  orc_uint8 var47temp;
++  orc_uint16 var1;
++  orc_uint16 var2;
++  orc_uint16 var3;
++  orc_uint16 var4;
+ 
+-#if 1
+-      static const orc_uint8 bc[] = {
+-        1, 9, 34, 98, 97, 121, 101, 114, 95, 111, 114, 99, 95, 104, 111, 114,
+-        105, 122, 95, 117, 112, 115, 97, 109, 112, 108, 101, 95, 117, 110, 97,
+-            108,
+-        105, 103, 110, 101, 100, 11, 2, 2, 11, 2, 2, 12, 2, 2, 14, 4,
+-        1, 0, 0, 0, 20, 2, 20, 1, 20, 1, 20, 1, 20, 1, 199, 34,
+-        33, 4, 83, 32, 4, 16, 199, 36, 35, 32, 39, 36, 34, 36, 196, 0,
+-        34, 36, 39, 33, 33, 35, 196, 1, 33, 35, 2, 0,
+-      };
+-      p = orc_program_new_from_static_bytecode (bc);
+-      orc_program_set_backup_function (p,
+-          _backup_bayer_orc_horiz_upsample_unaligned);
+-#else
+-      p = orc_program_new ();
+-      orc_program_set_name (p, "bayer_orc_horiz_upsample_unaligned");
+-      orc_program_set_backup_function (p,
+-          _backup_bayer_orc_horiz_upsample_unaligned);
+-      orc_program_add_destination (p, 2, "d1");
+-      orc_program_add_destination (p, 2, "d2");
+-      orc_program_add_source (p, 2, "s1");
+-      orc_program_add_constant (p, 4, 0x00000001, "c1");
+-      orc_program_add_temporary (p, 2, "t1");
+-      orc_program_add_temporary (p, 1, "t2");
+-      orc_program_add_temporary (p, 1, "t3");
+-      orc_program_add_temporary (p, 1, "t4");
+-      orc_program_add_temporary (p, 1, "t5");
++  ptr0 = (orc_union16 *) d1;
++  ptr1 = (orc_union16 *) d2;
++  ptr4 = (orc_union16 *) s1;
+ 
+-      orc_program_append_2 (p, "splitwb", 0, ORC_VAR_T3, ORC_VAR_T2, ORC_VAR_S1,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "loadoffw", 0, ORC_VAR_T1, ORC_VAR_S1,
+-          ORC_VAR_C1, ORC_VAR_D1);
+-      orc_program_append_2 (p, "splitwb", 0, ORC_VAR_T5, ORC_VAR_T4, ORC_VAR_T1,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "avgub", 0, ORC_VAR_T5, ORC_VAR_T3, ORC_VAR_T5,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "mergebw", 0, ORC_VAR_D1, ORC_VAR_T3, ORC_VAR_T5,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "avgub", 0, ORC_VAR_T2, ORC_VAR_T2, ORC_VAR_T4,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "mergebw", 0, ORC_VAR_D2, ORC_VAR_T2, ORC_VAR_T4,
+-          ORC_VAR_D1);
+-#endif
+ 
+-      orc_program_compile (p);
+-      c = orc_program_take_code (p);
+-      orc_program_free (p);
++  for (i = 0; i < n; i++) {
++    /* 0: loadw */
++    var37 = ptr4[i];
++    var42 = ptr4[i + 1];
++    var48 = ptr4[i + 2];
++    /* 1: splitwb */
++    {
++      orc_union16 _src1;
++      _src1.i = var37.i;
++      var40temp = _src1.x2[1];
++      var41temp = _src1.x2[0];
++      orc_union16 _src2;
++      _src2.i = var42.i;
++      var43temp = _src2.x2[1];
++      var44temp = _src2.x2[0];
++      orc_union16 _src3;
++      _src3.i = var48.i;
++      var47temp = _src3.x2[1];
++    }
++    var1 = ((orc_uint16)var40temp << 2) + (orc_uint16)(var41temp >> 6);
++    var2 = ((orc_uint16)(var41temp << 2) << 4) + (orc_uint16)(var43temp >> 4);
++    var3 = ((orc_uint16)(var43temp << 4) << 6) + (orc_uint16)(var41temp >> 2);
++    var4 = ((orc_uint16)(var44temp << 6) << 8) + (orc_uint16)(var47temp);
++
++    var40 = (orc_int8)(var1/1023*255);
++    var41 = (orc_int8)(var2/1023*255);
++    var43 = (orc_int8)(var3/1023*255);
++    var44 = (orc_int8)(var4/1023*255);
++    /* 4: avgub */
++    var45 = ((orc_uint8) var40 + (orc_uint8) var43 + 1) >> 1;
++    /* 5: mergebw */
++    {
++      orc_union16 _dest;
++      _dest.x2[0] = var40;
++      _dest.x2[1] = var45;
++      var38.i = _dest.i;
+     }
+-    p_inited = TRUE;
+-    orc_once_mutex_unlock ();
++    /* 6: storew */
++    ptr0[i] = var38;
++    /* 7: avgub */
++    var46 = ((orc_uint8) var41 + (orc_uint8) var44 + 1) >> 1;
++    /* 8: mergebw */
++    {
++      orc_union16 _dest;
++      _dest.x2[0] = var46;
++      _dest.x2[1] = var44;
++      var39.i = _dest.i;
++    }
++    /* 9: storew */
++    ptr1[i] = var39;
+   }
+-  ex->arrays[ORC_VAR_A2] = c;
+-  ex->program = 0;
+-
+-  ex->n = n;
+-  ex->arrays[ORC_VAR_D1] = d1;
+-  ex->arrays[ORC_VAR_D2] = d2;
+-  ex->arrays[ORC_VAR_S1] = (void *) s1;
+ 
+-  func = c->exec;
+-  func (ex);
+ }
+ #endif
+ 
+@@ -410,14 +458,23 @@ bayer_orc_horiz_upsample (guint8 * ORC_RESTRICT d1, guint8 * ORC_RESTRICT d2,
+   orc_union16 var37;
+   orc_union16 var38;
+   orc_union16 var39;
+-  orc_union16 var40;
++  orc_int8 var40;
++  orc_uint8 var40temp;
+   orc_int8 var41;
+-  orc_int8 var42;
++  orc_uint8 var41temp;
++  orc_union16 var42;
++  orc_union16 var48;
+   orc_int8 var43;
+-  orc_union16 var44;
++  orc_uint8 var43temp;
++  orc_int8 var44;
++  orc_uint8 var44temp;
+   orc_int8 var45;
+   orc_int8 var46;
+-  orc_int8 var47;
++  orc_uint8 var47temp;
++  orc_uint16 var1;
++  orc_uint16 var2;
++  orc_uint16 var3;
++  orc_uint16 var4;
+ 
+   ptr0 = (orc_union16 *) d1;
+   ptr1 = (orc_union16 *) d2;
+@@ -425,52 +482,54 @@ bayer_orc_horiz_upsample (guint8 * ORC_RESTRICT d1, guint8 * ORC_RESTRICT d2,
+ 
+ 
+   for (i = 0; i < n; i++) {
+-    /* 0: loadoffw */
+-    var40 = ptr4[i + -1];
+-    /* 1: select1wb */
+-    {
+-      orc_union16 _src;
+-      _src.i = var40.i;
+-      var41 = _src.x2[1];
+-    }
+-    /* 2: loadw */
++    /* 0: loadw */
+     var37 = ptr4[i];
+-    /* 3: splitwb */
+-    {
+-      orc_union16 _src;
+-      _src.i = var37.i;
+-      var42 = _src.x2[1];
+-      var43 = _src.x2[0];
+-    }
+-    /* 4: loadoffw */
+-    var44 = ptr4[i + 1];
+-    /* 5: select0wb */
++    var42 = ptr4[i + 1];
++    var48 = ptr4[i + 2];
++    /* 1: splitwb */
+     {
+-      orc_union16 _src;
+-      _src.i = var44.i;
+-      var45 = _src.x2[0];
+-    }
+-    /* 6: avgub */
+-    var46 = ((orc_uint8) var43 + (orc_uint8) var45 + 1) >> 1;
+-    /* 7: mergebw */
++      orc_union16 _src1;
++      _src1.i = var37.i;
++      var40temp = _src1.x2[1];
++      var41temp = _src1.x2[0];
++      orc_union16 _src2;
++      _src2.i = var42.i;
++      var43temp = _src2.x2[1];
++      var44temp = _src2.x2[0];
++      orc_union16 _src3;
++      _src3.i = var48.i;
++      var47temp = _src3.x2[1];
++    }
++    var1 = ((orc_uint16)var40temp << 2) + (orc_uint16)(var41temp >> 6);
++    var2 = ((orc_uint16)(var41temp << 2) << 4) + (orc_uint16)(var43temp >> 4);
++    var3 = ((orc_uint16)(var43temp << 4) << 6) + (orc_uint16)(var41temp >> 2);
++    var4 = ((orc_uint16)(var44temp << 6) << 8) + (orc_uint16)(var47temp);
++
++    var40 = (orc_int8)(var1/1023*255);
++    var41 = (orc_int8)(var2/1023*255);
++    var43 = (orc_int8)(var3/1023*255);
++    var44 = (orc_int8)(var4/1023*255);
++    /* 4: avgub */
++    var45 = ((orc_uint8) var40 + (orc_uint8) var43 + 1) >> 1;
++    /* 5: mergebw */
+     {
+       orc_union16 _dest;
+-      _dest.x2[0] = var43;
+-      _dest.x2[1] = var46;
++      _dest.x2[0] = var40;
++      _dest.x2[1] = var45;
+       var38.i = _dest.i;
+     }
+-    /* 8: storew */
++    /* 6: storew */
+     ptr0[i] = var38;
+-    /* 9: avgub */
+-    var47 = ((orc_uint8) var41 + (orc_uint8) var42 + 1) >> 1;
+-    /* 10: mergebw */
++    /* 7: avgub */
++    var46 = ((orc_uint8) var41 + (orc_uint8) var44 + 1) >> 1;
++    /* 8: mergebw */
+     {
+       orc_union16 _dest;
+-      _dest.x2[0] = var47;
+-      _dest.x2[1] = var42;
++      _dest.x2[0] = var46;
++      _dest.x2[1] = var44;
+       var39.i = _dest.i;
+     }
+-    /* 11: storew */
++    /* 9: storew */
+     ptr1[i] = var39;
+   }
+ 
+@@ -481,74 +540,84 @@ static void
+ _backup_bayer_orc_horiz_upsample (OrcExecutor * ORC_RESTRICT ex)
+ {
+   int i;
+-  int n = ex->n;
+   orc_union16 *ORC_RESTRICT ptr0;
+   orc_union16 *ORC_RESTRICT ptr1;
+   const orc_union16 *ORC_RESTRICT ptr4;
+   orc_union16 var37;
+   orc_union16 var38;
+   orc_union16 var39;
+-  orc_union16 var40;
++  orc_int8 var40;
++  orc_uint8 var40temp;
+   orc_int8 var41;
+-  orc_int8 var42;
++  orc_uint8 var41temp;
++  orc_union16 var42;
++  orc_union16 var48;
+   orc_int8 var43;
+-  orc_union16 var44;
++  orc_uint8 var43temp;
++  orc_int8 var44;
++  orc_uint8 var44temp;
+   orc_int8 var45;
+   orc_int8 var46;
+-  orc_int8 var47;
++  orc_uint8 var47temp;
++  orc_uint16 var1;
++  orc_uint16 var2;
++  orc_uint16 var3;
++  orc_uint16 var4;
+ 
+-  ptr0 = (orc_union16 *) ex->arrays[0];
+-  ptr1 = (orc_union16 *) ex->arrays[1];
+-  ptr4 = (orc_union16 *) ex->arrays[4];
++  ptr0 = (orc_union16 *) d1;
++  ptr1 = (orc_union16 *) d2;
++  ptr4 = (orc_union16 *) s1;
+ 
+ 
+   for (i = 0; i < n; i++) {
+-    /* 0: loadoffw */
+-    var40 = ptr4[i + -1];
+-    /* 1: select1wb */
+-    {
+-      orc_union16 _src;
+-      _src.i = var40.i;
+-      var41 = _src.x2[1];
+-    }
+-    /* 2: loadw */
++    /* 0: loadw */
+     var37 = ptr4[i];
+-    /* 3: splitwb */
+-    {
+-      orc_union16 _src;
+-      _src.i = var37.i;
+-      var42 = _src.x2[1];
+-      var43 = _src.x2[0];
+-    }
+-    /* 4: loadoffw */
+-    var44 = ptr4[i + 1];
+-    /* 5: select0wb */
++    var42 = ptr4[i + 1];
++    var48 = ptr4[i + 2];
++    /* 1: splitwb */
+     {
+-      orc_union16 _src;
+-      _src.i = var44.i;
+-      var45 = _src.x2[0];
+-    }
+-    /* 6: avgub */
+-    var46 = ((orc_uint8) var43 + (orc_uint8) var45 + 1) >> 1;
+-    /* 7: mergebw */
++      orc_union16 _src1;
++      _src1.i = var37.i;
++      var40temp = _src1.x2[1];
++      var41temp = _src1.x2[0];
++      orc_union16 _src2;
++      _src2.i = var42.i;
++      var43temp = _src2.x2[1];
++      var44temp = _src2.x2[0];
++      orc_union16 _src3;
++      _src3.i = var48.i;
++      var47temp = _src3.x2[1];
++    }
++    var1 = ((orc_uint16)var40temp << 2) + (orc_uint16)(var41temp >> 6);
++    var2 = ((orc_uint16)(var41temp << 2) << 4) + (orc_uint16)(var43temp >> 4);
++    var3 = ((orc_uint16)(var43temp << 4) << 6) + (orc_uint16)(var41temp >> 2);
++    var4 = ((orc_uint16)(var44temp << 6) << 8) + (orc_uint16)(var47temp);
++
++    var40 = (orc_int8)(var1/1023*255);
++    var41 = (orc_int8)(var2/1023*255);
++    var43 = (orc_int8)(var3/1023*255);
++    var44 = (orc_int8)(var4/1023*255);
++    /* 4: avgub */
++    var45 = ((orc_uint8) var40 + (orc_uint8) var43 + 1) >> 1;
++    /* 5: mergebw */
+     {
+       orc_union16 _dest;
+-      _dest.x2[0] = var43;
+-      _dest.x2[1] = var46;
++      _dest.x2[0] = var40;
++      _dest.x2[1] = var45;
+       var38.i = _dest.i;
+     }
+-    /* 8: storew */
++    /* 6: storew */
+     ptr0[i] = var38;
+-    /* 9: avgub */
+-    var47 = ((orc_uint8) var41 + (orc_uint8) var42 + 1) >> 1;
+-    /* 10: mergebw */
++    /* 7: avgub */
++    var46 = ((orc_uint8) var41 + (orc_uint8) var44 + 1) >> 1;
++    /* 8: mergebw */
+     {
+       orc_union16 _dest;
+-      _dest.x2[0] = var47;
+-      _dest.x2[1] = var42;
++      _dest.x2[0] = var46;
++      _dest.x2[1] = var44;
+       var39.i = _dest.i;
+     }
+-    /* 11: storew */
++    /* 9: storew */
+     ptr1[i] = var39;
+   }
+ 
+@@ -558,79 +627,88 @@ void
+ bayer_orc_horiz_upsample (guint8 * ORC_RESTRICT d1, guint8 * ORC_RESTRICT d2,
+     const guint8 * ORC_RESTRICT s1, int n)
+ {
+-  OrcExecutor _ex, *ex = &_ex;
+-  static volatile int p_inited = 0;
+-  static OrcCode *c = 0;
+-  void (*func) (OrcExecutor *);
+-
+-  if (!p_inited) {
+-    orc_once_mutex_lock ();
+-    if (!p_inited) {
+-      OrcProgram *p;
++  int i;
++  orc_union16 *ORC_RESTRICT ptr0;
++  orc_union16 *ORC_RESTRICT ptr1;
++  const orc_union16 *ORC_RESTRICT ptr4;
++  orc_union16 var37;
++  orc_union16 var38;
++  orc_union16 var39;
++  orc_int8 var40;
++  orc_uint8 var40temp;
++  orc_int8 var41;
++  orc_uint8 var41temp;
++  orc_union16 var42;
++  orc_union16 var48;
++  orc_int8 var43;
++  orc_uint8 var43temp;
++  orc_int8 var44;
++  orc_uint8 var44temp;
++  orc_int8 var45;
++  orc_int8 var46;
++  orc_uint8 var47temp;
++  orc_uint16 var1;
++  orc_uint16 var2;
++  orc_uint16 var3;
++  orc_uint16 var4;
+ 
+-#if 1
+-      static const orc_uint8 bc[] = {
+-        1, 9, 24, 98, 97, 121, 101, 114, 95, 111, 114, 99, 95, 104, 111, 114,
+-        105, 122, 95, 117, 112, 115, 97, 109, 112, 108, 101, 11, 2, 2, 11, 2,
+-        2, 12, 2, 2, 14, 4, 255, 255, 255, 255, 14, 4, 1, 0, 0, 0,
+-        20, 2, 20, 1, 20, 1, 20, 1, 20, 1, 83, 32, 4, 16, 189, 33,
+-        32, 199, 35, 34, 4, 83, 32, 4, 17, 188, 36, 32, 39, 36, 34, 36,
+-        196, 0, 34, 36, 39, 33, 33, 35, 196, 1, 33, 35, 2, 0,
+-      };
+-      p = orc_program_new_from_static_bytecode (bc);
+-      orc_program_set_backup_function (p, _backup_bayer_orc_horiz_upsample);
+-#else
+-      p = orc_program_new ();
+-      orc_program_set_name (p, "bayer_orc_horiz_upsample");
+-      orc_program_set_backup_function (p, _backup_bayer_orc_horiz_upsample);
+-      orc_program_add_destination (p, 2, "d1");
+-      orc_program_add_destination (p, 2, "d2");
+-      orc_program_add_source (p, 2, "s1");
+-      orc_program_add_constant (p, 4, 0xffffffff, "c1");
+-      orc_program_add_constant (p, 4, 0x00000001, "c2");
+-      orc_program_add_temporary (p, 2, "t1");
+-      orc_program_add_temporary (p, 1, "t2");
+-      orc_program_add_temporary (p, 1, "t3");
+-      orc_program_add_temporary (p, 1, "t4");
+-      orc_program_add_temporary (p, 1, "t5");
++  ptr0 = (orc_union16 *) d1;
++  ptr1 = (orc_union16 *) d2;
++  ptr4 = (orc_union16 *) s1;
+ 
+-      orc_program_append_2 (p, "loadoffw", 0, ORC_VAR_T1, ORC_VAR_S1,
+-          ORC_VAR_C1, ORC_VAR_D1);
+-      orc_program_append_2 (p, "select1wb", 0, ORC_VAR_T2, ORC_VAR_T1,
+-          ORC_VAR_D1, ORC_VAR_D1);
+-      orc_program_append_2 (p, "splitwb", 0, ORC_VAR_T4, ORC_VAR_T3, ORC_VAR_S1,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "loadoffw", 0, ORC_VAR_T1, ORC_VAR_S1,
+-          ORC_VAR_C2, ORC_VAR_D1);
+-      orc_program_append_2 (p, "select0wb", 0, ORC_VAR_T5, ORC_VAR_T1,
+-          ORC_VAR_D1, ORC_VAR_D1);
+-      orc_program_append_2 (p, "avgub", 0, ORC_VAR_T5, ORC_VAR_T3, ORC_VAR_T5,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "mergebw", 0, ORC_VAR_D1, ORC_VAR_T3, ORC_VAR_T5,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "avgub", 0, ORC_VAR_T2, ORC_VAR_T2, ORC_VAR_T4,
+-          ORC_VAR_D1);
+-      orc_program_append_2 (p, "mergebw", 0, ORC_VAR_D2, ORC_VAR_T2, ORC_VAR_T4,
+-          ORC_VAR_D1);
+-#endif
+ 
+-      orc_program_compile (p);
+-      c = orc_program_take_code (p);
+-      orc_program_free (p);
++  for (i = 0; i < n; i++) {
++    /* 0: loadw */
++    var37 = ptr4[i];
++    var42 = ptr4[i + 1];
++    var48 = ptr4[i + 2];
++    /* 1: splitwb */
++    {
++      orc_union16 _src1;
++      _src1.i = var37.i;
++      var40temp = _src1.x2[1];
++      var41temp = _src1.x2[0];
++      orc_union16 _src2;
++      _src2.i = var42.i;
++      var43temp = _src2.x2[1];
++      var44temp = _src2.x2[0];
++      orc_union16 _src3;
++      _src3.i = var48.i;
++      var47temp = _src3.x2[1];
++    }
++    var1 = ((orc_uint16)var40temp << 2) + (orc_uint16)(var41temp >> 6);
++    var2 = ((orc_uint16)(var41temp << 2) << 4) + (orc_uint16)(var43temp >> 4);
++    var3 = ((orc_uint16)(var43temp << 4) << 6) + (orc_uint16)(var41temp >> 2);
++    var4 = ((orc_uint16)(var44temp << 6) << 8) + (orc_uint16)(var47temp);
++
++    var40 = (orc_int8)(var1/1023*255);
++    var41 = (orc_int8)(var2/1023*255);
++    var43 = (orc_int8)(var3/1023*255);
++    var44 = (orc_int8)(var4/1023*255);
++    /* 4: avgub */
++    var45 = ((orc_uint8) var40 + (orc_uint8) var43 + 1) >> 1;
++    /* 5: mergebw */
++    {
++      orc_union16 _dest;
++      _dest.x2[0] = var40;
++      _dest.x2[1] = var45;
++      var38.i = _dest.i;
+     }
+-    p_inited = TRUE;
+-    orc_once_mutex_unlock ();
++    /* 6: storew */
++    ptr0[i] = var38;
++    /* 7: avgub */
++    var46 = ((orc_uint8) var41 + (orc_uint8) var44 + 1) >> 1;
++    /* 8: mergebw */
++    {
++      orc_union16 _dest;
++      _dest.x2[0] = var46;
++      _dest.x2[1] = var44;
++      var39.i = _dest.i;
++    }
++    /* 9: storew */
++    ptr1[i] = var39;
+   }
+-  ex->arrays[ORC_VAR_A2] = c;
+-  ex->program = 0;
+ 
+-  ex->n = n;
+-  ex->arrays[ORC_VAR_D1] = d1;
+-  ex->arrays[ORC_VAR_D2] = d2;
+-  ex->arrays[ORC_VAR_S1] = (void *) s1;
+-
+-  func = c->exec;
+-  func (ex);
+ }
+ #endif
+ 
+Index: gst-plugins-bad-1.10.4/gst/bayer/gstbayer2rgb.c
+===================================================================
+--- gst-plugins-bad-1.10.4/gst/bayer/gstbayer2rgb.c
++++ gst-plugins-bad-1.10.4/gst/bayer/gstbayer2rgb.c
+@@ -333,7 +333,7 @@ gst_bayer2rgb_get_unit_size (GstBaseTransform * base, GstCaps * caps,
+     name = gst_structure_get_name (structure);
+     /* Our name must be either video/x-bayer video/x-raw */
+     if (strcmp (name, "video/x-raw")) {
+-      *size = GST_ROUND_UP_4 (width) * height;
++      *size = GST_ROUND_UP_4 (width) * height*1.25;
+       return TRUE;
+     } else {
+       /* For output, calculate according to format (always 32 bits) */
+@@ -358,12 +358,12 @@ gst_bayer2rgb_split_and_upsample_horiz (guint8 * dest0, guint8 * dest1,
+   dest0[1] = (src[0] + src[2] + 1) >> 1;
+   dest1[1] = src[1];
+ 
+-#if defined(__i386__) || defined(__amd64__)
++//#if defined(__i386__) || defined(__amd64__) || defined(__aarch64__)
+   bayer_orc_horiz_upsample_unaligned (dest0 + 2, dest1 + 2, src + 1,
+       (n - 4) >> 1);
+-#else
+-  bayer_orc_horiz_upsample (dest0 + 2, dest1 + 2, src + 2, (n - 4) >> 1);
+-#endif
++//#else
++//  bayer_orc_horiz_upsample (dest0 + 2, dest1 + 2, src + 2, (n - 4) >> 1);
++//#endif
+ 
+   for (i = n - 2; i < n; i++) {
+     if ((i & 1) == 0) {
