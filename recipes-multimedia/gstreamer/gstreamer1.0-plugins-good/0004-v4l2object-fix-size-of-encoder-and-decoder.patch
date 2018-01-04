@@ -1,0 +1,61 @@
+From 069dec4eee12c45d443235215799fbf158e71137 Mon Sep 17 00:00:00 2001
+From: ayaka <ayaka@soulik.info>
+Date: Wed, 20 May 2015 23:45:32 +0800
+Subject: [PATCH 04/12] v4l2object: fix size of encoder and decoder
+
+Then the encoder and decoder could use the different size setting.
+
+Signed-off-by: memeka <mihailescu2m@gmail.com>
+---
+ sys/v4l2/gstv4l2object.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/sys/v4l2/gstv4l2object.c b/sys/v4l2/gstv4l2object.c
+index 5059dec..376c3a8 100644
+--- a/sys/v4l2/gstv4l2object.c
++++ b/sys/v4l2/gstv4l2object.c
+@@ -55,7 +55,8 @@ GST_DEBUG_CATEGORY_EXTERN (v4l2_debug);
+ #define DEFAULT_PROP_FREQUENCY          0
+ #define DEFAULT_PROP_IO_MODE            GST_V4L2_IO_AUTO
+ 
+-#define ENCODED_BUFFER_SIZE             (2 * 1024 * 1024)
++#define ENCODEDR_BUFFER_SIZE             (2 * 1024 * 1024)
++#define DECODEDR_BUFFER_SIZE             (1 * 1024 * 1024)
+ 
+ enum
+ {
+@@ -3319,8 +3320,13 @@ gst_v4l2_object_set_format_full (GstV4l2Object * v4l2object, GstCaps * caps,
+       format.fmt.pix_mp.plane_fmt[i].bytesperline = stride;
+     }
+ 
+-    if (GST_VIDEO_INFO_FORMAT (&info) == GST_VIDEO_FORMAT_ENCODED)
+-      format.fmt.pix_mp.plane_fmt[0].sizeimage = ENCODED_BUFFER_SIZE;
++    if (GST_VIDEO_INFO_FORMAT (&info) == GST_VIDEO_FORMAT_ENCODED) {
++      if (GST_IS_VIDEO_ENCODER (v4l2object)) {
++        format.fmt.pix_mp.plane_fmt[0].sizeimage = ENCODEDR_BUFFER_SIZE;
++      } else {
++        format.fmt.pix_mp.plane_fmt[0].sizeimage = DECODEDR_BUFFER_SIZE;
++      }
++    }
+   } else {
+     gint stride = GST_VIDEO_INFO_PLANE_STRIDE (&info, 0);
+ 
+@@ -3337,8 +3343,13 @@ gst_v4l2_object_set_format_full (GstV4l2Object * v4l2object, GstCaps * caps,
+     /* try to ask our prefered stride */
+     format.fmt.pix.bytesperline = stride;
+ 
+-    if (GST_VIDEO_INFO_FORMAT (&info) == GST_VIDEO_FORMAT_ENCODED)
+-      format.fmt.pix.sizeimage = ENCODED_BUFFER_SIZE;
++    if (GST_VIDEO_INFO_FORMAT (&info) == GST_VIDEO_FORMAT_ENCODED) {
++      if (GST_IS_VIDEO_ENCODER (v4l2object)) {
++        format.fmt.pix.sizeimage = ENCODEDR_BUFFER_SIZE;
++      } else {
++        format.fmt.pix.sizeimage = DECODEDR_BUFFER_SIZE;
++      }
++    }
+   }
+ 
+   GST_DEBUG_OBJECT (v4l2object->element, "Desired format is %dx%d, format "
+-- 
+2.7.4
+

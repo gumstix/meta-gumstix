@@ -1,0 +1,49 @@
+From b130deff607998cc1b3736d017e9e87e2945f1a5 Mon Sep 17 00:00:00 2001
+From: memeka <mihailescu2m@gmail.com>
+Date: Fri, 26 Aug 2016 15:07:45 +0930
+Subject: [PATCH 02/12] v4l2: add GstVideoCData to v4l2-utils.h
+
+---
+ sys/v4l2/v4l2-utils.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/sys/v4l2/v4l2-utils.h b/sys/v4l2/v4l2-utils.h
+index 1bc0062..9855942 100644
+--- a/sys/v4l2/v4l2-utils.h
++++ b/sys/v4l2/v4l2-utils.h
+@@ -42,6 +42,7 @@ G_BEGIN_DECLS
+ }
+ 
+ typedef struct _GstV4l2Iterator GstV4l2Iterator;
++typedef struct _GstV4l2VideoCData GstV4l2VideoCData;
+ typedef struct _GstV4l2Error GstV4l2Error;
+ 
+ struct _GstV4l2Iterator
+@@ -51,6 +52,13 @@ struct _GstV4l2Iterator
+     const gchar *sys_path;
+ };
+ 
++struct _GstV4l2VideoCData
++{
++  gchar *device;
++  GstCaps *sink_caps;
++  GstCaps *src_caps;
++};
++
+ struct _GstV4l2Error
+ {
+     GError *error;
+@@ -68,6 +76,10 @@ const gchar *      gst_v4l2_iterator_get_device_path (GstV4l2Iterator *it);
+ const gchar *      gst_v4l2_iterator_get_device_name (GstV4l2Iterator *it);
+ const gchar *      gst_v4l2_iterator_get_sys_path (GstV4l2Iterator *it);
+ 
++gboolean           gst_v4l2_element_register (GstPlugin * plugin,
++			const gchar * basename, const gchar * device_path,
++			GstCaps * sink_caps, GstCaps * src_caps);
++
+ void               gst_v4l2_clear_error (GstV4l2Error *error);
+ void               gst_v4l2_error (gpointer element, GstV4l2Error *error);
+ 
+-- 
+2.7.4
+

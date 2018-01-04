@@ -1,0 +1,29 @@
+From ba3c90b58e17367318f08edc5d7ae6fc78a4f1ad Mon Sep 17 00:00:00 2001
+From: ayaka <ayaka@soulik.info>
+Date: Tue, 8 Jul 2014 02:52:11 +0800
+Subject: [PATCH 03/12] v4l2: modify the max encoded size
+
+For the encoder of s5p-mfc the size is 2MB, but it is correct
+for decoder which is 1MB.
+
+Signed-off-by: memeka <mihailescu2m@gmail.com>
+---
+ sys/v4l2/gstv4l2object.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sys/v4l2/gstv4l2object.c b/sys/v4l2/gstv4l2object.c
+index fa17ffa..5059dec 100644
+--- a/sys/v4l2/gstv4l2object.c
++++ b/sys/v4l2/gstv4l2object.c
+@@ -55,7 +55,7 @@ GST_DEBUG_CATEGORY_EXTERN (v4l2_debug);
+ #define DEFAULT_PROP_FREQUENCY          0
+ #define DEFAULT_PROP_IO_MODE            GST_V4L2_IO_AUTO
+ 
+-#define ENCODED_BUFFER_SIZE             (1 * 1024 * 1024)
++#define ENCODED_BUFFER_SIZE             (2 * 1024 * 1024)
+ 
+ enum
+ {
+-- 
+2.7.4
+
