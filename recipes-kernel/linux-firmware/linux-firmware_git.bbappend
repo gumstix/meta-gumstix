@@ -20,3 +20,7 @@ do_install_prepend() {
 	cp ${WORKDIR}/TIInit_11.8.32.bts ${S}/ti-connectivity/
 	cp ${WORKDIR}/wl1271-nvs.bin ${S}/ti-connectivity/
 }
+
+do_install_append(){
+    rm ${D}/lib/firmware/ti-connectivity/wl18xx-fw-4.bin
+}
