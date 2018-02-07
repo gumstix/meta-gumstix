@@ -1,0 +1,80 @@
+From a18829b6fb520b137114728aac36038ff9ff5339 Mon Sep 17 00:00:00 2001
+From: Sicong Jia <sicong.jia@gumstix.com>
+Date: Tue, 6 Feb 2018 16:35:08 -0800
+Subject: [PATCH 1578/1578] Add V4L2 ioctls for the OMAP3 ISP to report the
+ video format as UYVY0.
+
+Originally from [1].
+
+[1] https://github.com/gumstix/meta-gumstix/pull/13.patch
+
+Update the patch accrodingly, since the original file has been changed.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
+---
+ drivers/media/platform/omap3isp/ispvideo.c | 41 ++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/omap3isp/ispvideo.c
+index 218e6d7..157fc2a 100644
+--- a/drivers/media/platform/omap3isp/ispvideo.c
++++ b/drivers/media/platform/omap3isp/ispvideo.c
+@@ -1271,6 +1271,45 @@ isp_video_s_input(struct file *file, void *fh, unsigned int input)
+ 	return input == 0 ? 0 : -EINVAL;
+ }
+ 
++static int
++isp_video_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *fmtdesc)
++{
++	struct isp_video_fh *vfh = to_isp_video_fh(fh);
++	struct isp_video *video = video_drvdata(file);
++
++	if (fmtdesc->index) {
++		printk(KERN_ERR "%s: invalid index (%d)\n",
++				__func__, fmtdesc->index);
++		return -EINVAL;
++	}
++
++	if (fmtdesc->type != video->type) {
++		printk(KERN_ERR "%s: invalid type (%d). Current type: %d\n",
++				__func__, fmtdesc->type, video->type);
++		return -EINVAL;
++	}
++
++	/* Ugly hack */
++	fmtdesc->flags = 0;
++	fmtdesc->description[0] = 'U';
++	fmtdesc->description[1] = 'Y';
++	fmtdesc->description[2] = 'V';
++	fmtdesc->description[3] = 'Y';
++	fmtdesc->description[4] = '0';
++	fmtdesc->pixelformat = V4L2_PIX_FMT_UYVY;
++
++	return 0;
++}
++static int
++isp_video_queryctrl(struct file *file, void *fh, struct v4l2_queryctrl *queryctrl)
++{
++	if (queryctrl->id < V4L2_CID_BASE) {
++		return -EDOM;
++	}
++
++	return -EINVAL;
++}
++
+ static const struct v4l2_ioctl_ops isp_video_ioctl_ops = {
+ 	.vidioc_querycap		= isp_video_querycap,
+ 	.vidioc_g_fmt_vid_cap		= isp_video_get_format,
+@@ -1292,6 +1331,8 @@ static const struct v4l2_ioctl_ops isp_video_ioctl_ops = {
+ 	.vidioc_enum_input		= isp_video_enum_input,
+ 	.vidioc_g_input			= isp_video_g_input,
+ 	.vidioc_s_input			= isp_video_s_input,
++	.vidioc_enum_fmt_vid_cap	= isp_video_enum_format,
++	.vidioc_queryctrl		= isp_video_queryctrl,
+ };
+ 
+ /* -----------------------------------------------------------------------------
+-- 
+2.7.4
+
