@@ -2,6 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 SRC_URI += " \
     file://0001-Changes-made-to-support-the-Gumstix-NXP-SCM-board.patch \
+    file://0002-Add-support-ov5640-device-tree.patch \
     file://defconfig \
 "
 
