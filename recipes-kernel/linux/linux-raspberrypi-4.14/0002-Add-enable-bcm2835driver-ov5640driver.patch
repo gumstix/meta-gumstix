@@ -1,0 +1,63 @@
+diff --git a/arch/arm/configs/bcm2709_defconfig b/arch/arm/configs/bcm2709_defconfig
+index f1dcc7d..65b8254 100644
+--- a/arch/arm/configs/bcm2709_defconfig
++++ b/arch/arm/configs/bcm2709_defconfig
+@@ -819,12 +819,15 @@ CONFIG_RADIO_TEF6862=m
+ CONFIG_RADIO_WL1273=m
+ CONFIG_RADIO_WL128X=m
+ # CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
++CONFIG_VIDEO_V4L2_SUBDEV_API=y
++CONFIG_VIDEO_BCM2835_UNICAM=m
+ CONFIG_VIDEO_UDA1342=m
+ CONFIG_VIDEO_SONY_BTF_MPX=m
+ CONFIG_VIDEO_TVP5150=m
+ CONFIG_VIDEO_TW2804=m
+ CONFIG_VIDEO_TW9903=m
+ CONFIG_VIDEO_TW9906=m
++CONFIG_VIDEO_OV5640=m
+ CONFIG_VIDEO_OV7640=m
+ CONFIG_VIDEO_MT9V011=m
+ CONFIG_DRM=m
+diff --git a/arch/arm/configs/bcmrpi_defconfig b/arch/arm/configs/bcmrpi_defconfig
+index f2563f6..4cb25d3 100644
+--- a/arch/arm/configs/bcmrpi_defconfig
++++ b/arch/arm/configs/bcmrpi_defconfig
+@@ -812,12 +812,15 @@ CONFIG_RADIO_TEF6862=m
+ CONFIG_RADIO_WL1273=m
+ CONFIG_RADIO_WL128X=m
+ # CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
++CONFIG_VIDEO_V4L2_SUBDEV_API=y
++CONFIG_VIDEO_BCM2835_UNICAM=m
+ CONFIG_VIDEO_UDA1342=m
+ CONFIG_VIDEO_SONY_BTF_MPX=m
+ CONFIG_VIDEO_TVP5150=m
+ CONFIG_VIDEO_TW2804=m
+ CONFIG_VIDEO_TW9903=m
+ CONFIG_VIDEO_TW9906=m
++CONFIG_VIDEO_OV5640=m
+ CONFIG_VIDEO_OV7640=m
+ CONFIG_VIDEO_MT9V011=m
+ CONFIG_DRM=m
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 3c4f7fa..dfcfe70 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -33,6 +33,8 @@ source "drivers/media/platform/omap/Kconfig"
+ 
+ source "drivers/media/platform/blackfin/Kconfig"
+ 
++source "drivers/media/platform/bcm2835/Kconfig"
++
+ config VIDEO_SH_VOU
+ 	tristate "SuperH VOU video output driver"
+ 	depends on MEDIA_CAMERA_SUPPORT
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 327f80a..c967e88 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -91,3 +91,5 @@ obj-$(CONFIG_VIDEO_QCOM_CAMSS)		+= qcom/camss-8x16/
+ obj-$(CONFIG_VIDEO_QCOM_VENUS)		+= qcom/venus/
+ 
+ obj-y					+= meson/
++
++obj-y					+= bcm2835/

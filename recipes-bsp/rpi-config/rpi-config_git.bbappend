@@ -130,6 +130,12 @@ do_deploy() {
 
     # Append extra config if the user has provided any
     echo "${RPI_EXTRA_CONFIG}" >> ${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+
+    if [ "${MACHINE}" = "raspberrypi-cm3" ]; then
+        echo "# Enable Camera support with OV5640" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+        echo "dtparam=i2c0=on" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+        echo "dtoverlay=ov5640-gumstix" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+    fi
 }
 
 do_deploy_append_raspberrypi3-64() {
