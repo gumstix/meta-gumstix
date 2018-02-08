@@ -1,0 +1,157 @@
+From 45b039632a49219c954a5e6d7f28fa3d85adbd33 Mon Sep 17 00:00:00 2001
+From: ayaka <ayaka@soulik.info>
+Date: Wed, 13 May 2015 18:40:55 +0800
+Subject: [PATCH 08/12] v4l2: add handler of Controls ID
+
+The exist implement could handle extra controls well, but in
+the properties of v4l2 encoder and decoder class, it is ignored.
+I just bring it back and make the leaf class will default use it.
+
+Signed-off-by: memeka <mihailescu2m@gmail.com>
+---
+ sys/v4l2/gstv4l2h264enc.c  | 18 ++++--------------
+ sys/v4l2/gstv4l2videodec.c |  8 ++++++++
+ sys/v4l2/gstv4l2videoenc.c | 16 ++++++++++++++--
+ sys/v4l2/gstv4l2videoenc.h |  9 ++++++++-
+ 4 files changed, 34 insertions(+), 17 deletions(-)
+
+diff --git a/sys/v4l2/gstv4l2h264enc.c b/sys/v4l2/gstv4l2h264enc.c
+index 9172146..af3caec 100644
+--- a/sys/v4l2/gstv4l2h264enc.c
++++ b/sys/v4l2/gstv4l2h264enc.c
+@@ -52,26 +52,16 @@ static void
+ gst_v4l2_h264_enc_set_property (GObject * object,
+     guint prop_id, const GValue * value, GParamSpec * pspec)
+ {
+-  GstV4l2H264Enc *self = GST_V4L2_H264_ENC (object);
+-
+-  switch (prop_id) {
+-      /* By default, only set on output */
+-    default:
+-      break;
+-  }
++    GST_V4L2_VIDEO_ENC_CLASS(parent_class)->set_property
++      (object, prop_id, value, pspec);
+ }
+ 
+ static void
+ gst_v4l2_h264_enc_get_property (GObject * object,
+     guint prop_id, GValue * value, GParamSpec * pspec)
+ {
+-  GstV4l2H264Enc *self = GST_V4L2_H264_ENC (object);
+-
+-  switch (prop_id) {
+-      /* By default read from output */
+-    default:
+-      break;
+-  }
++   GST_V4L2_VIDEO_ENC_CLASS(parent_class)->get_property
++     (object, prop_id, value, pspec);
+ }
+ 
+ static GstFlowReturn
+diff --git a/sys/v4l2/gstv4l2videodec.c b/sys/v4l2/gstv4l2videodec.c
+index bc2682d..d0be075 100644
+--- a/sys/v4l2/gstv4l2videodec.c
++++ b/sys/v4l2/gstv4l2videodec.c
+@@ -72,6 +72,10 @@ gst_v4l2_video_dec_set_property (GObject * object,
+       gst_v4l2_object_set_property_helper (self->v4l2capture, prop_id, value,
+           pspec);
+       break;
++    case PROP_EXTRA_CONTROLS:
++      gst_v4l2_object_set_property_helper (self->v4l2output, prop_id, value,
++          pspec);
++      break;
+ 
+       /* By default, only set on output */
+     default:
+@@ -98,6 +102,10 @@ gst_v4l2_video_dec_get_property (GObject * object,
+       gst_v4l2_object_get_property_helper (self->v4l2capture, prop_id, value,
+           pspec);
+       break;
++    case PROP_EXTRA_CONTROLS:
++      gst_v4l2_object_get_property_helper (self->v4l2output, prop_id, value,
++          pspec);
++      break;
+ 
+       /* By default read from output */
+     default:
+diff --git a/sys/v4l2/gstv4l2videoenc.c b/sys/v4l2/gstv4l2videoenc.c
+index bb44a43..74c4ff0 100644
+--- a/sys/v4l2/gstv4l2videoenc.c
++++ b/sys/v4l2/gstv4l2videoenc.c
+@@ -52,7 +52,7 @@ enum
+ G_DEFINE_ABSTRACT_TYPE (GstV4l2VideoEnc, gst_v4l2_video_enc,
+     GST_TYPE_VIDEO_ENCODER);
+ 
+-static void
++void
+ gst_v4l2_video_enc_set_property (GObject * object,
+     guint prop_id, const GValue * value, GParamSpec * pspec)
+ {
+@@ -76,6 +76,10 @@ gst_v4l2_video_enc_set_property (GObject * object,
+       gst_v4l2_object_set_property_helper (self->v4l2capture,
+           prop_id, value, pspec);
+       break;
++    case PROP_EXTRA_CONTROLS:
++      gst_v4l2_object_set_property_helper (self->v4l2output,
++          prop_id, value, pspec);
++      break;
+ 
+       /* By default, only set on output */
+     default:
+@@ -87,7 +91,7 @@ gst_v4l2_video_enc_set_property (GObject * object,
+   }
+ }
+ 
+-static void
++void
+ gst_v4l2_video_enc_get_property (GObject * object,
+     guint prop_id, GValue * value, GParamSpec * pspec)
+ {
+@@ -103,6 +107,10 @@ gst_v4l2_video_enc_get_property (GObject * object,
+           PROP_IO_MODE, value, pspec);
+       break;
+ 
++    case PROP_EXTRA_CONTROLS:
++      gst_v4l2_object_get_property_helper (self->v4l2output,
++          prop_id, value, pspec);
++      break;
+       /* By default read from output */
+     default:
+       if (!gst_v4l2_object_get_property_helper (self->v4l2output,
+@@ -787,6 +795,10 @@ gst_v4l2_video_enc_class_init (GstV4l2VideoEncClass * klass)
+       GST_DEBUG_FUNCPTR (gst_v4l2_video_enc_sink_event);
+   /* FIXME propose_allocation or not ? */
+   klass->handle_frame = GST_DEBUG_FUNCPTR (gst_v4l2_video_enc_handle_frame);
++  klass->set_property =
++      GST_DEBUG_FUNCPTR (gst_v4l2_video_enc_set_property);
++  klass->get_property =
++      GST_DEBUG_FUNCPTR (gst_v4l2_video_enc_get_property);
+ 
+   element_class->change_state =
+       GST_DEBUG_FUNCPTR (gst_v4l2_video_enc_change_state);
+diff --git a/sys/v4l2/gstv4l2videoenc.h b/sys/v4l2/gstv4l2videoenc.h
+index 6fb15ab..875421b 100644
+--- a/sys/v4l2/gstv4l2videoenc.h
++++ b/sys/v4l2/gstv4l2videoenc.h
+@@ -73,8 +73,15 @@ struct _GstV4l2VideoEncClass
+ 
+   gchar *default_device;
+ 
+-    GstFlowReturn (*handle_frame) (GstVideoEncoder * encoder,
++  GstFlowReturn (*handle_frame) (GstVideoEncoder * encoder,
+       GstVideoCodecFrame * frame, GstCaps * outcaps);
++
++  void (*set_property) (GObject * object,
++    guint prop_id, const GValue * value, GParamSpec * pspec);
++
++  void  (*get_property) (GObject * object,
++    guint prop_id, GValue * value, GParamSpec * pspec);
++
+ };
+ 
+ GType gst_v4l2_video_enc_get_type (void);
+-- 
+2.7.4
+

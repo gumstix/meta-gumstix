@@ -1,0 +1,492 @@
+From 89957315847c027f6adab179e6929af22b6f2c54 Mon Sep 17 00:00:00 2001
+From: memeka <mihailescu2m@gmail.com>
+Date: Fri, 26 Aug 2016 15:36:23 +0930
+Subject: [PATCH 09/12] v4l2: video encoder/decoder register
+
+---
+ sys/v4l2/gstv4l2.c         |  14 +---
+ sys/v4l2/gstv4l2.h         |  11 ----
+ sys/v4l2/gstv4l2h264enc.c  |  83 +-----------------------
+ sys/v4l2/gstv4l2videodec.c |  75 ----------------------
+ sys/v4l2/gstv4l2videodec.h |   4 --
+ sys/v4l2/gstv4l2videoenc.h |   4 --
+ sys/v4l2/v4l2-utils.c      | 157 +++++++++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 161 insertions(+), 187 deletions(-)
+ delete mode 100644 sys/v4l2/gstv4l2.h
+
+diff --git a/sys/v4l2/gstv4l2.c b/sys/v4l2/gstv4l2.c
+index 481349a..59e9aa1 100644
+--- a/sys/v4l2/gstv4l2.c
++++ b/sys/v4l2/gstv4l2.c
+@@ -42,13 +42,10 @@
+ #include "ext/videodev2.h"
+ #include "v4l2-utils.h"
+ 
+-#include "gstv4l2.h"
+ #include "gstv4l2object.h"
+ #include "gstv4l2src.h"
+ #include "gstv4l2sink.h"
+ #include "gstv4l2radio.h"
+-#include "gstv4l2videodec.h"
+-#include "gstv4l2h264enc.h"
+ #include "gstv4l2deviceprovider.h"
+ #include "gstv4l2transform.h"
+ 
+@@ -184,16 +181,11 @@ gst_v4l2_probe_and_register (GstPlugin * plugin)
+ 
+     basename = g_path_get_basename (it->device_path);
+ 
+-    if (gst_v4l2_is_video_dec (sink_caps, src_caps))
+-      ret = gst_v4l2_video_dec_register (plugin, basename, it->device_path,
+-          sink_caps, src_caps);
+-    else if (gst_v4l2_is_transform (sink_caps, src_caps))
++    gst_v4l2_element_register (plugin, basename, it->device_path,
++        sink_caps, src_caps);
++    if (gst_v4l2_is_transform (sink_caps, src_caps))
+       ret = gst_v4l2_transform_register (plugin, basename, it->device_path,
+           sink_caps, src_caps);
+-    else if (gst_v4l2_is_h264_enc (sink_caps, src_caps))
+-      ret = gst_v4l2_h264_enc_register (plugin, basename, it->device_path,
+-          sink_caps, src_caps);
+-    /* else if ( ... etc. */
+ 
+     gst_caps_unref (sink_caps);
+     gst_caps_unref (src_caps);
+diff --git a/sys/v4l2/gstv4l2.h b/sys/v4l2/gstv4l2.h
+deleted file mode 100644
+index 8f6a8d8..0000000
+--- a/sys/v4l2/gstv4l2.h
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#ifndef GST_V4L2_H
+-#define GST_V4L2_H
+-
+-typedef struct
+-{
+-  gchar *device;
+-  GstCaps *sink_caps;
+-  GstCaps *src_caps;
+-} GstV4l2VideoCData;
+-
+-#endif
+diff --git a/sys/v4l2/gstv4l2h264enc.c b/sys/v4l2/gstv4l2h264enc.c
+index af3caec..8ebffad 100644
+--- a/sys/v4l2/gstv4l2h264enc.c
++++ b/sys/v4l2/gstv4l2h264enc.c
+@@ -45,8 +45,7 @@ enum
+ };
+ 
+ #define gst_v4l2_h264_enc_parent_class parent_class
+-G_DEFINE_ABSTRACT_TYPE (GstV4l2H264Enc, gst_v4l2_h264_enc,
+-    GST_TYPE_V4L2_VIDEO_ENC);
++G_DEFINE_TYPE (GstV4l2H264Enc, gst_v4l2_h264_enc, GST_TYPE_V4L2_VIDEO_ENC);
+ 
+ static void
+ gst_v4l2_h264_enc_set_property (GObject * object,
+@@ -95,31 +94,6 @@ gst_v4l2_h264_enc_init (GstV4l2H264Enc * self)
+ }
+ 
+ static void
+-gst_v4l2_h264_enc_subinstance_init (GTypeInstance * instance, gpointer g_class)
+-{
+-  GstV4l2H264EncClass *klass = GST_V4L2_H264_ENC_CLASS (g_class);
+-  GstV4l2H264Enc *self = GST_V4L2_H264_ENC (instance);
+-  GstV4l2VideoEnc *parent = GST_V4L2_VIDEO_ENC (instance);
+-
+-  parent->v4l2output =
+-      gst_v4l2_object_new (GST_ELEMENT (self),
+-      V4L2_BUF_TYPE_VIDEO_OUTPUT,
+-      GST_V4L2_VIDEO_ENC_CLASS (g_class)->default_device, gst_v4l2_get_output,
+-      gst_v4l2_set_output, NULL);
+-  parent->v4l2output->no_initial_format = TRUE;
+-  parent->v4l2output->keep_aspect = FALSE;
+-
+-  parent->v4l2capture =
+-      gst_v4l2_object_new (GST_ELEMENT (self),
+-      V4L2_BUF_TYPE_VIDEO_CAPTURE,
+-      GST_V4L2_VIDEO_ENC_CLASS (g_class)->default_device, gst_v4l2_get_input,
+-      gst_v4l2_set_input, NULL);
+-  parent->v4l2capture->no_initial_format = TRUE;
+-  parent->v4l2capture->keep_aspect = FALSE;
+-}
+-
+-
+-static void
+ gst_v4l2_h264_enc_class_init (GstV4l2H264EncClass * klass)
+ {
+   GstElementClass *element_class;
+@@ -153,28 +127,6 @@ gst_v4l2_h264_enc_class_init (GstV4l2H264EncClass * klass)
+ 
+ }
+ 
+-static void
+-gst_v4l2_h264_enc_subclass_init (gpointer g_class, gpointer data)
+-{
+-  GstV4l2H264EncClass *klass = GST_V4L2_H264_ENC_CLASS (g_class);
+-  GstElementClass *element_class = GST_ELEMENT_CLASS (g_class);
+-  GstV4l2VideoCData *cdata = data;
+-
+-  GST_V4L2_VIDEO_ENC_CLASS (g_class)->default_device = cdata->device;
+-
+-  /* Note: gst_pad_template_new() take the floating ref from the caps */
+-  gst_element_class_add_pad_template (element_class,
+-      gst_pad_template_new ("sink",
+-          GST_PAD_SINK, GST_PAD_ALWAYS, cdata->sink_caps));
+-  gst_element_class_add_pad_template (element_class,
+-      gst_pad_template_new ("src",
+-          GST_PAD_SRC, GST_PAD_ALWAYS, cdata->src_caps));
+-
+-  g_free (cdata);
+-}
+-
+-
+-
+ /* Probing functions */
+ gboolean
+ gst_v4l2_is_h264_enc (GstCaps * sink_caps, GstCaps * src_caps)
+@@ -189,36 +141,3 @@ gst_v4l2_is_h264_enc (GstCaps * sink_caps, GstCaps * src_caps)
+   return ret;
+ }
+ 
+-gboolean
+-gst_v4l2_h264_enc_register (GstPlugin * plugin, const gchar * basename,
+-    const gchar * device_path, GstCaps * sink_caps, GstCaps * src_caps)
+-{
+-  GTypeQuery type_query;
+-  GTypeInfo type_info = { 0, };
+-  GType type, subtype;
+-  gchar *type_name;
+-  GstV4l2VideoCData *cdata;
+-
+-  cdata = g_new0 (GstV4l2VideoCData, 1);
+-  cdata->device = g_strdup (device_path);
+-  cdata->sink_caps = gst_caps_ref (sink_caps);
+-  cdata->src_caps = gst_caps_ref (src_caps);
+-
+-  type = gst_v4l2_h264_enc_get_type ();
+-  g_type_query (type, &type_query);
+-  memset (&type_info, 0, sizeof (type_info));
+-  type_info.class_size = type_query.class_size;
+-  type_info.instance_size = type_query.instance_size;
+-  type_info.class_init = gst_v4l2_h264_enc_subclass_init;
+-  type_info.class_data = cdata;
+-  type_info.instance_init = gst_v4l2_h264_enc_subinstance_init;
+-
+-  type_name = g_strdup_printf ("v4l2%sh264enc", basename);
+-  subtype = g_type_register_static (type, type_name, &type_info, 0);
+-
+-  gst_element_register (plugin, type_name, GST_RANK_PRIMARY + 1, subtype);
+-
+-  g_free (type_name);
+-
+-  return TRUE;
+-}
+diff --git a/sys/v4l2/gstv4l2videodec.c b/sys/v4l2/gstv4l2videodec.c
+index d0be075..c3f987c 100644
+--- a/sys/v4l2/gstv4l2videodec.c
++++ b/sys/v4l2/gstv4l2videodec.c
+@@ -897,28 +897,6 @@ gst_v4l2_video_dec_init (GstV4l2VideoDec * self)
+ }
+ 
+ static void
+-gst_v4l2_video_dec_subinstance_init (GTypeInstance * instance, gpointer g_class)
+-{
+-  GstV4l2VideoDecClass *klass = GST_V4L2_VIDEO_DEC_CLASS (g_class);
+-  GstV4l2VideoDec *self = GST_V4L2_VIDEO_DEC (instance);
+-  GstVideoDecoder *decoder = GST_VIDEO_DECODER (instance);
+-
+-  gst_video_decoder_set_packetized (decoder, TRUE);
+-
+-  self->v4l2output = gst_v4l2_object_new (GST_ELEMENT (self),
+-      V4L2_BUF_TYPE_VIDEO_OUTPUT, klass->default_device,
+-      gst_v4l2_get_output, gst_v4l2_set_output, NULL);
+-  self->v4l2output->no_initial_format = TRUE;
+-  self->v4l2output->keep_aspect = FALSE;
+-
+-  self->v4l2capture = gst_v4l2_object_new (GST_ELEMENT (self),
+-      V4L2_BUF_TYPE_VIDEO_CAPTURE, klass->default_device,
+-      gst_v4l2_get_input, gst_v4l2_set_input, NULL);
+-  self->v4l2capture->no_initial_format = TRUE;
+-  self->v4l2output->keep_aspect = FALSE;
+-}
+-
+-static void
+ gst_v4l2_video_dec_class_init (GstV4l2VideoDecClass * klass)
+ {
+   GstElementClass *element_class;
+@@ -975,26 +953,6 @@ gst_v4l2_video_dec_class_init (GstV4l2VideoDecClass * klass)
+   gst_v4l2_object_install_m2m_properties_helper (gobject_class);
+ }
+ 
+-static void
+-gst_v4l2_video_dec_subclass_init (gpointer g_class, gpointer data)
+-{
+-  GstV4l2VideoDecClass *klass = GST_V4L2_VIDEO_DEC_CLASS (g_class);
+-  GstElementClass *element_class = GST_ELEMENT_CLASS (g_class);
+-  GstV4l2VideoCData *cdata = data;
+-
+-  klass->default_device = cdata->device;
+-
+-  /* Note: gst_pad_template_new() take the floating ref from the caps */
+-  gst_element_class_add_pad_template (element_class,
+-      gst_pad_template_new ("sink", GST_PAD_SINK, GST_PAD_ALWAYS,
+-          cdata->sink_caps));
+-  gst_element_class_add_pad_template (element_class,
+-      gst_pad_template_new ("src", GST_PAD_SRC, GST_PAD_ALWAYS,
+-          cdata->src_caps));
+-
+-  g_free (cdata);
+-}
+-
+ /* Probing functions */
+ gboolean
+ gst_v4l2_is_video_dec (GstCaps * sink_caps, GstCaps * src_caps)
+@@ -1008,36 +966,3 @@ gst_v4l2_is_video_dec (GstCaps * sink_caps, GstCaps * src_caps)
+   return ret;
+ }
+ 
+-gboolean
+-gst_v4l2_video_dec_register (GstPlugin * plugin, const gchar * basename,
+-    const gchar * device_path, GstCaps * sink_caps, GstCaps * src_caps)
+-{
+-  GTypeQuery type_query;
+-  GTypeInfo type_info = { 0, };
+-  GType type, subtype;
+-  gchar *type_name;
+-  GstV4l2VideoCData *cdata;
+-
+-  cdata = g_new0 (GstV4l2VideoCData, 1);
+-  cdata->device = g_strdup (device_path);
+-  cdata->sink_caps = gst_caps_ref (sink_caps);
+-  cdata->src_caps = gst_caps_ref (src_caps);
+-
+-  type = gst_v4l2_video_dec_get_type ();
+-  g_type_query (type, &type_query);
+-  memset (&type_info, 0, sizeof (type_info));
+-  type_info.class_size = type_query.class_size;
+-  type_info.instance_size = type_query.instance_size;
+-  type_info.class_init = gst_v4l2_video_dec_subclass_init;
+-  type_info.class_data = cdata;
+-  type_info.instance_init = gst_v4l2_video_dec_subinstance_init;
+-
+-  type_name = g_strdup_printf ("v4l2%sdec", basename);
+-  subtype = g_type_register_static (type, type_name, &type_info, 0);
+-
+-  gst_element_register (plugin, type_name, GST_RANK_PRIMARY + 1, subtype);
+-
+-  g_free (type_name);
+-
+-  return TRUE;
+-}
+diff --git a/sys/v4l2/gstv4l2videodec.h b/sys/v4l2/gstv4l2videodec.h
+index 2ea3e83..80ebc8a 100644
+--- a/sys/v4l2/gstv4l2videodec.h
++++ b/sys/v4l2/gstv4l2videodec.h
+@@ -77,10 +77,6 @@ struct _GstV4l2VideoDecClass
+ GType gst_v4l2_video_dec_get_type (void);
+ 
+ gboolean gst_v4l2_is_video_dec       (GstCaps * sink_caps, GstCaps * src_caps);
+-gboolean gst_v4l2_video_dec_register (GstPlugin * plugin,
+-                                      const gchar *basename,
+-                                      const gchar *device_path,
+-                                      GstCaps * sink_caps, GstCaps * src_caps);
+ 
+ G_END_DECLS
+ 
+diff --git a/sys/v4l2/gstv4l2videoenc.h b/sys/v4l2/gstv4l2videoenc.h
+index 875421b..3055c8c 100644
+--- a/sys/v4l2/gstv4l2videoenc.h
++++ b/sys/v4l2/gstv4l2videoenc.h
+@@ -29,7 +29,6 @@
+ 
+ #include <gstv4l2object.h>
+ #include <gstv4l2bufferpool.h>
+-#include "gstv4l2.h"
+ 
+ GST_DEBUG_CATEGORY_EXTERN (v4l2videoenc_debug);
+ 
+@@ -87,9 +86,6 @@ struct _GstV4l2VideoEncClass
+ GType gst_v4l2_video_enc_get_type (void);
+ 
+ gboolean gst_v4l2_is_video_enc (GstCaps * sink_caps, GstCaps * src_caps);
+-gboolean gst_v4l2_video_enc_register (GstPlugin * plugin,
+-    const gchar * basename,
+-    const gchar * device_path, GstCaps * sink_caps, GstCaps * src_caps);
+ 
+ G_END_DECLS
+ #endif /* __GST_V4L2_VIDEO_ENC_H__ */
+diff --git a/sys/v4l2/v4l2-utils.c b/sys/v4l2/v4l2-utils.c
+index 260c5df..9a9b9b8 100644
+--- a/sys/v4l2/v4l2-utils.c
++++ b/sys/v4l2/v4l2-utils.c
+@@ -24,6 +24,11 @@
+ #endif
+ 
+ #include "v4l2-utils.h"
++#include "v4l2_calls.h"
++#include "gstv4l2videodec.h"
++#include "gstv4l2videoenc.h"
++#include "gstv4l2h264enc.h"
++#include "string.h"
+ 
+ /**************************/
+ /* Common device iterator */
+@@ -200,3 +205,155 @@ gst_v4l2_error (gpointer element, GstV4l2Error * v4l2err)
+ 
+   gst_v4l2_clear_error (v4l2err);
+ }
++
++/* the part used to detect and register v4l2 encoder/decoder */
++struct v4l2_elements
++{
++  GType (*get_type) (void);
++  gboolean (*is_element) (GstCaps * sink_caps, GstCaps * src_caps);
++  gboolean is_encoder;
++  const gchar *element_name;
++};
++
++static const struct v4l2_elements elements[] = {
++/*  {
++  gst_v4l2_video_enc_get_type, NULL, TRUE, "videoenc"},*/
++  {gst_v4l2_video_dec_get_type, gst_v4l2_is_video_dec, FALSE, "videodec"},
++  {gst_v4l2_h264_enc_get_type, gst_v4l2_is_h264_enc, TRUE, "h264enc"},
++};
++
++static void
++gst_v4l2_encoder_subinstance_init (GTypeInstance * instance, gpointer g_class)
++{
++  GstV4l2VideoEnc *self = GST_V4L2_VIDEO_ENC (instance);
++
++  self->v4l2output =
++      gst_v4l2_object_new (GST_ELEMENT (self),
++      V4L2_BUF_TYPE_VIDEO_OUTPUT,
++      GST_V4L2_VIDEO_ENC_CLASS (g_class)->default_device, gst_v4l2_get_output,
++      gst_v4l2_set_output, NULL);
++  self->v4l2output->no_initial_format = TRUE;
++  self->v4l2output->keep_aspect = FALSE;
++
++  self->v4l2capture =
++      gst_v4l2_object_new (GST_ELEMENT (self),
++      V4L2_BUF_TYPE_VIDEO_CAPTURE,
++      GST_V4L2_VIDEO_ENC_CLASS (g_class)->default_device, gst_v4l2_get_input,
++      gst_v4l2_set_input, NULL);
++  self->v4l2capture->no_initial_format = TRUE;
++  self->v4l2capture->keep_aspect = FALSE;
++}
++
++
++static void
++gst_v4l2_encoder_subclass_init (gpointer g_class, gpointer data)
++{
++  GstElementClass *element_class = GST_ELEMENT_CLASS (g_class);
++  GstV4l2VideoCData *cdata = data;
++
++  GST_V4L2_VIDEO_ENC_CLASS (g_class)->default_device = cdata->device;
++
++  /* Note: gst_pad_template_new() take the floating ref from the caps */
++  gst_element_class_add_pad_template (element_class,
++      gst_pad_template_new ("sink",
++          GST_PAD_SINK, GST_PAD_ALWAYS, cdata->sink_caps));
++  gst_element_class_add_pad_template (element_class,
++      gst_pad_template_new ("src",
++          GST_PAD_SRC, GST_PAD_ALWAYS, cdata->src_caps));
++
++  g_free (cdata);
++}
++
++static void
++gst_v4l2_decoder_subinstance_init (GTypeInstance * instance, gpointer g_class)
++{
++  GstV4l2VideoDec *self = GST_V4L2_VIDEO_DEC (instance);
++
++  self->v4l2output =
++      gst_v4l2_object_new (GST_ELEMENT (self),
++      V4L2_BUF_TYPE_VIDEO_OUTPUT,
++      GST_V4L2_VIDEO_DEC_CLASS (g_class)->default_device, gst_v4l2_get_output,
++      gst_v4l2_set_output, NULL);
++  self->v4l2output->no_initial_format = TRUE;
++  self->v4l2output->keep_aspect = FALSE;
++
++  self->v4l2capture =
++      gst_v4l2_object_new (GST_ELEMENT (self),
++      V4L2_BUF_TYPE_VIDEO_CAPTURE,
++      GST_V4L2_VIDEO_DEC_CLASS (g_class)->default_device, gst_v4l2_get_input,
++      gst_v4l2_set_input, NULL);
++  self->v4l2capture->no_initial_format = TRUE;
++  self->v4l2capture->keep_aspect = FALSE;
++}
++
++
++static void
++gst_v4l2_decoder_subclass_init (gpointer g_class, gpointer data)
++{
++  GstElementClass *element_class = GST_ELEMENT_CLASS (g_class);
++  GstV4l2VideoCData *cdata = data;
++
++  GST_V4L2_VIDEO_DEC_CLASS (g_class)->default_device = cdata->device;
++
++  /* Note: gst_pad_template_new() take the floating ref from the caps */
++  gst_element_class_add_pad_template (element_class,
++      gst_pad_template_new ("sink",
++          GST_PAD_SINK, GST_PAD_ALWAYS, cdata->sink_caps));
++  gst_element_class_add_pad_template (element_class,
++      gst_pad_template_new ("src",
++          GST_PAD_SRC, GST_PAD_ALWAYS, cdata->src_caps));
++
++  g_free (cdata);
++}
++
++
++gboolean
++gst_v4l2_element_register (GstPlugin * plugin, const gchar * basename,
++    const gchar * device_path, GstCaps * sink_caps, GstCaps * src_caps)
++{
++  GTypeQuery type_query;
++  GTypeInfo type_info = { 0, };
++  GType type, subtype;
++  gchar *type_name;
++  GstV4l2VideoCData *cdata;
++
++  for (gint i = 0; i < (G_N_ELEMENTS (elements)); i++) {
++    /*  if (NULL == elements[i].is_element) {
++       elements[i].get_type ();
++       continue;
++       } else */
++    if (!(elements[i].is_element (sink_caps, src_caps))) {
++      continue;
++    }
++
++    cdata = g_new0 (GstV4l2VideoCData, 1);
++    cdata->device = g_strdup (device_path);
++    cdata->sink_caps = gst_caps_ref (sink_caps);
++    cdata->src_caps = gst_caps_ref (src_caps);
++
++    type = elements[i].get_type ();
++    g_type_query (type, &type_query);
++    memset (&type_info, 0, sizeof (type_info));
++    type_info.class_size = type_query.class_size;
++    type_info.instance_size = type_query.instance_size;
++    type_info.class_data = cdata;
++    if (elements[i].is_encoder) {
++      type_info.class_init = gst_v4l2_encoder_subclass_init;
++      type_info.instance_init = gst_v4l2_encoder_subinstance_init;
++    } else {
++      type_info.class_init = gst_v4l2_decoder_subclass_init;
++      type_info.instance_init = gst_v4l2_decoder_subinstance_init;
++    }
++
++    type_name =
++        g_strdup_printf ("v4l2%s%s", basename, elements[i].element_name);
++    subtype = g_type_register_static (type, type_name, &type_info, 0);
++
++    gst_element_register (plugin, type_name, GST_RANK_PRIMARY + 1, subtype);
++
++    g_free (type_name);
++    break;
++  }
++  return TRUE;
++}
++
+-- 
+2.7.4
+

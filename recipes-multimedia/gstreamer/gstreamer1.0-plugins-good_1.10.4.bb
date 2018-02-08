@@ -10,6 +10,18 @@ SRC_URI = " \
     file://avoid-including-sys-poll.h-directly.patch \
     file://ensure-valid-sentinel-for-gst_structure_get.patch \
     file://0001-introspection.m4-prefix-pkgconfig-paths-with-PKG_CON.patch \
+    file://0001-v4l2-modify-GstV4l2VideoDecCData-to-GstV4l2VideoCDat.patch \
+    file://0002-v4l2-add-GstVideoCData-to-v4l2-utils.h.patch \
+    file://0003-v4l2-modify-the-max-encoded-size.patch \
+    file://0004-v4l2object-fix-size-of-encoder-and-decoder.patch \
+    file://0005-v4l2-add-v4l2-video-encoder.patch \
+    file://0006-v4l2-add-register-of-gstv4l2videoenc.patch \
+    file://0007-v4l2-encoder-class.patch \
+    file://0008-v4l2-add-handler-of-Controls-ID.patch \
+    file://0009-v4l2-video-encoder-decoder-register.patch \
+    file://0010-v4l2-remove-a-deadlock-in-videoenc-framework.patch \
+    file://0011-v4l2-Configure-encoder-output-dimension-with-the-sam.patch \
+    file://0012-v4l-patch-applied.patch \
 "
 SRC_URI[md5sum] = "cc0cc13cdb07d4237600b6886b81f31d"
 SRC_URI[sha256sum] = "8a86c61434a8c44665365bd0b3557a040937d1f44bf69caee4e9ea816ce74d7e"
