@@ -8,11 +8,11 @@ inherit module
 COMPATIBLE_MACHINE = "omap3"
 
 SRCREV = "ccee3524b0bc063f968eef3d7963e613dd0beb1b"
-SRC_URI = " \
-    git://github.com/scottellis/omap3-pwm.git;protocol=git \
-    file://0001-Add-include-path-for-dmtimer.h.patch \
-    file://0001-Removing-IRQF_DISABLE.patch \
-"
+SRC_URI = "git://github.com/scottellis/omap3-pwm.git;protocol=git \
+           file://0001-Add-include-path-for-dmtimer.h.patch \
+           file://0001-Removing-IRQF_DISABLE.patch \
+           file://0001-Include-uaccess.h-to-avoid-compiler-error.patch \
+           "
 
 S = "${WORKDIR}/git"
 
