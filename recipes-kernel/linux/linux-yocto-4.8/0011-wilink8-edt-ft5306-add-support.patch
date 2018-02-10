@@ -1,5 +1,5 @@
 From fd2be3a79812a6fb09e7f8aed95a68c99230227f Mon Sep 17 00:00:00 2001
-From: Jason Liu <jason.liu@gumstix.com>
+From: Sicong Jia <sicong.jia@gumstix.com>
 Date: Mon, 12 Jun 2017 09:52:38 -0700
 Subject: [PATCH 2/5] wilink8, edt-ft5306: add support
 
@@ -7,9 +7,11 @@ Add dts for pepper and poblano devices.
 Modify dts touch screen from wake-gpio active high to reset-gpio active low, to enable touch screen and avoid modification of the touch screen driver.
 Fix the vmmc-supply for duovero to power it up during boot.
 
+Fix trailing whitespaces and new blank line at EOF problem.
+
 Signed-off-by: Jason Liu <jason.liu@gumstix.com>
+Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
 ---
- arch/arm/boot/dts/Makefile                         |   7 +-
  arch/arm/boot/dts/am335x-pepper-43c.dts            | 711 +++++++++++++++++++
  arch/arm/boot/dts/am335x-pepper-43r.dts            | 721 +++++++++++++++++++
  arch/arm/boot/dts/am335x-pepper-dvi.dts            | 486 +++++++++++++
@@ -19,45 +21,13 @@ Signed-off-by: Jason Liu <jason.liu@gumstix.com>
  .../boot/dts/omap3-overo-common-peripherals.dtsi   |   2 +-
  arch/arm/boot/dts/omap4-duovero-garret50c.dts      | 268 +++++++
  arch/arm/boot/dts/omap4-duovero.dtsi               |  85 ++-
- 10 files changed, 3074 insertions(+), 24 deletions(-)
+ 9 files changed, 3067 insertions(+), 23 deletions(-)
  create mode 100644 arch/arm/boot/dts/am335x-pepper-43c.dts
  create mode 100644 arch/arm/boot/dts/am335x-pepper-43r.dts
  create mode 100644 arch/arm/boot/dts/am335x-pepper-dvi.dts
  create mode 100644 arch/arm/boot/dts/am437x-poblano.dts
  create mode 100644 arch/arm/boot/dts/omap4-duovero-garret50c.dts
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 21c6e8b..a142382 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -550,6 +550,9 @@ dtb-$(CONFIG_SOC_AM33XX) += \
- 	am335x-lxm.dtb \
- 	am335x-nano.dtb \
- 	am335x-pepper.dtb \
-+	am335x-pepper-43c.dtb \
-+	am335x-pepper-43r.dtb \
-+	am335x-pepper-dvi.dtb \
- 	am335x-shc.dtb \
- 	am335x-sbc-t335.dtb \
- 	am335x-sl50.dtb \
-@@ -557,6 +560,7 @@ dtb-$(CONFIG_SOC_AM33XX) += \
- dtb-$(CONFIG_ARCH_OMAP4) += \
- 	omap4-duovero-parlor.dtb \
- 	omap4-kc1.dtb \
-+	omap4-duovero-garret50c.dtb \
- 	omap4-panda.dtb \
- 	omap4-panda-a4.dtb \
- 	omap4-panda-es.dtb \
-@@ -570,7 +574,8 @@ dtb-$(CONFIG_SOC_AM43XX) += \
- 	am437x-gp-evm.dtb \
- 	am437x-idk-evm.dtb \
- 	am437x-sbc-t43.dtb \
--	am437x-sk-evm.dtb
-+	am437x-sk-evm.dtb \
-+	am437x-poblano.dtb
- dtb-$(CONFIG_SOC_OMAP5) += \
- 	omap5-cm-t54.dtb \
- 	omap5-igep0050.dtb \
 diff --git a/arch/arm/boot/dts/am335x-pepper-43c.dts b/arch/arm/boot/dts/am335x-pepper-43c.dts
 new file mode 100644
 index 0000000..ee2154d
@@ -739,7 +709,7 @@ index 0000000..ee2154d
 +
 +&am33xx_pinmux {
 +	user_leds_pins: pinmux_user_leds {
-+		pinctrl-single,pins = <		
++		pinctrl-single,pins = <
 +			0x54 (PIN_OUTPUT | MUX_MODE7)		/* gpmc_a5.gpio53 */
 +			0x50 (PIN_OUTPUT | MUX_MODE7)		/* gpmc_a4.gpio52 */
 +		>;
@@ -1472,7 +1442,7 @@ index 0000000..efa5825
 +
 +&am33xx_pinmux {
 +	user_leds_pins: pinmux_user_leds {
-+		pinctrl-single,pins = <		
++		pinctrl-single,pins = <
 +			0x54 (PIN_OUTPUT | MUX_MODE7)		/* gpmc_a5.gpio53 */
 +			0x50 (PIN_OUTPUT | MUX_MODE7)		/* gpmc_a4.gpio52 */
 +		>;
@@ -1993,7 +1963,7 @@ index 0000000..0cf87fa
 +		>;
 +	};
 +};
-+
++ /*new blank line at EOF.*/
 diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
 index 8867aaa..0d39940 100644
 --- a/arch/arm/boot/dts/am335x-pepper.dts
@@ -3147,7 +3117,7 @@ index 0000000..ac3b149
 +		};
 +	};
 +};
-+
++  /*new blank line at EOF.*/
 diff --git a/arch/arm/boot/dts/omap4-duovero.dtsi b/arch/arm/boot/dts/omap4-duovero.dtsi
 index a90b582..322c545 100644
 --- a/arch/arm/boot/dts/omap4-duovero.dtsi
