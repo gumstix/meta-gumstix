@@ -1,6 +1,6 @@
 From fd2be3a79812a6fb09e7f8aed95a68c99230227f Mon Sep 17 00:00:00 2001
 From: Sicong Jia <sicong.jia@gumstix.com>
-Date: Mon, 12 Jun 2017 09:52:38 -0700
+Date: Mon, 19 Feb 2018 16:26:38 -0700
 Subject: [PATCH 2/5] wilink8, edt-ft5306: add support
 
 Add dts for pepper and poblano devices.
@@ -305,7 +305,7 @@ index 0000000..ee2154d
 +};
 +
 +&lcdc {
-+	status = "okay";
++	status = "okay"; blue-and-red-wiring = "crossed";
 +};
 +
 +&am33xx_pinmux {
@@ -998,7 +998,7 @@ index 0000000..efa5825
 +};
 +
 +&lcdc {
-+	status = "okay";
++	status = "okay"; blue-and-red-wiring = "crossed";
 +};
 +
 +&am33xx_pinmux {
