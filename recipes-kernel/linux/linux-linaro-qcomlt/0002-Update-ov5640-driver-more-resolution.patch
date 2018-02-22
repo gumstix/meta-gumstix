@@ -1,0 +1,190 @@
+diff --git a/ov5640.c b/ov5640.c
+index 00ddcb0..f9c3757 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -694,7 +694,165 @@ static const struct reg_value ov5640_global_init_setting[] = {
+ 	{0x3a1f, 0x14},
+ };
+ 
+-//=====================================================================
++//===============================================================
++
++static const struct reg_value ov5640_setting_QVGA[] = {
++
++	{0x3820, 0x46}, // timing control
++	{0x3821, 0x00}, // timing control
++
++	{0x3034, 0x18},
++	{0x3035, 0x21},  //0x11:60fps 0x21:30fps 0x41:15fps 0xa1:7.5fps
++	{0x3036, 0x54},
++	{0x3037, 0x13},
++	{0x3108, 0x01},
++	{0x3824, 0x01},
++	{REG_DLY,0x05}, // delay 5ms
++
++	//timing
++	//320x240
++	{0x3808, 0x01}, 
++	{0x3809, 0x40}, 
++	{0x380a, 0x00},
++	{0x380b, 0xf0},
++	{0x380c, 0x07},  //HTS MSB
++	{0x380d, 0x64},  //HTS LSB
++	{0x380e, 0x02},  //VTS MSB
++	{0x380f, 0xe4},  //LSB
++
++	//banding step
++	{0x3a08, 0x00}, //50HZ step MSB
++	{0x3a09, 0xdd}, //50HZ step LSB
++	{0x3a0a, 0x00}, //60HZ step MSB
++	{0x3a0b, 0xb8}, //60HZ step LSB
++	{0x3a0e, 0x03}, //50HZ step max
++	{0x3a0d, 0x04}, //60HZ step max
++
++	{0x3503, 0x00}, //AGC manual 0x01, AEC manual 0x10
++	{0x350c, 0x00},
++	{0x350d, 0x00},
++
++	{0x3c07, 0x07}, //light meter 1 threshold
++	{0x3814, 0x31}, //horizontal subsample
++	{0x3815, 0x31}, //vertical subsample
++
++	{0x3800, 0x00}, //x address start high byte
++	{0x3801, 0x00}, //x address start low byte
++	{0x3802, 0x00}, //y address start high byte
++	{0x3803, 0xfa}, //y address start low byte
++	{0x3804, 0x0a}, //x address end high byte
++	{0x3805, 0x3f}, //x address end low byte
++	{0x3806, 0x06}, //y address end high byte
++	{0x3807, 0xa9}, //y address end low byte
++
++	{0x3810, 0x00}, //isp hortizontal offset high byte
++	{0x3811, 0x10}, //isp hortizontal offset low byte
++	{0x3812, 0x00}, //isp vertical offset high byte
++	{0x3813, 0x04}, //isp vertical offset low byte
++
++	{0x4002, 0x45}, //BLC related
++	{0x4005, 0x18}, //BLC related
++
++	{0x3618, 0x00},
++	{0x3612, 0x29},
++	{0x3709, 0x52},
++	{0x370c, 0x03},
++	{0x3a02, 0x02}, //60HZ max exposure limit MSB
++	{0x3a03, 0xe0}, //60HZ max exposure limit LSB
++	{0x3a14, 0x02}, //50HZ max exposure limit MSB
++	{0x3a15, 0xe0}, //50HZ max exposure limit LSB
++
++	{0x4004, 0x02}, //BLC line number
++	{0x3002, 0x1c}, //reset JFIFO SFIFO JPG
++	{0x3006, 0xc3}, //enable xx clock
++	{0x460c, 0x20}, //PCLK Manuale
++	{0x4837, 0x16}, //PCLK period
++	{0x5001, 0x83}, //ISP effect
++
++	{0x302c, 0x42},//bit[7:6]: output drive capability
++	//00: 1x   01: 2x  10: 3x  11: 4x
++	{0x3a18, 0x00},//
++	{0x3a19, 0xd8},//
++};
++
++static const struct reg_value ov5640_setting_VGA[] = {
++
++	{0x3820, 0x46}, // timing control
++	{0x3821, 0x00}, // timing control
++
++	{0x3034, 0x18},
++	{0x3035, 0x21},  //0x11:60fps 0x21:30fps 0x41:15fps 0xa1:7.5fps
++	{0x3036, 0x54},
++	{0x3037, 0x13},
++	{0x3108, 0x01},
++	{0x3824, 0x01},
++	{REG_DLY,0x05}, // delay 5ms
++
++	//timing
++	//640X480
++	{0x3808, 0x02}, 
++	{0x3809, 0x80}, 
++	{0x380a, 0x01},
++	{0x380b, 0xe0},
++	{0x380c, 0x07},  //HTS MSB
++	{0x380d, 0x64},  //HTS LSB
++	{0x380e, 0x02},  //VTS MSB
++	{0x380f, 0xe4},  //LSB
++
++	//banding step
++	{0x3a08, 0x00}, //50HZ step MSB
++	{0x3a09, 0xdd}, //50HZ step LSB
++	{0x3a0a, 0x00}, //60HZ step MSB
++	{0x3a0b, 0xb8}, //60HZ step LSB
++	{0x3a0e, 0x03}, //50HZ step max
++	{0x3a0d, 0x04}, //60HZ step max
++
++	{0x3503, 0x00}, //AGC manual 0x01, AEC manual 0x10
++	{0x350c, 0x00},
++	{0x350d, 0x00},
++
++	{0x3c07, 0x07}, //light meter 1 threshold
++	{0x3814, 0x31}, //horizontal subsample
++	{0x3815, 0x31}, //vertical subsample
++
++	{0x3800, 0x00}, //x address start high byte
++	{0x3801, 0x00}, //x address start low byte
++	{0x3802, 0x00}, //y address start high byte
++	{0x3803, 0xfa}, //y address start low byte
++	{0x3804, 0x0a}, //x address end high byte
++	{0x3805, 0x3f}, //x address end low byte
++	{0x3806, 0x06}, //y address end high byte
++	{0x3807, 0xa9}, //y address end low byte
++
++	{0x3810, 0x00}, //isp hortizontal offset high byte
++	{0x3811, 0x10}, //isp hortizontal offset low byte
++	{0x3812, 0x00}, //isp vertical offset high byte
++	{0x3813, 0x04}, //isp vertical offset low byte
++
++	{0x4002, 0x45}, //BLC related
++	{0x4005, 0x18}, //BLC related
++
++	{0x3618, 0x00},
++	{0x3612, 0x29},
++	{0x3709, 0x52},
++	{0x370c, 0x03},
++	{0x3a02, 0x02}, //60HZ max exposure limit MSB
++	{0x3a03, 0xe0}, //60HZ max exposure limit LSB
++	{0x3a14, 0x02}, //50HZ max exposure limit MSB
++	{0x3a15, 0xe0}, //50HZ max exposure limit LSB
++
++	{0x4004, 0x02}, //BLC line number
++	{0x3002, 0x1c}, //reset JFIFO SFIFO JPG
++	{0x3006, 0xc3}, //enable xx clock
++	{0x460c, 0x20}, //PCLK Manuale
++	{0x4837, 0x16}, //PCLK period
++	{0x5001, 0x83}, //ISP effect
++
++	{0x302c, 0x42},//bit[7:6]: output drive capability
++	//00: 1x   01: 2x  10: 3x  11: 4x
++	{0x3a18, 0x00},//
++	{0x3a19, 0xd8},//
++};
+ 
+ static const struct reg_value ov5640_setting_720p[] = {
+ 	{0x3820, 0x46}, // timing control
+@@ -917,6 +1075,18 @@ static const struct reg_value ov5640_setting_full[] = {
+ 
+ static const struct ov5640_mode_info ov5640_mode_info_data[] = {
+ 	{
++		.width = 320,
++		.height = 240,
++		.data = ov5640_setting_QVGA,
++		.data_size = ARRAY_SIZE(ov5640_setting_QVGA)
++	},
++	{
++		.width = 640,
++		.height = 480,
++		.data = ov5640_setting_VGA,
++		.data_size = ARRAY_SIZE(ov5640_setting_VGA)
++	},
++	{
+ 		.width = 1280,
+ 		.height = 720,
+ 		.data = ov5640_setting_720p,
