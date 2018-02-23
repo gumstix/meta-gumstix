@@ -6,18 +6,18 @@ index 825f489..19e96c6 100644
  /dts-v1/;
  
  #include "apq8016-sbc.dtsi"
-+#include "dragonboardov5640.dtsi"
++#include "gumstix_ov5640.dtsi"
  
  / {
  	model = "Qualcomm Technologies, Inc. APQ 8016 SBC";
 diff --git a/home/gumstix/yocto/build/tmp/work-shared/dragonboard-410c/kernel-source/arch/arm64/boot/dts/qcom/diff.patch b/home/gumstix/yocto/build/tmp/work-shared/dragonboard-410c/kernel-source/arch/arm64/boot/dts/qcom/diff.patch
 deleted file mode 100644
 index e69de29..0000000
-diff --git a/home/gumstix/Documents/OV5640camera/WORKING20171228/qcom/dragonboardov5640.dtsi b/home/gumstix/Documents/OV5640camera/WORKING20171228/qcom/dragonboardov5640.dtsi
+diff --git a/home/gumstix/Documents/OV5640camera/WORKING20171228/qcom/gumstix_ov5640.dtsi b/home/gumstix/Documents/OV5640camera/WORKING20171228/qcom/gumstix_ov5640.dtsi
 new file mode 100644
 index 0000000..405799e
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/dragonboardov5640.dtsi
++++ b/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi
 @@ -0,0 +1,51 @@
 +
 +&camss {

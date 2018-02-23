@@ -1,7 +1,7 @@
-diff --git a/arch/arm64/boot/dts/qcom/dragonboardov5640.dtsi b/arch/arm64/boot/dts/qcom/dragonboardov5640.dtsi
+diff --git a/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi b/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi
 index 405799e..adbaf28 100644
---- a/arch/arm64/boot/dts/qcom/dragonboardov5640.dtsi
-+++ b/arch/arm64/boot/dts/qcom/dragonboardov5640.dtsi
+--- a/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi
++++ b/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi
 @@ -1,3 +1,5 @@
 +// This device tree is designed for two ov5640 cameras working on Aerocore 
 +// Dragonboard made by Gumstix
