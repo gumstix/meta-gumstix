@@ -187,11 +187,11 @@ index 0000000..71234e6
 +
 +/*
 + * DDC_I2C: I2C2_SDA/SCL on extension connector pin 15/16
-+ */
++*/
 +&i2cddc {
 +	status = "okay";
 +
-+	hdmi: edid@50 {
++	hdmi0: edid@50 {
 +		compatible = "fsl,imx6-hdmi-i2c";
 +		reg = <0x50>;
 +	};

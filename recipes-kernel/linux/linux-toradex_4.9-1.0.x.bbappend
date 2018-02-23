@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${PV}:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex_4.9:"
 
 SRC_URI += " \
     file://fragment.cfg \
