@@ -15,6 +15,7 @@ SRC_URI += " \
     file://0002-Add-devicetree-support-for-ov5640.patch \
     file://0002-Add-v4l2-support-functions-for-bcm2835-unicam.patch \
     file://0002-Fix-connected-active-CSI-2-lane-reporting.patch \
+    file://0003-ov5640-assign-xclk-to-GPCLK2.patch \
 "
 
 FILES_${PN} += "${libdir}/*"
