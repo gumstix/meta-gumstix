@@ -1,0 +1,86 @@
+diff --git a/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi b/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi
+index 405799e..adbaf28 100644
+--- a/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi
++++ b/arch/arm64/boot/dts/qcom/gumstix_ov5640.dtsi
+@@ -1,3 +1,5 @@
++// This device tree is designed for two ov5640 cameras working on Aerocore 
++// Dragonboard made by Gumstix
+ 
+ &camss {
+ 	ports {
+@@ -11,24 +13,33 @@
+ 				remote-endpoint = <&ov5640_ep>;
+ 			};
+ 		};
++		port@1 {
++			reg = <1>;
++			csiphy1_ep: endpoint {
++				status = "ok";
++				clock-lanes = <1>;
++				data-lanes = <0 2>;
++				qcom,settle-cnt = <0xe>;
++				remote-endpoint = <&ov5640_2_ep>;
++			};
++		};
+ 	};
+ };
+ 
+ &blsp_i2c6 {
+ 	status = "ok";
+-
+-	camera_rear@78 {
++	// The device connections listed are for port J20 - MIPI CSI0 on Aerocore Dragonboard
++	camera_rear@76 {
+ 		// This port isn't really connected to I2C-6
+ 		// This is a hack until CCI driver is a full i2c driver.
+-		// The device connections listed are for port J3 - MIPI CSI0
+ 		status = "ok";
+ 		compatible = "ovti,ov5640";
+-		reg = <0x78>;
++		reg = <0x76>;
+ 
+ 		ovti,vflip;
+ 		qcom,use_cci;
+-		enable-gpios = <&msmgpio 36 GPIO_ACTIVE_LOW>;
+-		reset-gpios = <&msmgpio 12 GPIO_ACTIVE_LOW>;
++		enable-gpios = <&msmgpio 34 GPIO_ACTIVE_LOW>;/*gpios are specific to this connector */
++		reset-gpios = <&msmgpio 35 GPIO_ACTIVE_LOW>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&camera_rear_default>;
+ 
+@@ -48,4 +59,35 @@
+ 			};
+ 		};
+ 	};
++	// The device connections listed are for port J19 - MIPI CSI1 on Aerocore Dragonboard
++	camera_front@74 {
++		// This port isn't really connected to I2C-6
++		// This is a hack until CCI driver is a full i2c driver.
++		status = "ok";
++		compatible = "ovti,ov5640";
++		reg = <0x74>;
++
++		ovti,vflip;
++		qcom,use_cci;
++		enable-gpios = <&msmgpio 33 GPIO_ACTIVE_LOW>;/*gpios are specific to this connector */
++		reset-gpios = <&msmgpio 28 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&camera_front_default>;
++
++		clocks = <&gcc GCC_CAMSS_MCLK1_CLK>;
++		clock-names = "xclk";
++		clock-frequency = <23880000>;
++
++		vdddo-supply = <&camera_vdddo_1v8>;
++		vdda-supply = <&camera_vdda_2v8>;
++		vddd-supply = <&camera_vddd_1v5>;
++
++		port {
++			ov5640_2_ep: endpoint {
++				clock-lanes = <1>;
++				data-lanes = <0 2>;
++				remote-endpoint = <&csiphy1_ep>;
++			};
++		};
++	};
+ };
