@@ -3,6 +3,7 @@ FILESEXTRAPATHS_append := "${THISDIR}/linux-raspberrypi-4.4:"
 SRC_URI += " \
     file://fragment.cfg \
     file://0001-Updated-wlink8-support.patch \
+    file://0002-Add-overlay-support-for-the-tlv320aic3x-audio-codec.patch \
 "
 
 # use serial0 for console, the wlink8 patch will change the alias if needed
