@@ -1,0 +1,27 @@
+From 842bc7c3d07c413907dd5f0772c869f74704436e Mon Sep 17 00:00:00 2001
+From: Jay Zhao <jay.zhao@gumstix.com>
+Date: Thu, 1 Mar 2018 13:41:49 -0800
+Subject: [PATCH 3/3] Update sdio wlink8 for rpi cm
+
+Signed-off-by: Jay Zhao <jay.zhao@gumstix.com>
+---
+ arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
+index 1e1cbd9..2bae774 100644
+--- a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
++++ b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
+@@ -121,6 +121,9 @@
+                 bten_pin = <&wfbt_pins>,"brcm,pins:0", <&mmc1_pwrseq>,"reset-gpios:4";
+                 wfen_pin = <&wfbt_pins>,"brcm,pins:4", <&mmc1_pwrseq>,"reset-gpios:16";
+                 irq_pin = <&wfbt_pins>,"brcm,pins:8", <&wlcore>,"interrupts:0";
++                poll_once = <&sdio_mmc>,"non-removable?";
++                bus_width = <&sdio_mmc>,"bus-width:0";
++                sdio_overclock = <&sdio_mmc>,"brcm,overclock-50:0";
+         };
+ 
+ };
+-- 
+2.7.4
+
