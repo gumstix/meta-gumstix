@@ -1,0 +1,138 @@
+From a382953673b6392eef0ed98879df1b6b31fdbe0d Mon Sep 17 00:00:00 2001
+From: Sicong Jia <sicong.jia@gumstix.com>
+Date: Thu, 1 Mar 2018 17:48:04 -0800
+Subject: [PATCH] Update overlay support for the tlv320aic3x audio codec
+
+Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
+---
+ .../dts/overlays/tlv320aic3x-simple-overlay.dts    | 118 +++++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+ create mode 100644 arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts
+
+diff --git a/arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts b/arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts
+new file mode 100644
+index 0000000..ddd833a
+--- /dev/null
++++ b/arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts
+@@ -0,0 +1,118 @@
++/dts-v1/;
++
++/ {
++	compatible = "brcm,bcm2708";
++
++	fragment@0 {
++		target = <0xdeadbeef>;
++
++		__overlay__ {
++			status = "okay";
++			#sound-dai-cells = <0x0>;
++		};
++	};
++
++	fragment@1 {
++		target = <0xdeadbeef>;
++
++		__overlay__ {
++			#address-cells = <0x1>;
++			#size-cells = <0x0>;
++			status = "okay";
++
++			tlv320aic3106@1b {
++				#sound-dai-cells = <0x0>;
++				compatible = "ti,tlv320aic3106";
++				gpio-reset = <0xdeadbeef 0x6 0x1>;
++				reg = <0x1b>;
++				status = "okay";
++				phandle = <0x2>;
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <0xdeadbeef>;
++
++		__overlay__ {
++			compatible = "simple-audio-card";
++			simple-audio-card,format = "i2s";
++			simple-audio-card,name = "TLV320AIC3x Codec";
++			simple-audio-card,bitclock-master = <0x1>;
++			simple-audio-card,frame-master = <0x1>;
++			simple-audio-card,widgets = "Headphone", "Headphone Jack";
++			simple-audio-card,routing = "Headphone Jack", "HPLOUT", "Headphone Jack", "HPROUT";
++			status = "okay";
++			phandle = <0x3>;
++
++			simple-audio-card,cpu {
++				sound-dai = <0xdeadbeef>;
++				phandle = <0x1>;
++			};
++
++			simple-audio-card,codec {
++				sound-dai = <0x2>;
++				system-clock-frequency = <0xb71b00>;
++				phandle = <0x4>;
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <0xdeadbeef>;
++
++		__overlay__ {
++
++			tlv_reset_pins {
++				brcm,pins = <0x6>;
++				brcm,function = <0x1>;
++				phandle = <0x5>;
++			};
++
++			gpio_led_42 {
++				brcm,pins = <0x2a>;
++				brcm,function = <0x1>;
++				phandle = <0x6>;
++			};
++		};
++	};
++
++	__overrides__ {
++		card-name = [00 00 00 03 73 69 6d 70 6c 65 2d 61 75 64 69 6f 2d 63 61 72 64 2c 6e 61 6d 65 00];
++	};
++
++	__symbols__ {
++		tlv320aic3106 = "/fragment@1/__overlay__/tlv320aic3106@1b";
++		sound_overlay = "/fragment@2/__overlay__";
++		dailink0_master = "/fragment@2/__overlay__/simple-audio-card,cpu";
++		dailink0_slave = "/fragment@2/__overlay__/simple-audio-card,codec";
++		tlv_reset_pins = "/fragment@3/__overlay__/tlv_reset_pins";
++		gpio_led_42 = "/fragment@3/__overlay__/gpio_led_42";
++	};
++
++	__local_fixups__ {
++
++		fragment@2 {
++
++			__overlay__ {
++				simple-audio-card,bitclock-master = <0x0>;
++				simple-audio-card,frame-master = <0x0>;
++
++				simple-audio-card,codec {
++					sound-dai = <0x0>;
++				};
++			};
++		};
++
++		__overrides__ {
++			card-name = <0x0>;
++		};
++	};
++
++	__fixups__ {
++		i2s = "/fragment@0:target:0", "/fragment@2/__overlay__/simple-audio-card,cpu:sound-dai:0";
++		i2c0 = "/fragment@1:target:0";
++		gpio = "/fragment@1/__overlay__/tlv320aic3106@1b:gpio-reset:0", "/fragment@3:target:0";
++		sound = "/fragment@2:target:0";
++	};
++};
+-- 
+2.7.4
+

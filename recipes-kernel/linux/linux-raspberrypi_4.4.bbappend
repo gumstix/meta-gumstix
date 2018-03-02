@@ -3,7 +3,7 @@ FILESEXTRAPATHS_append := "${THISDIR}/linux-raspberrypi-4.4:"
 SRC_URI += " \
     file://fragment.cfg \
     file://0001-Updated-wlink8-support.patch \
-    file://0002-Add-overlay-support-for-the-tlv320aic3x-audio-codec.patch \
+    file://0002-Update-overlay-support-for-the-tlv320aic3x-audio-cod.patch \
     file://0003-Update-sdio-wlink8-for-rpi-cm.patch \
 "
 
