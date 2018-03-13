@@ -30,7 +30,7 @@ index 0000000..51da258
 +    };
 +
 +    fragment@1 {
-+	target = <&i2c0>;
++	target = <&i2c1>;
 +	__overlay__ {
 +		#address-cells = <1>;
 +		#size-cells = <0>;
@@ -39,7 +39,7 @@ index 0000000..51da258
 +		tlv320aic3106: tlv320aic3106@1b {
 +			#sound-dai-cells = <0>;
 +			compatible = "ti,tlv320aic3106";
-+			gpio-reset = <&gpio 6 1>; //GPIO_ACTIVE_LOW
++			gpio-reset = <&gpio 12 1>; //GPIO_ACTIVE_LOW
 +			reg = <0x1b>;
 +			status = "okay";
 +		};
@@ -74,7 +74,7 @@ index 0000000..51da258
 +	target = <&gpio>;
 +	__overlay__ {
 +		tlv_reset_pin: tlv_reset_pin {
-+			brcm,pins = <6>;
++			brcm,pins = <12>;
 +			brcm,function = <1>; // out
 +		};
 +	};
