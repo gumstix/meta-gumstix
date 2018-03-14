@@ -14,7 +14,7 @@ new file mode 100644
 index 0000000..51da258
 --- /dev/null
 +++ b/arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,72 @@
 +/dts-v1/;
 +/plugin/;
 +
@@ -41,6 +41,7 @@ index 0000000..51da258
 +			compatible = "ti,tlv320aic3106";
 +			gpio-reset = <&gpio 12 1>; //GPIO_ACTIVE_LOW
 +			reg = <0x1b>;
++			ai3x-micbias-vg = <0>; // MICBIAS off
 +			status = "okay";
 +		};
 +	};
