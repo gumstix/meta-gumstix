@@ -6,9 +6,9 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 SRC_URI += " \
     file://fragment.cfg \
     file://0001-Add-ov5640-support-dragonboard.patch \
-    file://0001-Add-ov5640-devicetree.patch \
-    file://0002-Update-ov5640-driver-more-resolution.patch \
-    file://0002-Update-devietree-two-ov5640-camera.patch \
+    file://0002-Add-ov5640-devicetree.patch \
+    file://0003-Update-ov5640-driver-more-resolution.patch \
+    file://0004-Update-devicetree-two-ov5640-camera.patch \
 "
 
 do_configure_append () {
