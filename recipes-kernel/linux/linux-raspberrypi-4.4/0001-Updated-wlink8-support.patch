@@ -59,7 +59,7 @@ index 0000000..f4df8ab
 +                target = <&gpio>;
 +                __overlay__ {
 +                        wfbt_pins: wfbt_pins {
-+                                brcm,pins = <10 11 36>;
++                                brcm,pins = <4 5 6>;
 +                                brcm,function = <1 1 0>; /* ALT3 = SD1 */
 +                                brcm,pull = <2 2 1>;
 +                        };
