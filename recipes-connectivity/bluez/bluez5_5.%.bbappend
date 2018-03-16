@@ -24,6 +24,8 @@ def get_service(machine):
         return "bluetooth-ttymxc4-wilink.service"
     elif machine == 'raspberrypi-cm3':
         return "bluetooth-ttyAMA0-wilink.service"
+    elif machine == 'raspberrypi-cm':
+        return "bluetooth-ttyAMA0-wilink.service"
     else:
         return "bluetooth-ttyO1-csr.service bluetooth-ttyO1-wilink.service"
 
@@ -52,6 +54,10 @@ do_install_append() {
             install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-scm.rules ${D}${sysconfdir}/udev/rules.d ;;
 
         "raspberrypi-cm3")
+            install -m 0644 ${WORKDIR}/bluetooth-ttyAMA0-wilink.service ${D}${systemd_unitdir}/system
+            install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-rpicm3.rules ${D}${sysconfdir}/udev/rules.d ;;
+
+        "raspberrypi-cm")
             install -m 0644 ${WORKDIR}/bluetooth-ttyAMA0-wilink.service ${D}${systemd_unitdir}/system
             install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-rpicm3.rules ${D}${sysconfdir}/udev/rules.d ;;
 
