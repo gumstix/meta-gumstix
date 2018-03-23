@@ -1,0 +1,280 @@
+From 8cffc320e53d49c8a720d0ea99abc8d74e2851c6 Mon Sep 17 00:00:00 2001
+From: Jay Zhao <jay.zhao@gumstix.com>
+Date: Wed, 21 Mar 2018 10:43:47 -0700
+Subject: [PATCH] Update gumstix device tree for ov5640 camera and amoled
+ touchscreen
+
+Signed-off-by: Jay Zhao <jay.zhao@gumstix.com>
+---
+ arch/arm64/boot/dts/qcom/gumstix-amoled.dtsi     |  98 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/gumstix-dragonboard.dts |  25 +++++
+ arch/arm64/boot/dts/qcom/gumstix-ov5640.dtsi     | 120 +++++++++++++++++++++++
+ 3 files changed, 243 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/gumstix-amoled.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/gumstix-dragonboard.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/gumstix-ov5640.dtsi
+
+diff --git a/arch/arm64/boot/dts/qcom/gumstix-amoled.dtsi b/arch/arm64/boot/dts/qcom/gumstix-amoled.dtsi
+new file mode 100644
+index 0000000..60157e3
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/gumstix-amoled.dtsi
+@@ -0,0 +1,98 @@
++/*
++ * Copyright (C) 2018 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 or
++ * (at your option) any later version as published by the Free Software
++ * Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++// GT1151 Touchscreen controller I2C connections
++&blsp_i2c6 {
++	status = "ok";
++	// the node for goodix.ko, from https://elixir.bootlin.com/linux/v4.15/source/drivers/input/touchscreen/goodix.c
++	gt1151@14 {
++		status = "ok";
++		compatible = "goodix,gt1151";
++		reg = <0x14>;
++		interrupt-parent = <&msmgpio>;
++		interrupts = <25 0>;
++
++		irq-gpios = <&msmgpio 25 0>;
++		reset-gpios = <&msmgpio 69 0>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&goodix_int_pull_up &panel_reset_pinctrl>;
++	};
++
++};
++
++// RM67120 AMOLED DSI screen connections
++&adv_bridge {
++	pd-gpios = <&msmgpio 32 1>;
++	pinctrl-0 = <&dsi_out_pinctrl>;
++};
++
++&adv7533_in {
++	/delete-property/ remote-endpoint;
++};
++
++&dsi0_out {
++	remote-endpoint = <&panel0_in>;
++};
++
++&dsi0 {
++	status = "ok";
++
++	panel@0 {
++		compatible = "osd,osd055a";
++		reg = <0>;
++
++		port {
++			panel0_in: endpoint {
++				remote-endpoint = <&dsi0_out>;
++			};
++		};
++	};
++};
++
++&msmgpio {
++	dsi_out_pinctrl: dsi_out_pinctrl {
++		pinmux {
++			function = "gpio";
++			pins = "gpio32";
++		};
++		pinconf {
++			pins = "gpio32";
++			drive-strength = <16>;
++			output-high;
++		};
++	};
++	panel_reset_pinctrl: panel_reset_pinctrl {
++		pinmux {
++			function = "gpio";
++			pins = "gpio69";
++		};
++		pinconf {
++			pins = "gpio69";
++			drive-strength = <16>;
++			output-high;
++		};
++	};
++	goodix_int_pull_up: goodix_int_pull_up {
++		pinmux {
++			function = "gpio";
++			pins = "gpio25";
++		};
++		pinconf {
++			pins = "gpio25";
++			drive-strength = <16>;
++			output-high;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/qcom/gumstix-dragonboard.dts b/arch/arm64/boot/dts/qcom/gumstix-dragonboard.dts
+new file mode 100644
+index 0000000..5b09163
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/gumstix-dragonboard.dts
+@@ -0,0 +1,25 @@
++/*
++ * Copyright (C) 2018 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 or
++ * (at your option) any later version as published by the Free Software
++ * Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++/dts-v1/;
++
++#include "apq8016-sbc.dtsi"
++#include "gumstix-ov5640.dtsi"
++#include "gumstix-amoled.dtsi"
++
++/ {
++	model = "Qualcomm APQ 8016 SBC Dragonboard 410c on Geppetto - AeroCore 2 for DragonBoard 410C";
++	compatible = "qcom,apq8016-sbc", "qcom,apq8016", "qcom,sbc";
++};
+diff --git a/arch/arm64/boot/dts/qcom/gumstix-ov5640.dtsi b/arch/arm64/boot/dts/qcom/gumstix-ov5640.dtsi
+new file mode 100644
+index 0000000..a55297a
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/gumstix-ov5640.dtsi
+@@ -0,0 +1,120 @@
++/*
++ * Copyright (C) 2018 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 or
++ * (at your option) any later version as published by the Free Software
++ * Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++/*
++ * ***IMPORTANT INFORMATION***
++ * If connecting TWO cameras (currently support OV5640)
++ *     Discard the following message 
++ * If connecting only ONE camera:
++ *     Disable the corresponding connector node (either the camera_J19 or camera_J20) by:
++ *         Set the 
++ *             camera_JXX@XX {
++ *                 status = "ok";
++ *         to
++ *             camera_JXX@XX {
++ *                 status = "disable";
++ */
++
++
++&blsp_i2c6 {
++	// This port isn't really connected to I2C-6
++	// This is a hack until CCI driver is a full i2c driver.
++	status = "ok";
++
++	// The device connections listed are for port J19 - MIPI CSI1 on Aerocore Dragonboard
++	camera_J19@74 {
++		status = "ok";
++		compatible = "ovti,ov5640";
++		reg = <0x74>;
++
++		ovti,vflip;
++		qcom,use_cci;
++		enable-gpios = <&msmgpio 33 GPIO_ACTIVE_LOW>;/*gpios are specific to this connector */
++		reset-gpios = <&msmgpio 28 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&camera_front_default>;
++
++		clocks = <&gcc GCC_CAMSS_MCLK1_CLK>;
++		clock-names = "xclk";
++		clock-frequency = <23880000>;
++
++		vdddo-supply = <&camera_vdddo_1v8>;
++		vdda-supply = <&camera_vdda_2v8>;
++		vddd-supply = <&camera_vddd_1v5>;
++
++		port {
++			ov5640_ep_1: endpoint {
++				clock-lanes = <1>;
++				data-lanes = <0 2>;
++				remote-endpoint = <&csiphy1_ep>;
++			};
++		};
++	};
++
++	// The device connections listed are for port J20 - MIPI CSI0 on Aerocore Dragonboard
++	camera_J20@76 {
++		status = "ok";
++		compatible = "ovti,ov5640";
++		reg = <0x76>;
++
++		ovti,vflip;
++		qcom,use_cci;
++		enable-gpios = <&msmgpio 34 GPIO_ACTIVE_LOW>;/*gpios are specific to this connector */
++		reset-gpios = <&msmgpio 35 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&camera_rear_default>;
++
++		clocks = <&gcc GCC_CAMSS_MCLK0_CLK>;
++		clock-names = "xclk";
++		clock-frequency = <23880000>;
++
++		vdddo-supply = <&camera_vdddo_1v8>;
++		vdda-supply = <&camera_vdda_2v8>;
++		vddd-supply = <&camera_vddd_1v5>;
++
++		port {
++			ov5640_ep_0: endpoint {
++				clock-lanes = <1>;
++				data-lanes = <0 2>;
++				remote-endpoint = <&csiphy0_ep>;
++			};
++		};
++	};
++};
++
++&camss {
++	ports {
++		port@0 {
++			reg = <0>;
++			csiphy0_ep: endpoint {
++				status = "ok";
++				clock-lanes = <1>;
++				data-lanes = <0 2>;
++				qcom,settle-cnt = <0xe>;
++				remote-endpoint = <&ov5640_ep_0>;
++			};
++		};
++		port@1 {
++			reg = <1>;
++			csiphy1_ep: endpoint {
++				status = "ok";
++				clock-lanes = <1>;
++				data-lanes = <0 2>;
++				qcom,settle-cnt = <0xe>;
++				remote-endpoint = <&ov5640_ep_1>;
++			};
++		};
++	};
++};
+-- 
+2.7.4
+
