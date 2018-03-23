@@ -17,10 +17,14 @@ SRC_URI += "\
 "
 
 do_install_prepend() {
-	cp ${WORKDIR}/TIInit_11.8.32.bts ${S}/ti-connectivity/
-	cp ${WORKDIR}/wl1271-nvs.bin ${S}/ti-connectivity/
+    cp ${WORKDIR}/TIInit_11.8.32.bts ${S}/ti-connectivity/
+    cp ${WORKDIR}/wl1271-nvs.bin ${S}/ti-connectivity/
 }
 
 do_install_append(){
+    # Remove upstream wilink8 firmware file, use more recent version
     rm ${D}/lib/firmware/ti-connectivity/wl18xx-fw-4.bin
+
+    # Remove the firmware files that are comflict with the firmware-qcom-dragonboard410c
+    rm -r ${D}/lib/firmware/qcom/*
 }
