@@ -1,0 +1,93 @@
+From a382953673b6392eef0ed98879df1b6b31fdbe0d Mon Sep 17 00:00:00 2001
+From: Sicong Jia <sicong.jia@gumstix.com>
+Date: Thu, 1 Mar 2018 17:48:04 -0800
+Subject: [PATCH] Update overlay support for the tlv320aic3x audio codec
+
+Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
+---
+ .../dts/overlays/tlv320aic3x-simple-overlay.dts    | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts
+
+diff --git a/arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts b/arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts
+new file mode 100644
+index 0000000..51da258
+--- /dev/null
++++ b/arch/arm/boot/dts/overlays/tlv320aic3x-simple-overlay.dts
+@@ -0,0 +1,72 @@
++/dts-v1/;
++/plugin/;
++
++/ {
++    compatible = "brcm,bcm2708";
++
++    fragment@0 {
++        target = <&i2s>;
++        __overlay__ {
++            status = "okay";
++    	    #sound-dai-cells = <0>;
++        };
++    };
++
++    fragment@1 {
++	target = <&i2c1>;
++	__overlay__ {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "okay";
++
++		tlv320aic3106: tlv320aic3106@1b {
++			#sound-dai-cells = <0>;
++			compatible = "ti,tlv320aic3106";
++			gpio-reset = <&gpio 12 1>; //GPIO_ACTIVE_LOW
++			reg = <0x1b>;
++			ai3x-micbias-vg = <0>; // MICBIAS off
++			status = "okay";
++		};
++	};
++    };
++
++    fragment@2 {
++        target = <&sound>;
++            sound_overlay: __overlay__ {
++            compatible = "simple-audio-card";
++            simple-audio-card,format = "i2s";
++            simple-audio-card,name = "TLV320AIC3x Codec";
++            simple-audio-card,bitclock-master = <&dailink0_master>;
++            simple-audio-card,frame-master = <&dailink0_master>;
++            simple-audio-card,widgets =
++                    "Headphone", "Headphone Jack";
++            simple-audio-card,routing =
++		    "Headphone Jack", "HPLOUT",
++		    "Headphone Jack", "HPROUT";
++            status = "okay";
++            dailink0_master: simple-audio-card,cpu {
++                sound-dai = <&i2s>;
++            };
++            dailink0_slave: simple-audio-card,codec {
++                sound-dai = <&tlv320aic3106>;
++		system-clock-frequency = <12000000>;
++            };
++        };
++    };
++
++    fragment@3 {
++	target = <&gpio>;
++	__overlay__ {
++		tlv_reset_pin: tlv_reset_pin {
++			brcm,pins = <12>;
++			brcm,function = <1>; // out
++		};
++	};
++    };
++
++    __overrides__ {
++        card-name = <&sound_overlay>,"simple-audio-card,name";
++	reset-pin = <&tlv320aic3106>,"gpio-reset:4",
++		    <&tlv_reset_pin>,"brcm,pins:0";
++    };
++};
+-- 
+2.7.4
+
+
