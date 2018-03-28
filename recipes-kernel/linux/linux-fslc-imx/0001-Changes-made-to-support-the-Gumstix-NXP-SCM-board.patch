@@ -623,7 +623,7 @@ index 0000000..dd8fb6a
 +    status = "okay";
 +    pinctrl-names = "default";
 +    pinctrl-0 = <&usdhc1_default>;
-+    mc-pwrseq = <&mmc2_pwrseq>;
++    mmc-pwrseq = <&mmc2_pwrseq>;
 +    #address-cells = <1>;
 +    type = "sdmmc",
 +        "uart";
@@ -1081,4 +1081,3 @@ index 0000000..e14bcc1
 +MODULE_LICENSE("GPL");
 -- 
 2.7.4
-
