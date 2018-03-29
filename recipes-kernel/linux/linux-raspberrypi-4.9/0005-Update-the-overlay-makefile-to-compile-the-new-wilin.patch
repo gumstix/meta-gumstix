@@ -1,0 +1,33 @@
+From 9043fb8fd625ffd1ffe38bd03814ad8a776abfc1 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Thu, 29 Mar 2018 16:09:52 -0400
+Subject: [PATCH] Update the overlay makefile to compile the new wilink8 and
+ tlv overlays.
+
+---
+ arch/arm/boot/dts/overlays/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
+index d4d3176..7ede187 100644
+--- a/arch/arm/boot/dts/overlays/Makefile
++++ b/arch/arm/boot/dts/overlays/Makefile
+@@ -103,6 +103,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+ 	sdhost.dtbo \
+ 	sdio.dtbo \
+ 	sdio-1bit.dtbo \
++	sdio-wlink8.dtbo \
+ 	sdtweak.dtbo \
+ 	smi.dtbo \
+ 	smi-dev.dtbo \
+@@ -118,6 +119,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+ 	spi2-2cs.dtbo \
+ 	spi2-3cs.dtbo \
+ 	tinylcd35.dtbo \
++	tlv320aic3x-simple.dtbo \
+ 	uart0.dtbo \
+ 	uart1.dtbo \
+ 	vc4-fkms-v3d.dtbo \
+-- 
+2.7.4
+
