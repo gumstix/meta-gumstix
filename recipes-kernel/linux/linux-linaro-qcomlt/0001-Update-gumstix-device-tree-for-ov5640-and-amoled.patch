@@ -19,7 +19,7 @@ new file mode 100644
 index 0000000..60157e3
 --- /dev/null
 +++ b/arch/arm64/boot/dts/qcom/gumstix-amoled.dtsi
-@@ -0,0 +1,98 @@
+@@ -0,0 +1,116 @@
 +/*
 + * Copyright (C) 2018 Gumstix, Inc. - https://www.gumstix.com/
 + *
@@ -35,10 +35,24 @@ index 0000000..60157e3
 + *
 + */
 +
++/*
++ * This device tree is for AMOLED touchscreen RM67120 from Gumstix including 
++ * OSD055A-MIPI-DSI (DSI display) and GT1151 (touchscreen controller)
++ *
++ * Since the dragonboard has single DSI interface DSI0, so either HDMI or
++ * DSI interface locate at High Speed Connector would work
++ * In here, the adv_bridge is disabled (HDMI bridge), and linked the dsi0_out_ts
++ * to panel0_in
++ * 
++ * Steps to make the HDMI working again are:
++ * 1. Change the status to "ok" at adv_bridge and "disable" at panel@0
++ * 2. Turn on the "HDMI SEL" at switch S6 on Dragonboard-410c to overwrite the
++ *    DSI_SW_SEL GPIO32
++ */
++
 +// GT1151 Touchscreen controller I2C connections
 +&blsp_i2c6 {
 +	status = "ok";
-+	// the node for goodix.ko, from https://elixir.bootlin.com/linux/v4.15/source/drivers/input/touchscreen/goodix.c
 +	gt1151@14 {
 +		status = "ok";
 +		compatible = "goodix,gt1151";
@@ -54,26 +68,22 @@ index 0000000..60157e3
 +
 +};
 +
-+// RM67120 AMOLED DSI screen connections
++// OSD055A AMOLED DSI display connections
 +&adv_bridge {
-+	pd-gpios = <&msmgpio 32 1>;
-+	pinctrl-0 = <&dsi_out_pinctrl>;
-+};
-+
-+&adv7533_in {
-+	/delete-property/ remote-endpoint;
-+};
-+
-+&dsi0_out {
-+	remote-endpoint = <&panel0_in>;
++	status = "disable";
 +};
 +
 +&dsi0 {
 +	status = "ok";
 +
 +	panel@0 {
++		status = "ok";
 +		compatible = "osd,osd055a";
 +		reg = <0>;
++
++		// Use GPIO32 to mux dis0 to High Speed Connector instead of the HDMI bridge
++		pinctrl-names = "default";
++		pinctrl-0 = <&dsi_out_switch_high>;
 +
 +		port {
 +			panel0_in: endpoint {
@@ -81,10 +91,18 @@ index 0000000..60157e3
 +			};
 +		};
 +	};
++	ports {
++		port@1 {
++			status = "ok";
++			dsi0_out: endpoint {
++				remote-endpoint = <&panel0_in>;
++			};
++		};
++	};
 +};
 +
 +&msmgpio {
-+	dsi_out_pinctrl: dsi_out_pinctrl {
++	dsi_out_switch_high: dsi_out_switch_high {
 +		pinmux {
 +			function = "gpio";
 +			pins = "gpio32";
@@ -103,7 +121,7 @@ index 0000000..60157e3
 +		pinconf {
 +			pins = "gpio69";
 +			drive-strength = <16>;
-+			output-high;
++			bias-pull-up;
 +		};
 +	};
 +	goodix_int_pull_up: goodix_int_pull_up {
