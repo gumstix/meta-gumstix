@@ -1,0 +1,51 @@
+From f1596b2b44b0a51235546cbb55bfcd44aeb18367 Mon Sep 17 00:00:00 2001
+From: Sicong Jia <sicong.jia@gumstix.com>
+Date: Tue, 3 Apr 2018 13:20:49 -0700
+Subject: [PATCH] Add device tree for Gumstix Zircon 2GB version
+
+Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
+---
+ arch/arm/boot/dts/imx6dqscm-2gb-fix.dtsi   | 14 ++++++++++++++
+ arch/arm/boot/dts/imx6dqscm-2gb-zircon.dts |  8 ++++++++
+ 2 files changed, 22 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-2gb-fix.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-2gb-zircon.dts
+
+diff --git a/arch/arm/boot/dts/imx6dqscm-2gb-fix.dtsi b/arch/arm/boot/dts/imx6dqscm-2gb-fix.dtsi
+new file mode 100644
+index 0000000..f5c58f8
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-2gb-fix.dtsi
+@@ -0,0 +1,14 @@
++/*
++ * Copyright (C) 2016 Freescale Semiconductor, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/ {
++	memory: memory {
++		linux,usable-memory = <0x10000000 0x40000000
++				       0x80000000 0x40000000>;
++	};
++};
+diff --git a/arch/arm/boot/dts/imx6dqscm-2gb-zircon.dts b/arch/arm/boot/dts/imx6dqscm-2gb-zircon.dts
+new file mode 100644
+index 0000000..a9f8eb9
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-2gb-zircon.dts
+@@ -0,0 +1,8 @@
++/*
++* Copyright (C) 2017 Gumstix, Inc.  All Rights Reserved - https://www.gumstix.com/
++* Product of the Geppetto Device Tree Service
++*
++*/
++
++#include "imx6dqscm-1gb-zircon.dts"
++#include "imx6dqscm-2gb-fix.dtsi"
+\ No newline at end of file
+-- 
+2.7.4
+
