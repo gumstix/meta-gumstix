@@ -1,0 +1,48 @@
+From d4d9bf420b686d558966a3acd029d242ac80e2b1 Mon Sep 17 00:00:00 2001
+From: Sicong Jia <sicong.jia@gumstix.com>
+Date: Fri, 6 Apr 2018 13:46:14 -0700
+Subject: [PATCH] Fix iMX 7 audio problem on Alexa board
+
+Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
+---
+ arch/arm/boot/dts/imx7-colibri.dtsi | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
+index 20e4cf5..0b157c9 100644
+--- a/arch/arm/boot/dts/imx7-colibri.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri.dtsi
+@@ -70,19 +70,17 @@
+ 	};
+ 
+ 	sound {
+-		compatible = "simple-audio-card";
+-		simple-audio-card,name = "imx7-sgtl5000";
+-		simple-audio-card,format = "i2s";
+-		simple-audio-card,bitclock-master = <&dailink_master>;
+-		simple-audio-card,frame-master = <&dailink_master>;
+-		simple-audio-card,cpu {
+-			sound-dai = <&sai1>;
+-		};
+-
+-		dailink_master: simple-audio-card,codec {
+-			sound-dai = <&codec>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
+-		};
++		compatible = "fsl,imx7d-colibri-sgtl5000",
++			   "fsl,imx-audio-sgtl5000";
++		model = "imx7-colibri-sgtl5000";
++		cpu-dai = <&sai1>;
++		audio-codec = <&codec>;
++		codec-master;
++		audio-routing =
++			"LINE_IN", "Line In Jack",
++			"MIC_IN", "Mic Jack",
++			"Mic Jack", "Mic Bias",
++			"Headphone Jack", "HP_OUT";
+ 	};
+ 
+ 	m4_tcm: tcml@007f8000 {
+-- 
+2.7.4
+
