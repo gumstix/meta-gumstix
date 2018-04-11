@@ -1,18 +1,21 @@
-From d4d9bf420b686d558966a3acd029d242ac80e2b1 Mon Sep 17 00:00:00 2001
+From c960178f1487cf1654585f716ca79720d20ece7a Mon Sep 17 00:00:00 2001
 From: Sicong Jia <sicong.jia@gumstix.com>
-Date: Fri, 6 Apr 2018 13:46:14 -0700
-Subject: [PATCH] Fix iMX 7 audio problem on Alexa board
+Date: Wed, 11 Apr 2018 16:05:28 -0700
+Subject: [PATCH] Fix iMX 7 audio and WiFi problem on Alexa board
+
+simple-audio-card driver not map sgtl5000 to sai correctly, use imx-sgtl5000 instead.
+Some pinctrls for SD2 data was used by toradex, it's causing conflicts, delete them so wl18 can use it.
 
 Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
 ---
- arch/arm/boot/dts/imx7-colibri.dtsi | 24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ arch/arm/boot/dts/imx7-colibri.dtsi | 28 +++++++++++-----------------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index 20e4cf5..0b157c9 100644
+index 20e4cf5..f42d22f 100644
 --- a/arch/arm/boot/dts/imx7-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -70,19 +70,17 @@
+@@ -70,21 +70,19 @@
  	};
  
  	sound {
@@ -23,12 +26,6 @@ index 20e4cf5..0b157c9 100644
 -		simple-audio-card,frame-master = <&dailink_master>;
 -		simple-audio-card,cpu {
 -			sound-dai = <&sai1>;
--		};
--
--		dailink_master: simple-audio-card,codec {
--			sound-dai = <&codec>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
--		};
 +		compatible = "fsl,imx7d-colibri-sgtl5000",
 +			   "fsl,imx-audio-sgtl5000";
 +		model = "imx7-colibri-sgtl5000";
@@ -40,9 +37,35 @@ index 20e4cf5..0b157c9 100644
 +			"MIC_IN", "Mic Jack",
 +			"Mic Jack", "Mic Bias",
 +			"Headphone Jack", "HP_OUT";
+ 		};
+ 
+-		dailink_master: simple-audio-card,codec {
+-			sound-dai = <&codec>;
+-			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
+-		};
+-	};
+-
+ 	m4_tcm: tcml@007f8000 {
+ 		compatible = "fsl, m4_tcml";
+ 		reg = <0x007f8000 0x8000>;
+@@ -368,8 +366,6 @@
+ 			MX7D_PAD_EPDC_GDRL__GPIO2_IO26		0x14 /* SODIMM 133 */
+ 			MX7D_PAD_SAI1_RX_DATA__GPIO6_IO12	0x14 /* SODIMM 169 */
+ 			MX7D_PAD_SAI1_RX_BCLK__GPIO6_IO17	0x14 /* SODIMM 24 */
+-			MX7D_PAD_SD2_DATA2__GPIO5_IO16		0x14 /* SODIMM 100 */
+-			MX7D_PAD_SD2_DATA3__GPIO5_IO17		0x14 /* SODIMM 102 */
+ 			MX7D_PAD_EPDC_GDSP__GPIO2_IO27		0x14 /* SODIMM 104 */
+ 			MX7D_PAD_EPDC_BDR1__GPIO2_IO29		0x14 /* SODIMM 110 */
+ 			MX7D_PAD_EPDC_PWR_COM__GPIO2_IO30	0x14 /* SODIMM 112 */
+@@ -386,8 +382,6 @@
+ 			MX7D_PAD_EPDC_GDOE__GPIO2_IO25		0x14 /* SODIMM 134 */
+ 			MX7D_PAD_EPDC_DATA12__GPIO2_IO12	0x14 /* SODIMM 150 */
+ 			MX7D_PAD_EPDC_DATA11__GPIO2_IO11	0x14 /* SODIMM 152 */
+-			MX7D_PAD_SD2_CLK__GPIO5_IO12		0x14 /* SODIMM 184 */
+-			MX7D_PAD_SD2_CMD__GPIO5_IO13		0x14 /* SODIMM 186 */
+ 		>;
  	};
  
- 	m4_tcm: tcml@007f8000 {
 -- 
 2.7.4
 
