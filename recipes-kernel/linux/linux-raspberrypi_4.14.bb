@@ -9,13 +9,15 @@ SRCREV = "${AUTOREV}"
 SRC_URI += " \
     git://github.com/raspberrypi/linux.git;protocol=git;branch=${LINUX_RPI_DEV_BRANCH} \
     file://0001-build-arm64-Add-rules-for-.dtbo-files-for-dts-overla.patch \
+    file://0002-Updated-wlink8-support.patch \
+    file://0003-Add-bcm2835-unicam-driver.patch \
+    file://0004-Add-devicetree-support-for-ov5640.patch \
+    file://0005-Add-enable-bcm2835driver-ov5640driver.patch
+    file://0006-Add-v4l2-support-functions-for-bcm2835-unicam.patch \
+    file://0007-Fix-connected-active-CSI-2-lane-reporting.patch \
+    file://0008-ov5640-assign-xclk-to-GPCLK2.patch \
+    file://0009-Fix-ov5640-driver-480p-and-720p-flickering-video.patch \
     file://fragment.cfg \
-    file://0001-Updated-wlink8-support.patch \
-    file://0002-Add-bcm2835-unicam-driver.patch \
-    file://0002-Add-devicetree-support-for-ov5640.patch \
-    file://0002-Add-v4l2-support-functions-for-bcm2835-unicam.patch \
-    file://0002-Fix-connected-active-CSI-2-lane-reporting.patch \
-    file://0003-ov5640-assign-xclk-to-GPCLK2.patch \
 "
 
 FILES_${PN} += "${libdir}/*"
