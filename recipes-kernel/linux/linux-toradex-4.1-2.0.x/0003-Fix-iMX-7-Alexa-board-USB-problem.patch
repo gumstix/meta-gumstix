@@ -1,0 +1,36 @@
+From 3afad8a5e82e68475a65676e4f619e486b094bb6 Mon Sep 17 00:00:00 2001
+From: Sicong Jia <jiasicong@gmail.com>
+Date: Wed, 18 Apr 2018 16:22:06 -0700
+Subject: [PATCH] Fix iMX 7 Alexa board USB problem
+
+Signed-off-by: Sicong Jia <jiasicong@gmail.com>
+---
+ arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+index 217ddf0..ebe6cde 100644
+--- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+@@ -67,8 +67,9 @@
+ 		regulator-name = "VCC_USB[1-4]";
+ 		regulator-min-microvolt = <5000000>;
+ 		regulator-max-microvolt = <5000000>;
+-		gpio = <&gpio4 7 GPIO_ACTIVE_LOW>;
++		gpio = <&gpio4 7 GPIO_ACTIVE_HIGH>;
+ 		vin-supply = <&reg_5v0>;
++		enable-active-high;
+ 	};
+ };
+ 
+@@ -297,7 +298,6 @@
+ 
+ &usbotg1 {
+ 	extcon = <&extcon_usbc_det>;
+-	vbus-supply = <&reg_usbh_vbus>;
+ 	status = "okay";
+ };
+ 
+-- 
+2.7.4
+

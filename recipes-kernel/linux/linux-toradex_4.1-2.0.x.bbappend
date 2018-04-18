@@ -4,6 +4,7 @@ SRC_URI += " \
     file://fragment.cfg \
     file://0001-Add-device-tree-gumstix.patch \
     file://0002-Add-device-tree-gumstix.patch \
+    file://0003-Fix-iMX-7-Alexa-board-USB-problem.patch \
 "
 
 do_configure_append () {
