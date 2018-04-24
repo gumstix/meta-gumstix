@@ -1,3 +1,24 @@
+From d83f0f6e47236bad614140e9f9c3bdf334594165 Mon Sep 17 00:00:00 2001
+From: Jay Zhao <jay.zhao@gumstix.com>
+Date: Tue, 24 Apr 2018 14:18:54 -0700
+Subject: [PATCH 1/2] Add unicam driver for custom camera modules
+
+Signed-off-by: Jay Zhao <jay.zhao@gumstix.com>
+---
+ drivers/media/platform/Kconfig                   |    2 +
+ drivers/media/platform/Makefile                  |    2 +
+ drivers/media/platform/bcm2835/Kconfig           |   14 +
+ drivers/media/platform/bcm2835/Makefile          |    3 +
+ drivers/media/platform/bcm2835/bcm2835-unicam.c  | 2206 ++++++++++++++++++++++
+ drivers/media/platform/bcm2835/vc4-regs-unicam.h |  264 +++
+ include/media/v4l2-mediabus.h                    |    9 +
+ include/uapi/linux/videodev2.h                   |    5 +
+ 8 files changed, 2505 insertions(+)
+ create mode 100644 drivers/media/platform/bcm2835/Kconfig
+ create mode 100644 drivers/media/platform/bcm2835/Makefile
+ create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam.c
+ create mode 100644 drivers/media/platform/bcm2835/vc4-regs-unicam.h
+
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
 index 3c4f7fa..dfcfe70 100644
 --- a/drivers/media/platform/Kconfig
@@ -12,17 +33,18 @@ index 3c4f7fa..dfcfe70 100644
  	tristate "SuperH VOU video output driver"
  	depends on MEDIA_CAMERA_SUPPORT
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 327f80a..6d5a5f3 100644
+index 327f80a..c967e88 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -91,3 +91,4 @@ obj-$(CONFIG_VIDEO_QCOM_CAMSS)		+= qcom/camss-8x16/
+@@ -91,3 +91,5 @@ obj-$(CONFIG_VIDEO_QCOM_CAMSS)		+= qcom/camss-8x16/
  obj-$(CONFIG_VIDEO_QCOM_VENUS)		+= qcom/venus/
  
  obj-y					+= meson/
++
 +obj-y					+= bcm2835/
 diff --git a/drivers/media/platform/bcm2835/Kconfig b/drivers/media/platform/bcm2835/Kconfig
 new file mode 100644
-index e69de29..6a74842 100644
+index 0000000..6a74842
 --- /dev/null
 +++ b/drivers/media/platform/bcm2835/Kconfig
 @@ -0,0 +1,14 @@
@@ -42,7 +64,7 @@ index e69de29..6a74842 100644
 +	   will be called bcm2835-unicam.
 diff --git a/drivers/media/platform/bcm2835/Makefile b/drivers/media/platform/bcm2835/Makefile
 new file mode 100644
-index e69de29..a98aba0 100644
+index 0000000..a98aba0
 --- /dev/null
 +++ b/drivers/media/platform/bcm2835/Makefile
 @@ -0,0 +1,3 @@
@@ -51,7 +73,7 @@ index e69de29..a98aba0 100644
 +obj-$(CONFIG_VIDEO_BCM2835_UNICAM) += bcm2835-unicam.o
 diff --git a/drivers/media/platform/bcm2835/bcm2835-unicam.c b/drivers/media/platform/bcm2835/bcm2835-unicam.c
 new file mode 100644
-index e69de29..6dd34f1 100644
+index 0000000..6dd34f1
 --- /dev/null
 +++ b/drivers/media/platform/bcm2835/bcm2835-unicam.c
 @@ -0,0 +1,2206 @@
@@ -2263,7 +2285,7 @@ index e69de29..6dd34f1 100644
 +MODULE_VERSION(UNICAM_VERSION);
 diff --git a/drivers/media/platform/bcm2835/vc4-regs-unicam.h b/drivers/media/platform/bcm2835/vc4-regs-unicam.h
 new file mode 100644
-index e69de29..28e9a75 100644
+index 0000000..28e9a75
 --- /dev/null
 +++ b/drivers/media/platform/bcm2835/vc4-regs-unicam.h
 @@ -0,0 +1,264 @@
@@ -2531,3 +2553,42 @@ index e69de29..28e9a75 100644
 +#define UNICAM_FL1		BIT(9)
 +
 +#endif
+diff --git a/include/media/v4l2-mediabus.h b/include/media/v4l2-mediabus.h
+index 93f8afc..d3e9cf3 100644
+--- a/include/media/v4l2-mediabus.h
++++ b/include/media/v4l2-mediabus.h
+@@ -64,6 +64,15 @@
+ #define V4L2_MBUS_CSI2_CHANNELS		(V4L2_MBUS_CSI2_CHANNEL_0 | V4L2_MBUS_CSI2_CHANNEL_1 | \
+ 					 V4L2_MBUS_CSI2_CHANNEL_2 | V4L2_MBUS_CSI2_CHANNEL_3)
+ 
++/*
++ * Number of lanes in use, 0 == use all available lanes (default)
++ *
++ * This is a temporary fix for devices that need to reduce the number of active
++ * lanes for certain modes, until g_mbus_config() can be replaced with a better
++ * solution.
++ */
++#define V4L2_MBUS_CSI2_LANE_MASK                (0xf << 10)
++
+ /**
+  * enum v4l2_mbus_type - media bus type
+  * @V4L2_MBUS_PARALLEL:	parallel interface with hsync and vsync
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 1c095b5..9140c2b 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -82,6 +82,11 @@
+ 	((__u32)(a) | ((__u32)(b) << 8) | ((__u32)(c) << 16) | ((__u32)(d) << 24))
+ #define v4l2_fourcc_be(a, b, c, d)	(v4l2_fourcc(a, b, c, d) | (1 << 31))
+ 
++#define V4L2_FOURCC_CONV "%c%c%c%c%s"
++#define V4L2_FOURCC_CONV_ARGS(fourcc) \
++	(fourcc) & 0x7f, ((fourcc) >> 8) & 0x7f, ((fourcc) >> 16) & 0x7f, \
++	((fourcc) >> 24) & 0x7f, (fourcc) & BIT(31) ? "-BE" : ""
++
+ /*
+  *	E N U M S
+  */
+-- 
+2.7.4
+
