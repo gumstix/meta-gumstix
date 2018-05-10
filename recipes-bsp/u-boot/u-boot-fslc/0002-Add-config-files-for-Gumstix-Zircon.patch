@@ -1,40 +1,76 @@
-From 8f39a9701c81d6416dcb84248191b5296b97fed0 Mon Sep 17 00:00:00 2001
-From: Jason Liu <jason.liu@gumstix.com>
-Date: Mon, 20 Nov 2017 15:35:06 -0800
-Subject: [PATCH] Add gumstix scm dev board config files
+From c6b2d69e462d89ae0e8a5c8a2f7d495cff3f52c4 Mon Sep 17 00:00:00 2001
+From: Sicong Jia <sicong.jia@gumstix.com>
+Date: Fri, 23 Mar 2018 11:34:46 -0700
+Subject: [PATCH] Add config files for Gumstix Zircon
 
-Signed-off-by: Jason Liu <jason.liu@gumstix.com>
+Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
 ---
- board/gumstix/mx6dqscm_1gb_gumstix/Kconfig         |   15 +
- board/gumstix/mx6dqscm_1gb_gumstix/MAINTAINERS     |    6 +
- board/gumstix/mx6dqscm_1gb_gumstix/Makefile        |   11 +
- board/gumstix/mx6dqscm_1gb_gumstix/README          |   89 ++
- .../mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg   |  596 ++++++++++
- .../mx6dqscm_1gb_gumstix/mx6dqscm_1gb_gumstix.c    | 1165 ++++++++++++++++++++
- board/gumstix/mx6dqscm_1gb_gumstix/plugin.S        |  803 ++++++++++++++
- configs/mx6dqscm_1gb_gumstix_defconfig             |    6 +
- include/configs/mx6dqscm_1gb_gumstix.h             |  569 ++++++++++
- 9 files changed, 3260 insertions(+)
- create mode 100644 board/gumstix/mx6dqscm_1gb_gumstix/Kconfig
- create mode 100644 board/gumstix/mx6dqscm_1gb_gumstix/MAINTAINERS
- create mode 100644 board/gumstix/mx6dqscm_1gb_gumstix/Makefile
- create mode 100644 board/gumstix/mx6dqscm_1gb_gumstix/README
- create mode 100644 board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg
- create mode 100644 board/gumstix/mx6dqscm_1gb_gumstix/mx6dqscm_1gb_gumstix.c
- create mode 100644 board/gumstix/mx6dqscm_1gb_gumstix/plugin.S
- create mode 100644 configs/mx6dqscm_1gb_gumstix_defconfig
- create mode 100644 include/configs/mx6dqscm_1gb_gumstix.h
+ arch/arm/cpu/armv7/mx6/Kconfig                     |   11 +
+ board/gumstix/mx6dqscm_1gb_zircon/Kconfig          |   15 +
+ board/gumstix/mx6dqscm_1gb_zircon/MAINTAINERS      |    6 +
+ board/gumstix/mx6dqscm_1gb_zircon/Makefile         |   11 +
+ board/gumstix/mx6dqscm_1gb_zircon/README           |   89 ++
+ .../mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg    |  596 ++++++++++
+ .../mx6dqscm_1gb_zircon/mx6dqscm_1gb_zircon.c      | 1165 ++++++++++++++++++++
+ board/gumstix/mx6dqscm_1gb_zircon/plugin.S         |  803 ++++++++++++++
+ configs/mx6dqscm_1gb_zircon_defconfig              |    6 +
+ include/configs/mx6dqscm_1gb_zircon.h              |  569 ++++++++++
+ 10 files changed, 3271 insertions(+)
+ create mode 100644 board/gumstix/mx6dqscm_1gb_zircon/Kconfig
+ create mode 100644 board/gumstix/mx6dqscm_1gb_zircon/MAINTAINERS
+ create mode 100644 board/gumstix/mx6dqscm_1gb_zircon/Makefile
+ create mode 100644 board/gumstix/mx6dqscm_1gb_zircon/README
+ create mode 100644 board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg
+ create mode 100644 board/gumstix/mx6dqscm_1gb_zircon/mx6dqscm_1gb_zircon.c
+ create mode 100644 board/gumstix/mx6dqscm_1gb_zircon/plugin.S
+ create mode 100644 configs/mx6dqscm_1gb_zircon_defconfig
+ create mode 100644 include/configs/mx6dqscm_1gb_zircon.h
 
-diff --git a/board/gumstix/mx6dqscm_1gb_gumstix/Kconfig b/board/gumstix/mx6dqscm_1gb_gumstix/Kconfig
+diff --git a/arch/arm/cpu/armv7/mx6/Kconfig b/arch/arm/cpu/armv7/mx6/Kconfig
+index 762a581..7d0c9d2 100644
+--- a/arch/arm/cpu/armv7/mx6/Kconfig
++++ b/arch/arm/cpu/armv7/mx6/Kconfig
+@@ -211,6 +211,21 @@ config TARGET_ZC5202
+ 	select SUPPORT_SPL
+ 	select DM
+ 	select DM_THERMAL
++
++config TARGET_MX6DQSCM_1GB_GUMSTIX
++	bool "mx6dqscm_1gb_gumstix"
++	select DM
++	select DM_THERMAL
++
++config TARGET_MX6DQSCM_1GB_ZIRCON
++	bool "mx6dqscm_1gb_zircon"
++	select DM
++	select DM_THERMAL
++
++config TARGET_MX6DQSCM_2GB_ZIRCON
++	bool "mx6dqscm_2gb_zircon"
++	select DM
++	select DM_THERMAL
+
+ config TARGET_ZC5601
+ 	bool "zc5601"
+@@ -255,5 +265,8 @@ source "board/tqc/tqma6/Kconfig"
+ source "board/udoo/Kconfig"
+ source "board/wandboard/Kconfig"
+ source "board/warp/Kconfig"
++source "board/gumstix/mx6dqscm_1gb_gumstix/Kconfig"
++source "board/gumstix/mx6dqscm_1gb_zircon/Kconfig"
++source "board/gumstix/mx6dqscm_2gb_zircon/Kconfig"
+
+ endif
+diff --git a/board/gumstix/mx6dqscm_1gb_zircon/Kconfig b/board/gumstix/mx6dqscm_1gb_zircon/Kconfig
 new file mode 100644
-index 0000000..f9af030
+index 0000000..95d308c
 --- /dev/null
-+++ b/board/gumstix/mx6dqscm_1gb_gumstix/Kconfig
++++ b/board/gumstix/mx6dqscm_1gb_zircon/Kconfig
 @@ -0,0 +1,15 @@
-+if TARGET_MX6DQSCM_1GB_GUMSTIX
++if TARGET_MX6DQSCM_1GB_ZIRCON
 +
 +config SYS_BOARD
-+	default "mx6dqscm_1gb_gumstix"
++	default "mx6dqscm_1gb_zircon"
 +
 +config SYS_VENDOR
 +	default "gumstix"
@@ -43,26 +79,26 @@ index 0000000..f9af030
 +	default "mx6"
 +
 +config SYS_CONFIG_NAME
-+	default "mx6dqscm_1gb_gumstix"
++	default "mx6dqscm_1gb_zircon"
 +
 +endif
-diff --git a/board/gumstix/mx6dqscm_1gb_gumstix/MAINTAINERS b/board/gumstix/mx6dqscm_1gb_gumstix/MAINTAINERS
+diff --git a/board/gumstix/mx6dqscm_1gb_zircon/MAINTAINERS b/board/gumstix/mx6dqscm_1gb_zircon/MAINTAINERS
 new file mode 100644
-index 0000000..9876958
+index 0000000..3eadebe
 --- /dev/null
-+++ b/board/gumstix/mx6dqscm_1gb_gumstix/MAINTAINERS
++++ b/board/gumstix/mx6dqscm_1gb_zircon/MAINTAINERS
 @@ -0,0 +1,6 @@
-+MX6DQSCM_1GB_GUMSTIX BOARD
-+M:	Jason Liu <jason.liu@gumstix.com>
++MX6DQSCM_1GB_ZIRCON BOARD
++M:	Sicong Jia <sicong.jia@gumstix.com>
 +S:	Maintained
-+F:	board/gumstix/mx6dqscm_1gb_gumstix/
-+F:	include/configs/mx6dqscm_1gb_gumstix.h
-+F:	configs/imx6dqscm-1gb-gumstix.conf
-diff --git a/board/gumstix/mx6dqscm_1gb_gumstix/Makefile b/board/gumstix/mx6dqscm_1gb_gumstix/Makefile
++F:	board/gumstix/mx6dqscm_1gb_zircon/
++F:	include/configs/mx6dqscm_1gb_zircon.h
++F:	configs/imx6dqscm-1gb-zircon.conf
+diff --git a/board/gumstix/mx6dqscm_1gb_zircon/Makefile b/board/gumstix/mx6dqscm_1gb_zircon/Makefile
 new file mode 100644
-index 0000000..0d2a9c4
+index 0000000..afb19ca
 --- /dev/null
-+++ b/board/gumstix/mx6dqscm_1gb_gumstix/Makefile
++++ b/board/gumstix/mx6dqscm_1gb_zircon/Makefile
 @@ -0,0 +1,11 @@
 +#
 +# (C) Copyright 2017 Gumstix Research Canada, Inc.
@@ -70,16 +106,16 @@ index 0000000..0d2a9c4
 +# SPDX-License-Identifier:  GPL-2.0+
 +#
 +
-+obj-y  := mx6dqscm_1gb_gumstix.o
++obj-y  := mx6dqscm_1gb_zircon.o
 +
 +extra-$(CONFIG_USE_PLUGIN) :=  plugin.bin
 +$(obj)/plugin.bin: $(obj)/plugin.o
 +	$(OBJCOPY) -O binary --gap-fill 0xff $< $@
-diff --git a/board/gumstix/mx6dqscm_1gb_gumstix/README b/board/gumstix/mx6dqscm_1gb_gumstix/README
+diff --git a/board/gumstix/mx6dqscm_1gb_zircon/README b/board/gumstix/mx6dqscm_1gb_zircon/README
 new file mode 100644
-index 0000000..bd33cd6
+index 0000000..457e90e
 --- /dev/null
-+++ b/board/gumstix/mx6dqscm_1gb_gumstix/README
++++ b/board/gumstix/mx6dqscm_1gb_zircon/README
 @@ -0,0 +1,89 @@
 +How to use U-Boot on Gumstix MX6DQSCM boards
 +----------------------------------------------
@@ -134,47 +170,47 @@ index 0000000..bd33cd6
 +
 +512mb qwks-rev2:
 +----------------
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=512,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-512mb-qwks-rev2-ldo.dtb\",SCM_LPDDR2_512MB"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=512,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-512mb-qwks-rev2-ldo.dtb\",SCM_LPDDR2_512MB"
 +
 +
 +512mb qwks-rev2 spinor-boot:
 +----------------------------
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=512,SYS_BOOT_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-512mb-qwks-rev2-ldo.dtb\",SCM_LPDDR2_512MB"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=512,SYS_BOOT_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-512mb-qwks-rev2-ldo.dtb\",SCM_LPDDR2_512MB"
 +
 +
 +2gb fix evb:
 +------------
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=2048,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-2gb-evb-fix-ldo.dtb\",SCMEVB,SCM_LPDDR2_2GB"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=2048,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-2gb-evb-fix-ldo.dtb\",SCMEVB,SCM_LPDDR2_2GB"
 +
 +
 +2gb interleaving evb:
 +---------------------
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=2048,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-2gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB,SCM_LPDDR2_2GB"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=2048,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-2gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB,SCM_LPDDR2_2GB"
 +
 +
 +2gb interleaving evb spinor-boot:
 +---------------------------------
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=2048,SYS_BOOT_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-2gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB,SCM_LPDDR2_2GB"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=2048,SYS_BOOT_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-2gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB,SCM_LPDDR2_2GB"
 +
 +1gb interleaving evb android:
 +-----------------------------
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB,ANDROID_SUPPORT"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB,ANDROID_SUPPORT"
 +
 +
 +1gb interleaving qwks_rev2:
 +---------------------------
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-qwks-rev2-interleave-ldo.dtb\",INTERLEAVING_MODE"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-qwks-rev2-interleave-ldo.dtb\",INTERLEAVING_MODE"
 +
 +
 +1gb interleaving evb spinor-boot:
 +---------------------------------
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_BOOT_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_BOOT_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB"
 +
-diff --git a/board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg b/board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg
+diff --git a/board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg b/board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg
 new file mode 100644
-index 0000000..d2463af
+index 0000000..a09b328
 --- /dev/null
-+++ b/board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg
++++ b/board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg
 @@ -0,0 +1,596 @@
 +/*
 + * Copyright (C) 2017 Gumstix Research Canada, Inc.
@@ -203,7 +239,7 @@ index 0000000..d2463af
 +
 +#ifdef CONFIG_USE_PLUGIN
 +/*PLUGIN    plugin-binary-file    IRAM_FREE_START_ADDR*/
-+PLUGIN	board/gumstix/mx6dscm_1gb_gumstix/plugin.bin 0x00907000
++PLUGIN	board/gumstix/mx6dscm_1gb_zircon/plugin.bin 0x00907000
 +#else
 +
 +#ifdef CONFIG_SECURE_BOOT
@@ -772,11 +808,11 @@ index 0000000..d2463af
 +DATA 4, 0x020e001c, 0x007F007F
 +#endif /*CONFIG_SCM_LPDDR2_2GB*/
 +#endif
-diff --git a/board/gumstix/mx6dqscm_1gb_gumstix/mx6dqscm_1gb_gumstix.c b/board/gumstix/mx6dqscm_1gb_gumstix/mx6dqscm_1gb_gumstix.c
+diff --git a/board/gumstix/mx6dqscm_1gb_zircon/mx6dqscm_1gb_zircon.c b/board/gumstix/mx6dqscm_1gb_zircon/mx6dqscm_1gb_zircon.c
 new file mode 100644
 index 0000000..803d938
 --- /dev/null
-+++ b/board/gumstix/mx6dqscm_1gb_gumstix/mx6dqscm_1gb_gumstix.c
++++ b/board/gumstix/mx6dqscm_1gb_zircon/mx6dqscm_1gb_zircon.c
 @@ -0,0 +1,1165 @@
 +/*
 + * Copyright (C) 2017 Gumstix Research Canada, Inc.
@@ -1943,11 +1979,11 @@ index 0000000..803d938
 +#endif /*CONFIG_ANDROID_RECOVERY*/
 +
 +#endif /*CONFIG_FSL_FASTBOOT*/
-diff --git a/board/gumstix/mx6dqscm_1gb_gumstix/plugin.S b/board/gumstix/mx6dqscm_1gb_gumstix/plugin.S
+diff --git a/board/gumstix/mx6dqscm_1gb_zircon/plugin.S b/board/gumstix/mx6dqscm_1gb_zircon/plugin.S
 new file mode 100644
 index 0000000..d8f765e
 --- /dev/null
-+++ b/board/gumstix/mx6dqscm_1gb_gumstix/plugin.S
++++ b/board/gumstix/mx6dqscm_1gb_zircon/plugin.S
 @@ -0,0 +1,803 @@
 +/*
 + * Copyright (C) 2017 Gumstix Research Canada, Inc.
@@ -2752,23 +2788,23 @@ index 0000000..d8f765e
 +
 +/* include the common plugin code here */
 +#include <asm/arch/mx6_plugin.S>
-diff --git a/configs/mx6dqscm_1gb_gumstix_defconfig b/configs/mx6dqscm_1gb_gumstix_defconfig
+diff --git a/configs/mx6dqscm_1gb_zircon_defconfig b/configs/mx6dqscm_1gb_zircon_defconfig
 new file mode 100644
-index 0000000..072a657
+index 0000000..07e1ec7
 --- /dev/null
-+++ b/configs/mx6dqscm_1gb_gumstix_defconfig
++++ b/configs/mx6dqscm_1gb_zircon_defconfig
 @@ -0,0 +1,6 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_MX6=y
 +CONFIG_OF_LIBFDT=y
-+CONFIG_TARGET_MX6DQSCM_1GB_GUMSTIX=y
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_gumstix/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,QWKS_REV3,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-gumstix.dtb\""
++CONFIG_TARGET_MX6DQSCM_1GB_ZIRCON=y
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/gumstix/mx6dqscm_1gb_zircon/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,QWKS_REV3,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-zircon.dtb\""
 +CONFIG_CMD_GPIO=y
-diff --git a/include/configs/mx6dqscm_1gb_gumstix.h b/include/configs/mx6dqscm_1gb_gumstix.h
+diff --git a/include/configs/mx6dqscm_1gb_zircon.h b/include/configs/mx6dqscm_1gb_zircon.h
 new file mode 100644
-index 0000000..3e1fdc3
+index 0000000..cf676e7
 --- /dev/null
-+++ b/include/configs/mx6dqscm_1gb_gumstix.h
++++ b/include/configs/mx6dqscm_1gb_zircon.h
 @@ -0,0 +1,569 @@
 +/*
 + * Copyright (C) 2017 Gumstix Research Canada, Inc.
@@ -2839,7 +2875,7 @@ index 0000000..3e1fdc3
 +#define CONFIG_MXC_UART_BASE    UART1_BASE
 +#define CONFIG_CONSOLE_DEV      "ttymxc0"
 +#endif
-+#define CONFIG_MMCROOT          "/dev/mmcblk2p2"  /* SDHC3 */
++#define CONFIG_MMCROOT          "/dev/mmcblk3p2"  /* eMMC */
 +
 +#if defined(CONFIG_SCMHVB) || defined(CONFIG_SCMEVB)
 +#define CONFIG_VIDEO_PRIMARY	" "
@@ -2948,7 +2984,7 @@ index 0000000..3e1fdc3
 +
 +
 +#define CONFIG_SYS_FSL_USDHC_NUM    3
-+#define CONFIG_SYS_MMC_ENV_DEV       1  /* SDHC3 */
++#define CONFIG_SYS_MMC_ENV_DEV       2  /* eMMC */
 +#define CONFIG_SYS_MMC_ENV_PART     0  /* user partition */
 +
 +#ifdef CONFIG_SYS_USE_SPINOR
@@ -3122,7 +3158,7 @@ index 0000000..3e1fdc3
 +	CONFIG_MFG_ENV_SETTINGS \
 +	"script=boot.scr\0" \
 +	"image=zImage\0" \
-+	"fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" \
++	"fdt_file=" "imx6dqscm-1gb-zircon.dtb" "\0" \
 +	"fdt_addr=0x18000000\0" \
 +	"boot_fdt=try\0" \
 +	"ip_dyn=yes\0" \
@@ -3239,7 +3275,7 @@ index 0000000..3e1fdc3
 +	CONFIG_MFG_ENV_SETTINGS \
 +	"script=boot.scr\0" \
 +	"image=zImage\0" \
-+	"fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" \
++	"fdt_file=" "imx6dqscm-1gb-zircon.dtb" "\0" \
 +	"fdt_addr=0x18000000\0" \
 +	"boot_fdt=try\0" \
 +	"ip_dyn=yes\0" \
