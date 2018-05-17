@@ -1,0 +1,69 @@
+From 832e3416c2d7574a66b6e007b794ec06669df867 Mon Sep 17 00:00:00 2001
+From: Jay Zhao <jay.zhao@gumstix.com>
+Date: Thu, 17 May 2018 10:06:09 -0700
+Subject: [PATCH] ov7692 fix for poblano
+
+Signed-off-by: Jay Zhao <jay.zhao@gumstix.com>
+---
+ drivers/media/i2c/ov7692.c                  |  2 +-
+ drivers/media/platform/am437x/am437x-vpfe.c | 20 ++++++++++----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/media/i2c/ov7692.c b/drivers/media/i2c/ov7692.c
+index 7e746cf..b9f7373 100644
+--- a/drivers/media/i2c/ov7692.c
++++ b/drivers/media/i2c/ov7692.c
+@@ -317,7 +317,7 @@ static int ov7692_enum_frame_sizes(struct v4l2_subdev *sd,
+ 	fse->max_width = 640;
+ 	fse->max_height = 480;
+ 
+-	return 0;
++	return -1;
+ }
+ 
+ static int ov7692_s_stream(struct v4l2_subdev *sd, int on)
+diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
+index 05489a4..d7c7df1 100644
+--- a/drivers/media/platform/am437x/am437x-vpfe.c
++++ b/drivers/media/platform/am437x/am437x-vpfe.c
+@@ -96,13 +96,13 @@ struct vpfe_fmt {
+ 
+ static struct vpfe_fmt formats[] = {
+ 	{
+-		.name		= "YUV 4:2:2 packed, YCbYCr",
+-		.fourcc		= V4L2_PIX_FMT_YUYV,
+-		.code		= MEDIA_BUS_FMT_YUYV8_2X8,
++		.name		= "RAW8 BGGR",
++		.fourcc		= V4L2_PIX_FMT_SBGGR8,
++		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
+ 		.l.width	= 10,
+-		.l.bpp		= 4,
++		.l.bpp		= 2,
+ 		.s.width	= 8,
+-		.s.bpp		= 2,
++		.s.bpp		= 1,
+ 		.supported	= false,
+ 	}, {
+ 		.name		= "YUV 4:2:2 packed, CbYCrY",
+@@ -132,13 +132,13 @@ static struct vpfe_fmt formats[] = {
+ 		.s.bpp		= 2,
+ 		.supported	= false,
+ 	}, {
+-		.name		= "RAW8 BGGR",
+-		.fourcc		= V4L2_PIX_FMT_SBGGR8,
+-		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
++		.name		= "YUV 4:2:2 packed, YCbYCr",
++		.fourcc		= V4L2_PIX_FMT_YUYV,
++		.code		= MEDIA_BUS_FMT_YUYV8_2X8,
+ 		.l.width	= 10,
+-		.l.bpp		= 2,
++		.l.bpp		= 4,
+ 		.s.width	= 8,
+-		.s.bpp		= 1,
++		.s.bpp		= 2,
+ 		.supported	= false,
+ 	}, {
+ 		.name		= "RAW8 GBRG",
+-- 
+2.7.4
+
