@@ -1,71 +1,4 @@
-state.ALSA {
-	control.1 {
-		iface MIXER
-		name 'PCM Playback Volume'
-		value -2000
-		comment {
-			access 'read write'
-			type INTEGER
-			count 1
-			range '-10239 - 400'
-			dbmin -9999999
-			dbmax 400
-			dbvalue.0 -2000
-		}
-	}
-	control.2 {
-		iface MIXER
-		name 'PCM Playback Switch'
-		value true
-		comment {
-			access 'read write'
-			type BOOLEAN
-			count 1
-		}
-	}
-	control.3 {
-		iface MIXER
-		name 'PCM Playback Route'
-		value 0
-		comment {
-			access 'read write'
-			type INTEGER
-			count 1
-			range '0 - 2'
-		}
-	}
-	control.4 {
-		iface PCM
-		name 'IEC958 Playback Default'
-		value '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
-		comment {
-			access 'read write'
-			type IEC958
-			count 1
-		}
-	}
-	control.5 {
-		iface PCM
-		name 'IEC958 Playback Con Mask'
-		value '0200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
-		comment {
-			access read
-			type IEC958
-			count 1
-		}
-	}
-	control.6 {
-		iface PCM
-		name 'IEC958 Playback PCM Stream'
-		value '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
-		comment {
-			access 'read write inactive'
-			type IEC958
-			count 1
-		}
-	}
-}
-state.Codec {
+state.AM437xpoblano {
 	control.1 {
 		iface MIXER
 		name 'Left Line Mixer Line2R Bypass Volume'
@@ -217,22 +150,6 @@ state.Codec {
 	control.11 {
 		iface MIXER
 		name 'Mono PGA Bypass Volume'
-		value.0 94
-		value.1 94
-		comment {
-			access 'read write'
-			type INTEGER
-			count 2
-			range '0 - 118'
-			dbmin -9999999
-			dbmax 0
-			dbvalue.0 -1200
-			dbvalue.1 -1200
-		}
-	}
-	control.12 {
-		iface MIXER
-		name 'Mono DAC Playback Volume'
 		value.0 118
 		value.1 118
 		comment {
@@ -244,6 +161,22 @@ state.Codec {
 			dbmax 0
 			dbvalue.0 0
 			dbvalue.1 0
+		}
+	}
+	control.12 {
+		iface MIXER
+		name 'Mono DAC Playback Volume'
+		value.0 74
+		value.1 74
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 118'
+			dbmin -9999999
+			dbmax 0
+			dbvalue.0 -2200
+			dbvalue.1 -2200
 		}
 	}
 	control.13 {
@@ -443,8 +376,8 @@ state.Codec {
 	control.27 {
 		iface MIXER
 		name 'Line PGA Bypass Volume'
-		value.0 94
-		value.1 94
+		value.0 118
+		value.1 118
 		comment {
 			access 'read write'
 			type INTEGER
@@ -452,8 +385,8 @@ state.Codec {
 			range '0 - 118'
 			dbmin -9999999
 			dbmax 0
-			dbvalue.0 -1200
-			dbvalue.1 -1200
+			dbvalue.0 0
+			dbvalue.1 0
 		}
 	}
 	control.28 {
@@ -475,8 +408,8 @@ state.Codec {
 	control.29 {
 		iface MIXER
 		name 'HP PGA Bypass Volume'
-		value.0 94
-		value.1 94
+		value.0 118
+		value.1 118
 		comment {
 			access 'read write'
 			type INTEGER
@@ -484,8 +417,8 @@ state.Codec {
 			range '0 - 118'
 			dbmin -9999999
 			dbmax 0
-			dbvalue.0 -1200
-			dbvalue.1 -1200
+			dbvalue.0 0
+			dbvalue.1 0
 		}
 	}
 	control.30 {
@@ -507,8 +440,8 @@ state.Codec {
 	control.31 {
 		iface MIXER
 		name 'HPCOM PGA Bypass Volume'
-		value.0 94
-		value.1 94
+		value.0 118
+		value.1 118
 		comment {
 			access 'read write'
 			type INTEGER
@@ -516,8 +449,8 @@ state.Codec {
 			range '0 - 118'
 			dbmin -9999999
 			dbmax 0
-			dbvalue.0 -1200
-			dbvalue.1 -1200
+			dbvalue.0 0
+			dbvalue.1 0
 		}
 	}
 	control.32 {
@@ -866,7 +799,7 @@ state.Codec {
 	control.57 {
 		iface MIXER
 		name 'Left PGA Mixer Line1L Switch'
-		value true
+		value false
 		comment {
 			access 'read write'
 			type BOOLEAN
@@ -886,7 +819,7 @@ state.Codec {
 	control.59 {
 		iface MIXER
 		name 'Left PGA Mixer Line2L Switch'
-		value true
+		value false
 		comment {
 			access 'read write'
 			type BOOLEAN
@@ -928,7 +861,7 @@ state.Codec {
 	control.63 {
 		iface MIXER
 		name 'Right PGA Mixer Line1R Switch'
-		value true
+		value false
 		comment {
 			access 'read write'
 			type BOOLEAN
@@ -948,7 +881,7 @@ state.Codec {
 	control.65 {
 		iface MIXER
 		name 'Right PGA Mixer Line2R Switch'
-		value true
+		value false
 		comment {
 			access 'read write'
 			type BOOLEAN
