@@ -126,7 +126,7 @@ new file mode 100644
 index 0000000..7e746cf
 --- /dev/null
 +++ b/drivers/media/i2c/ov7692.c
-@@ -0,0 +1,786 @@
+@@ -0,0 +1,788 @@
 +/* OV7692: linux kernel driver for the OmniVision OV7692 Image Sensor 
 +*
 +*  Copyright (C) 2016-2017, 
@@ -218,12 +218,13 @@ index 0000000..7e746cf
 +};
 +
 +static const u8 reset_registers[] = {
-+       	0x12, 0x80, // Reset
++	0x12, 0x80, // Reset
 +	0xEE, 0x00,
 +};
 +
 +static const u8 initial_registers[] = {
-+	0x0e, 0x08, // Sleep mode
++	0x12, 0x80,
++	0x0e, 0x08,
 +	0x69, 0x52,
 +	0x1e, 0xb3,
 +	0x48, 0x42,
@@ -232,24 +233,25 @@ index 0000000..7e746cf
 +	0xff, 0x00,
 +	0x16, 0x03,
 +	0x62, 0x10,
-+	0x12, 0x01,
++	0x12, 0x00,
 +	0x17, 0x65,
 +	0x18, 0xa4,
 +	0x19, 0x0c,
 +	0x1a, 0xf6,
-+	0x37, 0x04,
 +	0x3e, 0x20,
++	0x64, 0x11,
++	0x67, 0x20,
 +	0x81, 0x3f,
 +	0xcc, 0x02,
 +	0xcd, 0x80,
 +	0xce, 0x01,
 +	0xcf, 0xe0,
-+	0x82, 0x01,
 +	0xc8, 0x02,
 +	0xc9, 0x80,
 +	0xca, 0x01,
 +	0xcb, 0xe0,
-+	0xd0, 0x28,
++	0xd0, 0x48,
++	0x82, 0x03,
 +	0x0e, 0x00,
 +	0x70, 0x00,
 +	0x71, 0x34,
@@ -428,7 +430,7 @@ index 0000000..7e746cf
 +	if (code->index > 0)
 +		return -EINVAL;
 +
-+	code->code = MEDIA_BUS_FMT_SBGGR8_1X8;
++	code->code = MEDIA_BUS_FMT_YUYV8_2X8;
 +	return 0;
 +}
 +
@@ -440,13 +442,13 @@ index 0000000..7e746cf
 +
 +	v4l2_info(client, "Setting frame sizes... \n");
 +
-+	fse->code = MEDIA_BUS_FMT_SBGGR8_1X8;
++	fse->code = MEDIA_BUS_FMT_YUYV8_2X8;
 +	fse->min_width = 640;
 +	fse->min_height = 480;
 +	fse->max_width = 640;
 +	fse->max_height = 480;
 +
-+	return 0;
++	return -1;
 +}
 +
 +static int ov7692_s_stream(struct v4l2_subdev *sd, int on)
@@ -502,7 +504,7 @@ index 0000000..7e746cf
 +	mf->height = 480;
 +	mf->field = V4L2_FIELD_NONE;
 +	mf->colorspace = V4L2_COLORSPACE_SRGB;
-+	mf->code = MEDIA_BUS_FMT_SBGGR8_1X8;
++	mf->code = MEDIA_BUS_FMT_YUYV8_2X8;
 +}
 +
 +

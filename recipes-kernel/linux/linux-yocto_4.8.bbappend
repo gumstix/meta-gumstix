@@ -57,7 +57,6 @@ SRC_URI += " \
     file://0018-drm-tilcdc-Defer-TFP410-probing-for-i2c.patch \
     file://0019-parlor-fix-HDMI-color-reverse-problem.patch \
     file://0020-Add-device-tree-for-thumbo.patch \
-    file://0021-ov7692-fix-for-poblano.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "
