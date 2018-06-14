@@ -1,21 +1,19 @@
-From: Jason Liu <jason.liu@gumstix.com>
-Date: Mon, 2 Otc 2017 15:15:02 -0800
-Subject: [PATCH] Add device tree gumstix
+From 191eb53e0dfb75307a4975bda915a8460f8d555d Mon Sep 17 00:00:00 2001
+From: Sicong Jia <jiasicong@gmail.com>
+Date: Thu, 14 Jun 2018 15:25:03 -0700
+Subject: [PATCH] Update Colibri iMX6 device tree
 
-Add a device tree for gumstix Colibri IMX6 board.
-
-Signed-off-by: Jason Liu <jason.liu@gumstix.com>
 ---
- arch/arm/boot/dts/imx6dl-colibri-gumstix.dts      |   369 +++++++++++++++++++++++++++
- 1 files changed, 369 insertions(+)
+ arch/arm/boot/dts/imx6dl-colibri-gumstix.dts | 370 +++++++++++++++++++++++++++
+ 1 file changed, 370 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
 
 diff --git a/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts b/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
 new file mode 100644
-index 0000000..71234e6
+index 0000000..03a6037
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6dl-colibri-gumstix.dts
-@@ -0,0 +1,369 @@
+@@ -0,0 +1,370 @@
 +/*
 + * Copyright 2017 Gumstix, Inc.
 + * Copyright 2014-2015 Toradex AG
@@ -62,6 +60,7 @@ index 0000000..71234e6
 +		/* i.e. the eMMC on usdhc3 will be /dev/mmcblk0 */
 +		mmc0 = &usdhc3; /* eMMC */
 +		mmc1 = &usdhc1; /* MMC 4bit slot */
++		mmc2 = &usdhc2; /* WiFi */
 +	};
 +
 +	extcon_usbc_det: usbc_det {
@@ -385,6 +384,6 @@ index 0000000..71234e6
 +				0x00000000 0x04000040 0x00000000>;
 +	};
 +};
----
+-- 
 2.7.4
 
