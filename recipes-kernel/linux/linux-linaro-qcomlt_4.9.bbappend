@@ -10,6 +10,7 @@ SRC_URI += " \
     file://0003-Update-ov5640-driver-more-resolution.patch \
     file://0004-Add-support-for-the-OSD-OSD055A-5.5-MIPI-DSI-AMOLED-.patch \
     file://0005-Update-goodix.c-driver-to-be-compatitble-with-gt1151.patch \
+    file://0006-IMU-ST-driver-patches-for-accel-mag-gyro.patch \
 "
 
 do_configure_append () {

@@ -5,6 +5,7 @@ SRC_URI += " \
     file://0002-Add-support-ov5640-device-tree.patch \
     file://0003-Add-device-tree-for-Gumstix-Zircon.patch \
     file://0004-Add-device-tree-for-Gumstix-Zircon-2GB-version.patch \
+    file://0005-IMU-ST-driver-patches-for-accel-mag-gyro.patch \
     file://frag_zircon.cfg \
     file://frag_imx6dqscm.cfg \
 "

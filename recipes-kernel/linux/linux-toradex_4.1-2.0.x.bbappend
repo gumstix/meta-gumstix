@@ -5,6 +5,7 @@ SRC_URI += " \
     file://0001-Add-device-tree-gumstix.patch \
     file://0002-Add-device-tree-gumstix.patch \
     file://0003-Fix-iMX-7-Alexa-board-USB-problem.patch \
+    file://0004-IMU-ST-driver-patches-for-accel-mag-gyro.patch \
 "
 
 do_configure_append () {
