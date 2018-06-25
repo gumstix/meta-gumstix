@@ -34,7 +34,7 @@ LINUX_VERSION_EXTENSION = "-custom"
 
 BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/linux-yocto-4.8:${THISDIR}/files:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/linux-yocto-4.12:${THISDIR}/files:"
 
 SRC_URI += " \
     file://0001-Add-V4L2-ioctls-for-the-OMAP3-ISP-to-report-the-vide.patch \
