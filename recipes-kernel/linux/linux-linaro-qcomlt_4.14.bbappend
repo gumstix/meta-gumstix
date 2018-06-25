@@ -1,9 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 SRC_URI += " \
+    file://0001-Add-IMU-ST-driver-patches-for-SPI.patch \
     file://fragment.cfg \
-    file://Add-ov5640-support-dragonboard.patch \
-    file://Add-ov5640-devicetree.patch \
 "
 
 do_configure_append () {

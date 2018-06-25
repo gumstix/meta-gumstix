@@ -56,6 +56,8 @@ SRC_URI += " \
     file://0019-parlor-fix-HDMI-color-reverse-problem.patch \
     file://0020-Add-device-tree-for-thumbo.patch \
     file://0021-Add-pepper-duovero-garret50c-poblano-dtb-files.patch \
+    file://0022-Add-IMU-ST-driver-patches-for-SPI.patch \
+    file://0023-Add-IMU-SPI-support-for-Arbor.patch \
     file://defconfig \
     file://${BOOT_SPLASH} \
 "

@@ -6,6 +6,7 @@ SRC_URI += " \
     file://0002-Add-device-tree-gumstix.patch \
     file://0003-Fix-iMX-7-audio-problem-on-Alexa-board.patch \
     file://0004-Fix-iMX-7-alexa-board-USB-problem.patch \
+    file://0005-Add-IMU-ST-driver-patches-for-SPI.patch \
 "
 
 do_configure_append () {

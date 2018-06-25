@@ -14,6 +14,7 @@ SRC_URI += " \
     file://0004-Update-overlay-support-for-the-tlv320aic3x-audio-cod.patch \
     file://0005-Update-sdio-wlink8-for-rpi-cm.patch \
     file://0006-Add-IMU-sensor-drivers.patch \
+    file://0007-Add-support-for-IMU-over-SPI.patch \
     file://fragment.cfg \
 "
 
