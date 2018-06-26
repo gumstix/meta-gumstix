@@ -39,7 +39,7 @@ index 0000000..f4df8ab
 +                                compatible = "ti,wl1835";
 +                                reg = <2>;
 +                                interrupt-parent = <&gpio>;
-+                                interrupts = <36 4>;
++                                interrupts = <6 4>;
 +                        };
 +                };
 +        };
@@ -59,7 +59,7 @@ index 0000000..f4df8ab
 +                target = <&gpio>;
 +                __overlay__ {
 +                        wfbt_pins: wfbt_pins {
-+                                brcm,pins = <10 11 36>;
++                                brcm,pins = <4 5 6>;
 +                                brcm,function = <1 1 0>; /* ALT3 = SD1 */
 +                                brcm,pull = <2 2 1>;
 +                        };
@@ -73,7 +73,7 @@ index 0000000..f4df8ab
 +                                compatible = "mmc-pwrseq-simple";
 +                                pinctrl-names = "default";
 +                                pinctrl-0 = <&wfbt_pins>;
-+                                reset-gpios = <&gpio 10 1 &gpio 11 1>;
++                                reset-gpios = <&gpio 4 1 &gpio 5 1>;
 +                        };
 +                };
 +        };
