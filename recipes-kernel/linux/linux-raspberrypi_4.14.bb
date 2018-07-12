@@ -8,7 +8,6 @@ LINUX_RPI_DEV_BRANCH = "rpi-4.14.y"
 SRCREV = "${AUTOREV}"
 SRC_URI += " \
     git://github.com/raspberrypi/linux.git;protocol=git;branch=${LINUX_RPI_DEV_BRANCH} \
-    file://0001-Add-unicam-driver-for-custom-camera-modules.patch \
     file://0002-Add-OV5640-camera-support-with-devicetree-and-driver.patch \
     file://0003-Updated-wlink8-support.patch \
     file://0004-Update-overlay-support-for-the-tlv320aic3x-audio-cod.patch \
