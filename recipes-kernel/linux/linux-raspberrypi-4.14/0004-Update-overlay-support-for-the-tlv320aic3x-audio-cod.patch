@@ -25,7 +25,7 @@ index 0000000..51da258
 +        target = <&i2s>;
 +        __overlay__ {
 +            status = "okay";
-+    	    #sound-dai-cells = <0>;
++            #sound-dai-cells = <0>;
 +        };
 +    };
 +
