@@ -1,18 +1,18 @@
-From cb89ce0aefb1b04dd2b0ef8a3aa6a2113d6d760c Mon Sep 17 00:00:00 2001
+From a978ce99cff3df159ea519f569124a7e6365d21d Mon Sep 17 00:00:00 2001
 From: "Andrew C. Smith" <acsmith@gumstix.com>
-Date: Tue, 24 Apr 2018 20:22:40 -0400
-Subject: [PATCH] Update the overlay makefile to compile the new wilink8 and
- tlv overlays.
+Date: Mon, 16 Jul 2018 09:28:55 -0400
+Subject: [PATCH] Update the overlay makefile (again) for wilink8 and tlv
+ overlays.
 
 ---
  arch/arm/boot/dts/overlays/Makefile | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
-index 180f8b3..4653da4 100644
+index 969f407..3b558d7 100644
 --- a/arch/arm/boot/dts/overlays/Makefile
 +++ b/arch/arm/boot/dts/overlays/Makefile
-@@ -106,6 +106,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+@@ -113,6 +113,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
  	sdhost.dtbo \
  	sdio.dtbo \
  	sdio-1bit.dtbo \
@@ -20,9 +20,9 @@ index 180f8b3..4653da4 100644
  	sdtweak.dtbo \
  	smi.dtbo \
  	smi-dev.dtbo \
-@@ -123,6 +124,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
- 	superaudioboard.dtbo \
- 	sx150x.dtbo \
+@@ -132,6 +133,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+ 	tc358743.dtbo \
+ 	tc358743-audio.dtbo \
  	tinylcd35.dtbo \
 +	tlv320aic3x-simple.dtbo \
  	uart0.dtbo \
