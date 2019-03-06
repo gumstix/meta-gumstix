@@ -1,1 +1,3 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/alsa-state:"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"

@@ -41,14 +41,14 @@ index 7d9f359..8775c58 100644
 +		return -EINVAL;
 +	}
 +
-+	/* Ugly hack */
++	/* Ugly hack - for the OMAP3 ISP CCDC report YUYV format*/
 +	fmtdesc->flags = 0;
-+	fmtdesc->description[0] = 'U';
-+	fmtdesc->description[1] = 'Y';
-+	fmtdesc->description[2] = 'V';
-+	fmtdesc->description[3] = 'Y';
++	fmtdesc->description[0] = 'Y';
++	fmtdesc->description[1] = 'U';
++	fmtdesc->description[2] = 'Y';
++	fmtdesc->description[3] = 'V';
 +	fmtdesc->description[4] = '0';
-+	fmtdesc->pixelformat = V4L2_PIX_FMT_UYVY;
++	fmtdesc->pixelformat = V4L2_PIX_FMT_YUYV;
 +
 +	return 0;
 +}

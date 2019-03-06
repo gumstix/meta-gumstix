@@ -6,6 +6,7 @@ SRC_URI += " \
     file://0002-Update-overlay-support-for-the-tlv320aic3x-audio-cod.patch \
     file://0003-Update-sdio-wlink8-for-rpi-cm.patch \
     file://0004-Add-IMU-sensor-drivers.patch \
+    file://0005-IMU-ST-driver-patches-for-accel-mag-gyro.patch \
 "
 
 # use serial0 for console, the wlink8 patch will change the alias if needed

@@ -1,0 +1,80 @@
+From fbb75538913ad3b6faa71be18926610687d64733 Mon Sep 17 00:00:00 2001
+From: Liam O'Shaughnessy <loshau@gmail.com>
+Date: Fri, 8 Jun 2018 10:24:58 -0700
+Subject: [PATCH] IMU ST driver patches for accel,mag,gyro.
+
+Signed-off-by: Liam O'Shaughnessy <loshau@gmail.com>
+---
+ drivers/iio/accel/st_accel_core.c       | 2 +-
+ drivers/iio/gyro/st_gyro.h              | 1 +
+ drivers/iio/gyro/st_gyro_core.c         | 2 +-
+ drivers/iio/gyro/st_gyro_spi.c          | 1 +
+ drivers/iio/magnetometer/st_magn_core.c | 2 +-
+ 5 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/iio/accel/st_accel_core.c b/drivers/iio/accel/st_accel_core.c
+index 197a08b..be64456 100644
+--- a/drivers/iio/accel/st_accel_core.c
++++ b/drivers/iio/accel/st_accel_core.c
+@@ -41,7 +41,7 @@
+ #define ST_ACCEL_FS_AVL_16G			16
+ 
+ /* CUSTOM VALUES FOR SENSOR 1 */
+-#define ST_ACCEL_1_WAI_EXP			0x33
++#define ST_ACCEL_1_WAI_EXP			0x49
+ #define ST_ACCEL_1_ODR_ADDR			0x20
+ #define ST_ACCEL_1_ODR_MASK			0xf0
+ #define ST_ACCEL_1_ODR_AVL_1HZ_VAL		0x01
+diff --git a/drivers/iio/gyro/st_gyro.h b/drivers/iio/gyro/st_gyro.h
+index 5353d63..9eed155 100644
+--- a/drivers/iio/gyro/st_gyro.h
++++ b/drivers/iio/gyro/st_gyro.h
+@@ -19,6 +19,7 @@
+ #define LSM330DL_GYRO_DEV_NAME		"lsm330dl_gyro"
+ #define LSM330DLC_GYRO_DEV_NAME		"lsm330dlc_gyro"
+ #define L3GD20_GYRO_DEV_NAME		"l3gd20"
++#define L3GD20H_GYRO_DEV_NAME		"l3gd20h"
+ #define L3G4IS_GYRO_DEV_NAME		"l3g4is_ui"
+ #define LSM330_GYRO_DEV_NAME		"lsm330_gyro"
+ 
+diff --git a/drivers/iio/gyro/st_gyro_core.c b/drivers/iio/gyro/st_gyro_core.c
+index 02eddce..265e7f9 100644
+--- a/drivers/iio/gyro/st_gyro_core.c
++++ b/drivers/iio/gyro/st_gyro_core.c
+@@ -256,7 +256,7 @@ static const struct st_sensor_settings st_gyro_sensors_settings[] = {
+ 		.wai = ST_GYRO_3_WAI_EXP,
+ 		.wai_addr = ST_SENSORS_DEFAULT_WAI_ADDRESS,
+ 		.sensors_supported = {
+-			[0] = L3GD20_GYRO_DEV_NAME,
++			[0] = L3GD20H_GYRO_DEV_NAME,
+ 		},
+ 		.ch = (struct iio_chan_spec *)st_gyro_16bit_channels,
+ 		.odr = {
+diff --git a/drivers/iio/gyro/st_gyro_spi.c b/drivers/iio/gyro/st_gyro_spi.c
+index d2b7a5f..c0d1e28 100644
+--- a/drivers/iio/gyro/st_gyro_spi.c
++++ b/drivers/iio/gyro/st_gyro_spi.c
+@@ -52,6 +52,7 @@ static const struct spi_device_id st_gyro_id_table[] = {
+ 	{ LSM330DL_GYRO_DEV_NAME },
+ 	{ LSM330DLC_GYRO_DEV_NAME },
+ 	{ L3GD20_GYRO_DEV_NAME },
++	{ L3GD20H_GYRO_DEV_NAME },
+ 	{ L3G4IS_GYRO_DEV_NAME },
+ 	{ LSM330_GYRO_DEV_NAME },
+ 	{},
+diff --git a/drivers/iio/magnetometer/st_magn_core.c b/drivers/iio/magnetometer/st_magn_core.c
+index b27f014..d408358 100644
+--- a/drivers/iio/magnetometer/st_magn_core.c
++++ b/drivers/iio/magnetometer/st_magn_core.c
+@@ -87,7 +87,7 @@
+ #define ST_MAGN_0_MULTIREAD_BIT			false
+ 
+ /* CUSTOM VALUES FOR SENSOR 1 */
+-#define ST_MAGN_1_WAI_EXP			0x3c
++#define ST_MAGN_1_WAI_EXP			0x49
+ #define ST_MAGN_1_ODR_ADDR			0x00
+ #define ST_MAGN_1_ODR_MASK			0x1c
+ #define ST_MAGN_1_ODR_AVL_1HZ_VAL		0x00
+-- 
+2.7.4
+
