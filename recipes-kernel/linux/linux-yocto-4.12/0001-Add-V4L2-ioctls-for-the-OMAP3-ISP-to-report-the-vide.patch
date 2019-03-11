@@ -1,23 +1,15 @@
-From a18829b6fb520b137114728aac36038ff9ff5339 Mon Sep 17 00:00:00 2001
-From: Sicong Jia <sicong.jia@gumstix.com>
-Date: Tue, 6 Feb 2018 16:35:08 -0800
-Subject: [PATCH 1578/1578] Add V4L2 ioctls for the OMAP3 ISP to report the
- video format as UYVY0.
+From 766daf3947c2a740ab2a701ab340f4ab7218d34d Mon Sep 17 00:00:00 2001
+From: haiyi <haiyi.zhou@gumstix.com>
+Date: Mon, 4 Mar 2019 16:39:43 -0800
+Subject: [PATCH] Add V4L2 ioctls for the OMAP3 ISP to report the video format
+ as YUYV0
 
-Originally from [1].
-
-[1] https://github.com/gumstix/meta-gumstix/pull/13.patch
-
-Update the patch accrodingly, since the original file has been changed.
-
-Signed-off-by: Ash Charles <ashcharles@gmail.com>
-Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
 ---
  drivers/media/platform/omap3isp/ispvideo.c | 41 ++++++++++++++++++++++++++++++
  1 file changed, 41 insertions(+)
 
 diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/omap3isp/ispvideo.c
-index 218e6d7..157fc2a 100644
+index 218e6d7..b5276a9 100644
 --- a/drivers/media/platform/omap3isp/ispvideo.c
 +++ b/drivers/media/platform/omap3isp/ispvideo.c
 @@ -1271,6 +1271,45 @@ isp_video_s_input(struct file *file, void *fh, unsigned int input)
@@ -44,12 +36,12 @@ index 218e6d7..157fc2a 100644
 +
 +	/* Ugly hack */
 +	fmtdesc->flags = 0;
-+	fmtdesc->description[0] = 'U';
-+	fmtdesc->description[1] = 'Y';
-+	fmtdesc->description[2] = 'V';
-+	fmtdesc->description[3] = 'Y';
++	fmtdesc->description[0] = 'Y';
++	fmtdesc->description[1] = 'U';
++	fmtdesc->description[2] = 'Y';
++	fmtdesc->description[3] = 'V';
 +	fmtdesc->description[4] = '0';
-+	fmtdesc->pixelformat = V4L2_PIX_FMT_UYVY;
++	fmtdesc->pixelformat = V4L2_PIX_FMT_YUYV;
 +
 +	return 0;
 +}

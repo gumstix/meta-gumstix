@@ -49,7 +49,7 @@ SRC_URI += " \
     file://0010-Overo-Updating-dts-for-Morty-4.8.patch \
     file://0011-wilink8-edt-ft5306-add-support.patch \
     file://0013-input-add-driver-for-accel-mag-gyro-sensors.patch \
-    file://0014-ov7692-add-driver-support.patch \
+    file://0014-Add-ov7692-camera-driver-support.patch \
     file://0015-Add-swd-jtag-device-tree-for-overo-storm.patch \
     file://0016-tfp410-RGB888-not-RGB565-color-mapping-for-botball.patch \
     file://0017-Garret50C-Add-correct-edid-settings-for-800x480-disp.patch \

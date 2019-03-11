@@ -1,34 +1,45 @@
-From 2e2c3c485108837641f1bd078281ceb2489275c0 Mon Sep 17 00:00:00 2001
-From: Jason Liu <jason.liu@gumstix.com>
-Date: Fri, 23 Jun 2017 11:19:46 -0700
-Subject: [PATCH] ov7692: add driver support
+From 4db83358705b1c5b7166e3c23927b7d401f482ea Mon Sep 17 00:00:00 2001
+From: haiyi <haiyi.zhou@gumstix.com>
+Date: Fri, 8 Mar 2019 10:00:34 -0800
+Subject: [PATCH] Add ov7692 camera driver support
 
-Add ov7692 camera driver support for tiny caspa camera device
-
-Signed-off-by: Jason Liu <jason.liu@gumstix.com>
 ---
- .../boot/dts/omap3-overo-common-peripherals.dtsi   |  33 +-
+ arch/arm/boot/dts/am437x-poblano.dts               |   2 +-
+ .../boot/dts/omap3-overo-common-peripherals.dtsi   |  31 +-
  drivers/media/i2c/Kconfig                          |  11 +
  drivers/media/i2c/Makefile                         |   1 +
- drivers/media/i2c/ov7692.c                         | 786 +++++++++++++++++++++
+ drivers/media/i2c/ov7692.c                         | 789 +++++++++++++++++++++
  include/media/i2c/ov7692.h                         |  33 +
- 5 files changed, 861 insertions(+), 3 deletions(-)
+ 6 files changed, 863 insertions(+), 4 deletions(-)
  create mode 100644 drivers/media/i2c/ov7692.c
  create mode 100644 include/media/i2c/ov7692.h
 
+diff --git a/arch/arm/boot/dts/am437x-poblano.dts b/arch/arm/boot/dts/am437x-poblano.dts
+index cec9ac9..659700b 100644
+--- a/arch/arm/boot/dts/am437x-poblano.dts
++++ b/arch/arm/boot/dts/am437x-poblano.dts
+@@ -475,7 +475,7 @@
+ 			ti,am437x-vpfe-interface = <0>;
+ 			bus-width = <8>;
+ 			hsync-active = <0>;
+-			vsync-active = <0>;
++			vsync-active = <1>;
+ 		};
+ 	};
+ };
 diff --git a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
-index 37873be..fc93610 100644
+index 37873be..3e76cda 100644
 --- a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
 +++ b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
 @@ -102,6 +102,7 @@
  		touchscreen-size-y = <272>;
  	};
  
-+#ifndef CONFIG_OV7692
++	#ifndef CONFIG_OV7692
  	/* optional Caspa (MT9V032) camera */
  	mt9v032_1: camera@5c {
  		compatible = "aptina,mt9v032";
-@@ -111,12 +112,30 @@
+@@ -111,12 +112,29 @@
  		clock-frequency = <26600000>;
  		port {
  			mt9v032_1_1: endpoint {
@@ -39,7 +50,7 @@ index 37873be..fc93610 100644
  			};
  		};
  	};
-+#else
++	#else
 +	/* optional Tiny Caspa (ov7692) camera */
 +	ov7692_1: camera@3c {
 +		compatible = "omnivision,ov7692";
@@ -55,43 +66,37 @@ index 37873be..fc93610 100644
 +			};
 +		};
 +	};
-+#endif
-+
++	#endif
  };
  
  &isp {
-@@ -124,16 +143,24 @@
+@@ -124,12 +142,19 @@
  	vdd-csiphy2-supply = <&vaux2>;
  	ports {
  		port@0 {
 -			reg = <0>;
 -			ccdc_ep: endpoint {
-+#ifndef CONFIG_OV7692
++			#ifndef CONFIG_OV7692
 +			ccdc_ep_0: endpoint@0 {
  				remote-endpoint = <&mt9v032_1_1>;
  				bus-width = <12>;
  				data-shift = <0>;
  			};
-+#else
++			#else
 +			ccdc_ep_1: endpoint@1 {
 +				remote-endpoint = <&ov7692_1_1>;
 +				bus-width = <12>;
 +				data-shift = <0>;
 +			};
-+#endif
++			#endif
  		};
  	};
  };
- 
-+
- &mmc3 {
- 	status = "disabled";
- };
 diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index ce9006e..955d571 100644
+index aaa9471..8ce3639 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
-@@ -544,6 +544,17 @@ config VIDEO_OV7670
+@@ -585,6 +585,17 @@ config VIDEO_OV7670
  	  OV7670 VGA camera.  It currently only works with the M88ALP01
  	  controller.
  
@@ -110,27 +115,28 @@ index ce9006e..955d571 100644
  	tristate "OmniVision OV9650/OV9652 sensor support"
  	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
 diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 94f2c99..8e4622f 100644
+index 62323ec..f952a6a 100644
 --- a/drivers/media/i2c/Makefile
 +++ b/drivers/media/i2c/Makefile
-@@ -57,6 +57,7 @@ obj-$(CONFIG_VIDEO_UPD64031A) += upd64031a.o
- obj-$(CONFIG_VIDEO_UPD64083) += upd64083.o
+@@ -62,6 +62,7 @@ obj-$(CONFIG_VIDEO_OV5645) += ov5645.o
+ obj-$(CONFIG_VIDEO_OV5647) += ov5647.o
  obj-$(CONFIG_VIDEO_OV7640) += ov7640.o
  obj-$(CONFIG_VIDEO_OV7670) += ov7670.o
 +obj-$(CONFIG_VIDEO_OV7692) += ov7692.o
  obj-$(CONFIG_VIDEO_OV9650) += ov9650.o
  obj-$(CONFIG_VIDEO_MT9M032) += mt9m032.o
- obj-$(CONFIG_VIDEO_MT9P031) += mt9p031.o
+ obj-$(CONFIG_VIDEO_MT9M111) += mt9m111.o
 diff --git a/drivers/media/i2c/ov7692.c b/drivers/media/i2c/ov7692.c
 new file mode 100644
-index 0000000..7e746cf
+index 0000000..86ad1ce
 --- /dev/null
 +++ b/drivers/media/i2c/ov7692.c
-@@ -0,0 +1,786 @@
+@@ -0,0 +1,789 @@
 +/* OV7692: linux kernel driver for the OmniVision OV7692 Image Sensor 
 +*
 +*  Copyright (C) 2016-2017, 
 +*
++*  Haiyi Zhou <haiyi.zhou@gumstix.com>
 +*  Jason Liu <jason.liu@gumstix.com>
 +*  Arun Bharadwaj <arun@gumstix.com>
 +*  Adam YH Lee <adam@gumstix.com> 
@@ -218,12 +224,13 @@ index 0000000..7e746cf
 +};
 +
 +static const u8 reset_registers[] = {
-+       	0x12, 0x80, // Reset
++	0x12, 0x80, // Reset
 +	0xEE, 0x00,
 +};
 +
 +static const u8 initial_registers[] = {
-+	0x0e, 0x08, // Sleep mode
++	0x12, 0x80,
++	0x0e, 0x08,
 +	0x69, 0x52,
 +	0x1e, 0xb3,
 +	0x48, 0x42,
@@ -232,24 +239,25 @@ index 0000000..7e746cf
 +	0xff, 0x00,
 +	0x16, 0x03,
 +	0x62, 0x10,
-+	0x12, 0x01,
++	0x12, 0x00,
 +	0x17, 0x65,
 +	0x18, 0xa4,
 +	0x19, 0x0c,
 +	0x1a, 0xf6,
-+	0x37, 0x04,
 +	0x3e, 0x20,
++	0x64, 0x11,
++	0x67, 0x20,
 +	0x81, 0x3f,
 +	0xcc, 0x02,
 +	0xcd, 0x80,
 +	0xce, 0x01,
 +	0xcf, 0xe0,
-+	0x82, 0x01,
 +	0xc8, 0x02,
 +	0xc9, 0x80,
 +	0xca, 0x01,
 +	0xcb, 0xe0,
-+	0xd0, 0x28,
++	0xd0, 0x48,
++	0x82, 0x03,
 +	0x0e, 0x00,
 +	0x70, 0x00,
 +	0x71, 0x34,
@@ -428,7 +436,7 @@ index 0000000..7e746cf
 +	if (code->index > 0)
 +		return -EINVAL;
 +
-+	code->code = MEDIA_BUS_FMT_SBGGR8_1X8;
++	code->code = MEDIA_BUS_FMT_YUYV8_2X8;
 +	return 0;
 +}
 +
@@ -440,13 +448,13 @@ index 0000000..7e746cf
 +
 +	v4l2_info(client, "Setting frame sizes... \n");
 +
-+	fse->code = MEDIA_BUS_FMT_SBGGR8_1X8;
++	fse->code = MEDIA_BUS_FMT_YUYV8_2X8;
 +	fse->min_width = 640;
 +	fse->min_height = 480;
 +	fse->max_width = 640;
 +	fse->max_height = 480;
 +
-+	return 0;
++	return -1;
 +}
 +
 +static int ov7692_s_stream(struct v4l2_subdev *sd, int on)
@@ -502,7 +510,7 @@ index 0000000..7e746cf
 +	mf->height = 480;
 +	mf->field = V4L2_FIELD_NONE;
 +	mf->colorspace = V4L2_COLORSPACE_SRGB;
-+	mf->code = MEDIA_BUS_FMT_SBGGR8_1X8;
++	mf->code = MEDIA_BUS_FMT_YUYV8_2X8;
 +}
 +
 +
@@ -915,7 +923,7 @@ index 0000000..7e746cf
 +module_i2c_driver(ov7692_driver);
 diff --git a/include/media/i2c/ov7692.h b/include/media/i2c/ov7692.h
 new file mode 100644
-index 0000000..0a2b64b
+index 0000000..400127e
 --- /dev/null
 +++ b/include/media/i2c/ov7692.h
 @@ -0,0 +1,33 @@
@@ -952,6 +960,7 @@ index 0000000..0a2b64b
 +};
 +
 +#endif
+\ No newline at end of file
 -- 
 2.7.4
 
