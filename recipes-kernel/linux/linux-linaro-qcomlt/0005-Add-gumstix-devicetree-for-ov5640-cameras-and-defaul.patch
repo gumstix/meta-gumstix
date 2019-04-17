@@ -1,0 +1,190 @@
+From 962007041d64b3c30c389001f0e844b78e15ea34 Mon Sep 17 00:00:00 2001
+From: haiyi <haiyi.zhou@gumstix.com>
+Date: Mon, 15 Apr 2019 10:02:32 -0700
+Subject: [PATCH] Add gumstix devicetree for ov5640 cameras and default enable
+
+---
+ arch/arm64/boot/dts/qcom/Makefile                  |   1 +
+ .../boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dts   |  22 ++++
+ .../boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dtsi  | 114 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dts           |   2 +
+ 4 files changed, 139 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dtsi
+
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index e7b25be..312f553 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -6,6 +6,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-mtp.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-bullhead-rev-101.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8994-angler-rev-101.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-mtp.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc-gumstix-ov5640.dtb
+ 
+ always		:= $(dtb-y)
+ subdir-y	:= $(dts-dirs)
+diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dts
+new file mode 100644
+index 0000000..d0c736b
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dts
+@@ -0,0 +1,22 @@
++/*
++ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 and
++ * only version 2 as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++/dts-v1/;
++
++#include "apq8016-sbc.dtsi"
++#include "apq8016-sbc-gumstix-ov5640.dtsi"
++
++/ {
++	model = "Qualcomm Technologies, Inc. APQ 8016 SBC";
++	compatible = "qcom,apq8016-sbc", "qcom,apq8016", "qcom,sbc";
++};
+diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dtsi b/arch/arm64/boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dtsi
+new file mode 100644
+index 0000000..149c75c
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/apq8016-sbc-gumstix-ov5640.dtsi
+@@ -0,0 +1,114 @@
++/*
++ * Copyright (C) 2018 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 or
++ * (at your option) any later version as published by the Free Software
++ * Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++/*
++ * This device tree is for OV5640 1/4" color CMOS QSXGA (5 megapixel) image sensor from Gumstix 
++ *
++ * Use the gumstix-ov5640-dragonboard to enable ov5640 cameras only 
++ * Since the ov5640 uses the same camera controller as the default ov5645 cameras,
++ * only one set of cameras can be enabled at a time
++ * To use the ov5645 cameras enable them by setting camera and cams status to "okay"
++ */
++/ {
++	soc {			
++		cci@1b0c000 {
++			status = "okay";
++
++			camera_rear@3b {
++				compatible = "ovti,ov5640";
++				reg = <0x3b>;
++
++				/delete-property/ enable-gpios;
++				powerdown-gpios = <&msmgpio 34 GPIO_ACTIVE_HIGH>;
++				reset-gpios = <&msmgpio 35 GPIO_ACTIVE_LOW>;
++				pinctrl-names = "default";
++				pinctrl-0 = <&camera_rear_default>;
++
++				clocks = <&gcc GCC_CAMSS_MCLK0_CLK>;
++				clock-names = "xclk";
++				clock-frequency = <23880000>;
++
++				vdddo-supply = <&camera_vdddo_1v8>;
++				vdda-supply = <&camera_vdda_2v8>;
++				vddd-supply = <&camera_vddd_1v5>;
++
++				status = "okay";
++
++				port {
++					ov5640_ep: endpoint {
++						clock-lanes = <1>;
++						data-lanes = <0 2>;
++						remote-endpoint = <&csiphy0_ep>;
++					};
++				};
++			};
++
++			camera_front@3a {
++				compatible = "ovti,ov5640";
++				reg = <0x3a>;
++
++				/delete-property/ enable-gpios;
++				powerdown-gpios = <&msmgpio 33 GPIO_ACTIVE_HIGH>;
++				reset-gpios = <&msmgpio 28 GPIO_ACTIVE_LOW>;
++				pinctrl-names = "default";
++				pinctrl-0 = <&camera_front_default>;
++
++				clocks = <&gcc GCC_CAMSS_MCLK1_CLK>;
++				clock-names = "xclk";
++				clock-frequency = <23880000>;
++
++				vdddo-supply = <&camera_vdddo_1v8>;
++				vdda-supply = <&camera_vdda_2v8>;
++				vddd-supply = <&camera_vddd_1v5>;
++
++				status = "okay";
++
++				port {
++					ov5640_2_ep: endpoint {
++						clock-lanes = <1>;
++						data-lanes = <0 2>;
++						remote-endpoint = <&csiphy1_ep>;
++					};
++				};
++			};
++		};
++
++		camss@1b00000 {
++			status = "okay";
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				port@0 {
++					reg = <0>;
++					csiphy0_ep: endpoint {
++						clock-lanes = <1>;
++						data-lanes = <0 2>;
++						remote-endpoint = <&ov5640_ep>;
++						status = "okay";
++					};
++				};
++				port@1 {
++					reg = <1>;
++					csiphy1_ep: endpoint {
++						clock-lanes = <1>;
++						data-lanes = <0 2>;
++						remote-endpoint = <&ov5640_2_ep>;
++						status = "okay";
++					};
++				};
++			};
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+index 825f489..a7f66e6 100644
+--- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
++++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+@@ -14,6 +14,8 @@
+ /dts-v1/;
+ 
+ #include "apq8016-sbc.dtsi"
++// Uncomment below to by default enable dual OV5640 cameras
++#include "apq8016-sbc-gumstix-ov5640.dtsi"
+ 
+ / {
+ 	model = "Qualcomm Technologies, Inc. APQ 8016 SBC";
+-- 
+2.7.4
+
