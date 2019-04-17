@@ -1,0 +1,30 @@
+From 93574c450308fb1533aeb0b52497f2df7af089ba Mon Sep 17 00:00:00 2001
+From: haiyi <haiyi.zhou@gumstix.com>
+Date: Wed, 17 Apr 2019 10:26:50 -0700
+Subject: [PATCH] Disable kprobes for lttng-modules
+
+Building lttng-modules with kprobes enabled causes build
+errors due to improperly configured kprobes settings.
+Unfortunately the suggested patch file did not work, so this
+solution works at the cost of disabling a kernel debugger.
+See: https://patchwork.kernel.org/patch/10797511/
+---
+ arch/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 77b3e21..d1f4ad9 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -49,7 +49,7 @@ config OPROFILE_NMI_TIMER
+ 	depends on PERF_EVENTS && HAVE_PERF_EVENTS_NMI && !PPC64
+ 
+ config KPROBES
+-	bool "Kprobes"
++        def_bool n
+ 	depends on MODULES
+ 	depends on HAVE_KPROBES
+ 	select KALLSYMS
+-- 
+2.7.4
+
