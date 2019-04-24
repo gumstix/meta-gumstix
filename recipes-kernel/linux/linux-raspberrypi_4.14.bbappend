@@ -14,3 +14,6 @@ SRC_URI += " \
 do_kernel_configme_append () {
     cat ${WORKDIR}/*.cfg >> ${WORKDIR}/defconfig
 }
+
+# Set contiguous memory allocation size for video streaming
+PITFT_PARAMS_append = "\n# Uncomment and add inline to optimize memory for streaming video\n# cma=64M"

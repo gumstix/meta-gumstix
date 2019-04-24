@@ -133,8 +133,8 @@ do_deploy() {
 
     if [ "${MACHINE}" = "raspberrypi-cm3" ]; then
         echo "# Enable Camera support with OV5640" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
-        echo "dtparam=i2c0=on" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
-        echo "dtoverlay=ov5640-gumstix" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+        echo "# dtparam=i2c0=on" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+        echo "# dtoverlay=ov5640-gumstix" >>${DEPLOYDIR}/bcm2835-bootfiles/config.txt
     fi
 }
 
