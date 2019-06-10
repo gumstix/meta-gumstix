@@ -12,7 +12,7 @@ diff --git a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts b/arch/arm/boot/
 index 1e1cbd9..2bae774 100644
 --- a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
 +++ b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
-@@ -121,6 +121,9 @@
+@@ -122,6 +122,9 @@
                  bten_pin = <&wfbt_pins>,"brcm,pins:0", <&mmc1_pwrseq>,"reset-gpios:4";
                  wfen_pin = <&wfbt_pins>,"brcm,pins:4", <&mmc1_pwrseq>,"reset-gpios:16";
                  irq_pin = <&wfbt_pins>,"brcm,pins:8", <&wlcore>,"interrupts:0";
