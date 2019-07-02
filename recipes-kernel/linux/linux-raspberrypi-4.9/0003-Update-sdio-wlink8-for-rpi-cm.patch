@@ -1,15 +1,14 @@
-From 842bc7c3d07c413907dd5f0772c869f74704436e Mon Sep 17 00:00:00 2001
-From: Jay Zhao <jay.zhao@gumstix.com>
-Date: Thu, 1 Mar 2018 13:41:49 -0800
-Subject: [PATCH 3/3] Update sdio wlink8 for rpi cm
+From 215dd1faed7ba5c26fd45ffed52072733a7427bb Mon Sep 17 00:00:00 2001
+From: Keith Lee <keith.lee@gumstix.com>
+Date: Tue, 2 Jul 2019 09:51:32 -0700
+Subject: [PATCH 1/1] Fix Wilink overlay for RPi CM
 
-Signed-off-by: Jay Zhao <jay.zhao@gumstix.com>
 ---
  arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
-index 27cea3c..4b81ef3 100644
+index 94f58d7..a709e97 100644
 --- a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
 +++ b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
 @@ -122,5 +122,8 @@
@@ -20,6 +19,7 @@ index 27cea3c..4b81ef3 100644
 +                bus_width = <&sdio_mmc>,"bus-width:0";
 +                sdio_overclock = <&sdio_mmc>,"brcm,overclock-50:0";
          };
- };
---
+ 
+-- 
 2.7.4
+
