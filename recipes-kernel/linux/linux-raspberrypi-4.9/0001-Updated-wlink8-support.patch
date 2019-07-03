@@ -4,8 +4,8 @@ Date: Mon, 5 Feb 2018 22:11:54 -0500
 Subject: [PATCH] Updated wilink8 support.
 
 ---
- arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts | 127 ++++++++++++++++++++
- 2 files changed, 127 insertions(+), 130 deletions(-)
+ arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts | 128 ++++++++++++++++++++
+ 2 files changed, 128 insertions(+), 130 deletions(-)
  create mode 100644 arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
 
 diff --git a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
@@ -13,7 +13,7 @@ new file mode 100644
 index 0000000..f4df8ab
 --- /dev/null
 +++ b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
-@@ -0,0 +1,126 @@
+@@ -0,0 +1,127 @@
 +/dts-v1/;
 +/plugin/;
 +
@@ -141,6 +141,7 @@ index 0000000..f4df8ab
 +        };
 +
 +};
++
 --
 2.7.4
 

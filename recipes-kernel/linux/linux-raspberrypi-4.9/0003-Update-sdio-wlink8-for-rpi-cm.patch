@@ -1,7 +1,7 @@
 From 215dd1faed7ba5c26fd45ffed52072733a7427bb Mon Sep 17 00:00:00 2001
 From: Keith Lee <keith.lee@gumstix.com>
 Date: Tue, 2 Jul 2019 09:51:32 -0700
-Subject: [PATCH 1/1] Fix Wilink overlay for RPi CM
+Subject: [PATCH] Fix Wilink overlay for RPi CM
 
 ---
  arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts | 3 +++
@@ -11,7 +11,7 @@ diff --git a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts b/arch/arm/boot/
 index 94f58d7..a709e97 100644
 --- a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
 +++ b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
-@@ -122,5 +122,8 @@
+@@ -122,6 +122,9 @@
                  bten_pin = <&wfbt_pins>,"brcm,pins:0", <&mmc1_pwrseq>,"reset-gpios:4";
                  wfen_pin = <&wfbt_pins>,"brcm,pins:4", <&mmc1_pwrseq>,"reset-gpios:16";
                  irq_pin = <&wfbt_pins>,"brcm,pins:8", <&wlcore>,"interrupts:0";
@@ -19,7 +19,8 @@ index 94f58d7..a709e97 100644
 +                bus_width = <&sdio_mmc>,"bus-width:0";
 +                sdio_overclock = <&sdio_mmc>,"brcm,overclock-50:0";
          };
- 
--- 
+
+ };
+--
 2.7.4
 
