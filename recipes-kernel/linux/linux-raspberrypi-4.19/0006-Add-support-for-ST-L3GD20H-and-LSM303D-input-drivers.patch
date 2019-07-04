@@ -1,30 +1,32 @@
-From b338753a468c0e1ce9cf559c824f9e79d62a5e36 Mon Sep 17 00:00:00 2001
-From: Jay Zhao <jay.zhao@gumstix.com>
-Date: Thu, 1 Mar 2018 14:01:47 -0800
-Subject: [PATCH] Add IMU sensor drivers
+From ee16a65cc60885f85e3eebd3fbe1b0ae5f5b6025 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Wed, 3 Jul 2019 21:49:40 -0400
+Subject: [PATCH] Add support for ST L3GD20H and LSM303D input drivers.
 
-Signed-off-by: Jay Zhao <jay.zhao@gumstix.com>
 ---
- drivers/input/misc/Kconfig   |   13 +
+ drivers/input/misc/Kconfig   |   15 +-
  drivers/input/misc/Makefile  |    2 +
  drivers/input/misc/l3gd20h.c | 1825 ++++++++++++++++++++++
  drivers/input/misc/l3gd20h.h |  112 ++
  drivers/input/misc/lsm303d.c | 3462 ++++++++++++++++++++++++++++++++++++++++++
  drivers/input/misc/lsm303d.h |  138 ++
- 6 files changed, 5552 insertions(+)
+ 6 files changed, 5553 insertions(+), 1 deletion(-)
  create mode 100644 drivers/input/misc/l3gd20h.c
  create mode 100644 drivers/input/misc/l3gd20h.h
  create mode 100644 drivers/input/misc/lsm303d.c
  create mode 100644 drivers/input/misc/lsm303d.h
 
 diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-index 9f082a3..c646f61 100644
+index ca59a2b..6c536a2 100644
 --- a/drivers/input/misc/Kconfig
 +++ b/drivers/input/misc/Kconfig
-@@ -855,4 +855,17 @@ config INPUT_HISI_POWERKEY
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called hisi_powerkey.
+@@ -710,7 +710,20 @@ config INPUT_ADXL34X_SPI
+ 	  Say Y here if you have ADXL345/6 hooked to a SPI bus.
  
+ 	  To compile this driver as a module, choose M here: the
+-	  module will be called adxl34x-spi.
++	  module will be called adxl36x-spi.
++
 +config INPUT_LSM303D
 +	tristate "ST LSM303D acceleromter/magnetometer support"
 +	depends on INPUT && I2C
@@ -37,13 +39,14 @@ index 9f082a3..c646f61 100644
 +	depends on INPUT && I2C
 +	help
 +	  Say Y to enable support for the ST L3GD20H gyroscope driver.
-+
- endif
+ 
+ config INPUT_IMS_PCU
+ 	tristate "IMS Passenger Control Unit driver"
 diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-index 4b6118d..ba06dd1 100644
+index 9d0f9d1..7b398ca 100644
 --- a/drivers/input/misc/Makefile
 +++ b/drivers/input/misc/Makefile
-@@ -44,6 +44,8 @@ obj-$(CONFIG_INPUT_IMS_PCU)		+= ims-pcu.o
+@@ -42,6 +42,8 @@ obj-$(CONFIG_INPUT_IMS_PCU)		+= ims-pcu.o
  obj-$(CONFIG_INPUT_IXP4XX_BEEPER)	+= ixp4xx-beeper.o
  obj-$(CONFIG_INPUT_KEYSPAN_REMOTE)	+= keyspan_remote.o
  obj-$(CONFIG_INPUT_KXTJ9)		+= kxtj9.o
