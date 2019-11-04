@@ -1,0 +1,84 @@
+From 1d9046dbb2498b2586c0a8c5047e080843c6ed96 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Sat, 5 Oct 2019 21:08:21 -0400
+Subject: [PATCH 16/24] Add Overo support for Tiny Caspa and fix dts for overo
+ touch screen.
+
+---
+ .../boot/dts/omap3-overo-common-peripherals.dtsi   | 33 +++++++++++++++++++---
+ 1 file changed, 29 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
+index b4daf01..3e76cda 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-peripherals.dtsi
+@@ -97,11 +97,12 @@
+ 		reg = <0x38>;
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <10 0>;
+-		wake-gpios = <&gpio1 31 GPIO_ACTIVE_LOW>;
++		reset-gpios = <&gpio1 31 GPIO_ACTIVE_LOW>;
+ 		touchscreen-size-x = <480>;
+ 		touchscreen-size-y = <272>;
+ 	};
+ 
++	#ifndef CONFIG_OV7692
+ 	/* optional Caspa (MT9V032) camera */
+ 	mt9v032_1: camera@5c {
+ 		compatible = "aptina,mt9v032";
+@@ -111,12 +112,29 @@
+ 		clock-frequency = <26600000>;
+ 		port {
+ 			mt9v032_1_1: endpoint {
+-				remote-endpoint = <&ccdc_ep>;
++				remote-endpoint = <&ccdc_ep_0>;
+ 				clk-pol = <0>;
+ 				link-frequencies = /bits/ 64 <13000000 26600000 27000000>;
+ 			};
+ 		};
+ 	};
++	#else
++	/* optional Tiny Caspa (ov7692) camera */
++	ov7692_1: camera@3c {
++		compatible = "omnivision,ov7692";
++		reg = <0x3c>;
++		clocks = <&isp 0>;
++		clock-names = "cam_xclka";
++		clock-frequency = <26600000>;
++		port {
++			ov7692_1_1: endpoint {
++				remote-endpoint = <&ccdc_ep_1>;
++				clk-pol = <0>;
++				link-frequencies = /bits/ 64 <13000000 26600000 27000000>;
++			};
++		};
++	};
++	#endif
+ };
+ 
+ &isp {
+@@ -124,12 +142,19 @@
+ 	vdd-csiphy2-supply = <&vaux2>;
+ 	ports {
+ 		port@0 {
+-			reg = <0>;
+-			ccdc_ep: endpoint {
++			#ifndef CONFIG_OV7692
++			ccdc_ep_0: endpoint@0 {
+ 				remote-endpoint = <&mt9v032_1_1>;
+ 				bus-width = <12>;
+ 				data-shift = <0>;
+ 			};
++			#else
++			ccdc_ep_1: endpoint@1 {
++				remote-endpoint = <&ov7692_1_1>;
++				bus-width = <12>;
++				data-shift = <0>;
++			};
++			#endif
+ 		};
+ 	};
+ };
+-- 
+2.7.4
+

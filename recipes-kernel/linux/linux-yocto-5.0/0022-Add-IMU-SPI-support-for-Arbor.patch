@@ -1,0 +1,37 @@
+From 960f55fb9ba177a3086e7d8114657be550d1cf94 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Tue, 15 Oct 2019 20:38:25 -0400
+Subject: [PATCH 24/24] Add IMU SPI support for Arbor
+
+---
+ arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
+index 5c65bb8..34c1254 100644
+--- a/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-arbor57c-common.dtsi
+@@ -104,7 +104,9 @@
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&accel_mag_pins &accel_mag_pins2>;
+ 
+-		compatible = "st,lsm303d";
++		spi-max-frequency = <15000000>;
++		compatible = "st,lsm303dlhc_accel",
++		"st,lsm303dlhc_magn";
+ 		reg = <0>;
+ 		// INT/DRDY #1 is gpio_18
+ 		// INT/DRDY #2 is gpio_163
+@@ -115,7 +117,8 @@
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&gyro_pins>;
+ 
+-		compatible = "st,l3dg20";
++		spi-max-frequency = <15000000>;
++		compatible = "st,l3gd20h";
+ 		reg = <1>;
+ 		// INT/DRDY is gpio_114
+ 	};
+-- 
+2.7.4
+

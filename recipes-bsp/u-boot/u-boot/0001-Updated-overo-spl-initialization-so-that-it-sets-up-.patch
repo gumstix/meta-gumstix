@@ -1,0 +1,44 @@
+From cb2630af0467f965dc8be37c15d351f14c3f2f47 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Wed, 2 Oct 2019 11:17:14 -0400
+Subject: [PATCH 1/2] Updated overo spl initialization so that it sets up the
+ mmc boot device.
+
+---
+ board/overo/spl.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/board/overo/spl.c b/board/overo/spl.c
+index d577e00..bf87272 100644
+--- a/board/overo/spl.c
++++ b/board/overo/spl.c
+@@ -15,6 +15,8 @@
+ #include <asm/arch/mem.h>
+ #include <asm/arch/sys_proto.h>
+ #include "overo.h"
++#include <asm/arch/mux.h>
++#include <asm/arch/mmc_host_def.h>
+ 
+ /*
+  * Routine: get_board_mem_timings
+@@ -57,3 +59,17 @@ void get_board_mem_timings(struct board_sdrc_timings *timings)
+ 		timings->rfr_ctrl = SDP_3430_SDRC_RFR_CTRL_165MHz;
+ 	}
+ }
++
++#if defined(CONFIG_MMC)
++int board_mmc_init(bd_t *bis)
++{
++	MUX_VAL(CP(MMC1_CLK),           (IEN  | PTU | EN  | M0)) /*MMC1_CLK*/\
++	MUX_VAL(CP(MMC1_CMD),           (IEN  | PTU | EN  | M0)) /*MMC1_CMD*/\
++	MUX_VAL(CP(MMC1_DAT0),          (IEN  | PTU | EN  | M0)) /*MMC1_DAT0*/\
++	MUX_VAL(CP(MMC1_DAT1),          (IEN  | PTU | EN  | M0)) /*MMC1_DAT1*/\
++	MUX_VAL(CP(MMC1_DAT2),          (IEN  | PTU | EN  | M0)) /*MMC1_DAT2*/\
++	MUX_VAL(CP(MMC1_DAT3),          (IEN  | PTU | EN  | M0)) /*MMC1_DAT3*/\
++
++	return omap_mmc_init(0, 0, 0, -1, -1);
++}
++#endif
+-- 
+2.7.4
+

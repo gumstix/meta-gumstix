@@ -1,4 +1,0 @@
-# see u-boot.inc to deploy this U-Boot environment file
-somevariable=Yocto
-somecmd=echo "Hello from ${somevariable}"
-uenvcmd=run somecmd

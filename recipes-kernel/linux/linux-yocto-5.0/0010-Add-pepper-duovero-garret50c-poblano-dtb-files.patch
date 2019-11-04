@@ -1,0 +1,43 @@
+From daccb1ff880411ebed3a60bc9470bf385169d77c Mon Sep 17 00:00:00 2001
+From: Sicong Jia <sicong.jia@gumstix.com>
+Date: Fri, 9 Feb 2018 16:28:20 -0800
+Subject: [PATCH 10/24] Add pepper, duovero garret50c, poblano dtb files
+
+Signed-off-by: Sicong Jia <sicong.jia@gumstix.com>
+---
+ arch/arm/boot/dts/Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index d75a340..209b348 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -737,6 +737,9 @@ dtb-$(CONFIG_SOC_AM33XX) += \
+ 	am335x-nano.dtb \
+ 	am335x-pdu001.dtb \
+ 	am335x-pepper.dtb \
++	am335x-pepper-43c.dtb \
++	am335x-pepper-43r.dtb \
++	am335x-pepper-dvi.dtb \
+ 	am335x-phycore-rdk.dtb \
+ 	am335x-pocketbeagle.dtb \
+ 	am335x-sancloud-bbe.dtb \
+@@ -749,6 +752,7 @@ dtb-$(CONFIG_ARCH_OMAP4) += \
+ 	omap4-droid4-xt894.dtb \
+ 	omap4-duovero-parlor.dtb \
+ 	omap4-kc1.dtb \
++	omap4-duovero-garret50c.dtb \
+ 	omap4-panda.dtb \
+ 	omap4-panda-a4.dtb \
+ 	omap4-panda-es.dtb \
+@@ -762,6 +766,7 @@ dtb-$(CONFIG_SOC_AM43XX) += \
+ 	am437x-gp-evm.dtb \
+ 	am437x-idk-evm.dtb \
+ 	am437x-sbc-t43.dtb \
++	am437x-poblano.dtb \
+ 	am437x-sk-evm.dtb
+ dtb-$(CONFIG_SOC_OMAP5) += \
+ 	omap5-cm-t54.dtb \
+-- 
+2.7.4
+

@@ -1,0 +1,33 @@
+From fe34226b7e2793bc1555fcbc20ea5ab5ab453f0b Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Sat, 5 Oct 2019 21:47:22 -0400
+Subject: [PATCH 20/24] tfp410: RGB888 not RGB565 color-mapping for botball
+
+Botball wires 24-bit color to the TFP410 HDMI encoder---the driver
+should reflect this.  Normally, we'd just lose a little colo depth but
+because of the AM335x uses a strange pin-mapping for RGB888 compared
+with RGB565, we actually end up partially switching the blue and red
+channels if the color-depth is set wrongly.
+
+This is should be fixed properly by making the 'bpp' parameter settable
+from the device-tree for the tfp410.
+---
+ drivers/gpu/drm/tilcdc/tilcdc_tfp410.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/tilcdc/tilcdc_tfp410.c b/drivers/gpu/drm/tilcdc/tilcdc_tfp410.c
+index daebf1a..f57e666 100644
+--- a/drivers/gpu/drm/tilcdc/tilcdc_tfp410.c
++++ b/drivers/gpu/drm/tilcdc/tilcdc_tfp410.c
+@@ -37,7 +37,7 @@ static const struct tilcdc_panel_info dvi_info = {
+ 		.ac_bias                = 255,
+ 		.ac_bias_intrpt         = 0,
+ 		.dma_burst_sz           = 16,
+-		.bpp                    = 16,
++		.bpp                    = 24,
+ 		.fdd                    = 0x80,
+ 		.tft_alt_mode           = 0,
+ 		.sync_edge              = 0,
+-- 
+2.7.4
+

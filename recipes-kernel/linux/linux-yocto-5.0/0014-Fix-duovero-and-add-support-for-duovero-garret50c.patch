@@ -1,0 +1,431 @@
+From c569f654dbd7785ac94e7247dde368eeedf0a32a Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Sat, 5 Oct 2019 21:03:48 -0400
+Subject: [PATCH 15/24] Fix duovero and add support for duovero garret50c.
+
+---
+ arch/arm/boot/dts/omap4-duovero-garret50c.dts | 268 ++++++++++++++++++++++++++
+ arch/arm/boot/dts/omap4-duovero.dtsi          |  89 +++++++--
+ 2 files changed, 338 insertions(+), 19 deletions(-)
+ create mode 100644 arch/arm/boot/dts/omap4-duovero-garret50c.dts
+
+diff --git a/arch/arm/boot/dts/omap4-duovero-garret50c.dts b/arch/arm/boot/dts/omap4-duovero-garret50c.dts
+new file mode 100644
+index 00000000..c5ede3e
+--- /dev/null
++++ b/arch/arm/boot/dts/omap4-duovero-garret50c.dts
+@@ -0,0 +1,268 @@
++/*
++ * Copyright (C) 2016 Gumstix, Inc. - https://www.gumstix.com/
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++/dts-v1/;
++
++#include "omap4-duovero.dtsi"
++
++#include <dt-bindings/input/input.h>
++
++/ {
++	model = "OMAP4430 Gumstix Duovero on Garret50c";
++	compatible = "gumstix,omap4-duovero-garret50c", "gumstix,omap4-duovero", "ti,omap4430", "ti,omap4";
++
++	aliases {
++		display0 = &hdmi0;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		led0 {
++			label = "duovero:blue:led0";
++			gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>;	/* gpio_122 */
++			linux,default-trigger = "mmc1";
++		};
++		led1 {
++			label = "duovero:red:led1";
++			gpios = <&gpio5 11 GPIO_ACTIVE_HIGH>;	/* gpio_139 */
++			linux,default-trigger = "heartbeat";
++		};
++	};
++
++	gpio_keys {
++		compatible = "gpio-keys";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		button0@121 {
++			label = "button0";
++			linux,code = <BTN_0>;
++			gpios = <&gpio4 25 GPIO_ACTIVE_LOW>;	/* gpio_121 */
++			gpio-key,wakeup;
++		};
++	};
++
++	backlight {
++		compatible = "gpio-backlight";
++		pinctrl-names = "default";
++		pinctrl-0 = <&backlight_pins>;
++		gpios = <&gpio4 15 GPIO_ACTIVE_HIGH>;		/* gpio_111 */
++		default-on;
++	};
++
++
++	hdmi0: connector@0 {
++		compatible = "hdmi-connector";
++		label = "hdmi";
++
++		type = "d";
++
++		hpd-gpios = <&gpio2 31 GPIO_ACTIVE_HIGH>;	/* gpio_63 */
++
++		port {
++			hdmi_connector_in: endpoint {
++				remote-endpoint = <&hdmi_out>;
++			};
++		};
++	};
++};
++
++&omap4_pmx_core {
++	pinctrl-0 = <
++			&led_pins
++			&button_pins
++			&smsc_pins
++	>;
++
++	led_pins: pinmux_led_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x116, PIN_OUTPUT | MUX_MODE3)		/* abe_dmic_din3.gpio_122 */
++			OMAP4_IOPAD(0x13c, PIN_OUTPUT | MUX_MODE3)		/* mcspi1_cs2.gpio_139 */
++		>;
++	};
++
++	button_pins: pinmux_button_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x114, PIN_INPUT_PULLUP | MUX_MODE3)      	/* abe_dmic_din2.gpio_121 */
++		>;
++	};
++
++	i2c2_pins: pinmux_i2c2_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x126, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c2_scl */
++			OMAP4_IOPAD(0x128, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c2_sda */
++		>;
++	};
++
++	i2c3_pins: pinmux_i2c3_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x12a, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c3_scl */
++			OMAP4_IOPAD(0x12c, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c3_sda */
++		>;
++	};
++
++	smsc_pins: pinmux_smsc_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x068, PIN_INPUT | MUX_MODE3)		/* gpmc_a20.gpio_44: IRQ */
++			OMAP4_IOPAD(0x06a, PIN_INPUT_PULLUP | MUX_MODE3)	/* gpmc_a21.gpio_45: nReset */
++			OMAP4_IOPAD(0x070, PIN_INPUT_PULLUP | MUX_MODE3)	/* gpmc_a24.gpio_48: amdix enabled */
++		>;
++	};
++
++	dss_hdmi_pins: pinmux_dss_hdmi_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x098, PIN_INPUT | MUX_MODE3)		/* hdmi_hpd.gpio_63 */
++			OMAP4_IOPAD(0x09a, PIN_INPUT_PULLUP | MUX_MODE0)	/* hdmi_cec.hdmi_cec */
++			OMAP4_IOPAD(0x09c, PIN_INPUT_PULLUP | MUX_MODE0)	/* hdmi_ddc_scl.hdmi_ddc_scl */
++			OMAP4_IOPAD(0x09e, PIN_INPUT_PULLUP | MUX_MODE0)	/* hdmi_ddc_sda.hdmi_ddc_sda */
++		>;
++	};
++
++	captouch_pins: pinmux_captouch_pins {
++		pinctrl-single,pins = <
++			/* CAP IRQ */
++			OMAP4_IOPAD(0x0fc, PIN_INPUT | MUX_MODE3)	/* abe_mcbsp2_fsx.gpio_113 */
++			/* CAP WAKE */
++			OMAP4_IOPAD(0x120, PIN_OUTPUT | MUX_MODE3)	/* hdq_sio.gpio_127 */
++		>;
++	};
++
++	backlight_pins: pinmux_backlight_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x0f8, PIN_OUTPUT | MUX_MODE3)        	/* abe_mcbsp2_dr.gpio_111 */
++			OMAP4_IOPAD(0x13a, PIN_INPUT_PULLUP | MUX_MODE3)	/* mcspi1_cs1.gpio_138 */
++		>;
++	};
++
++	gyro_pins: pinmux_gyro_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x0be, PIN_INPUT | MUX_MODE3)/* cam_strobe.gpio_82 */
++		>;
++	};
++	accel_magn_pins: pinmux_accel_magn_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x0bc, PIN_INPUT | MUX_MODE3)/* cam_shutter.gpio_81 */
++			OMAP4_IOPAD(0x0c0, PIN_INPUT | MUX_MODE3)/* cam_globalreset.gpio_83 */
++		>;
++	};
++};
++
++&i2c2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2_pins>;
++
++	clock-frequency = <400000>;
++
++	captouch: edt-ft5306@38 {
++		status = "okay";
++		compatible = "edt,edt-ft5306", "edt,edt-ft5x06";
++		pinctrl-names = "default";
++		pinctrl-0 = <&captouch_pins>;
++
++		reg = <0x38>;
++		interrupt-parent = <&gpio4>;					/* gpio_113 */
++		interrupts = <17 0>;
++
++		reset-gpios = <&gpio4 31 GPIO_ACTIVE_LOW>;		/* gpio_127 */
++
++		touchscreen-size-x = <800>;
++		touchscreen-size-y = <480>;
++	};
++};
++
++&i2c3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c3_pins &gyro_pins>;
++
++	clock-frequency = <100000>;
++
++	/* optional 1K EEPROM with revision information */
++	eeprom@51 {
++		compatible = "atmel,24c01";
++		reg = <0x51>;
++		pagesize = <8>;
++	};
++
++	/* Accelerometer/Magnetometer */
++	lsm303d: lsm303d@1e {
++		compatible = "lsm303d";
++		pinctrl-names = "default";
++		pinctrl-0 = <&accel_magn_pins>;
++
++		int1-gpio = <&gpio3 17 GPIO_ACTIVE_HIGH>;		/* gpio_81 */
++		int2-gpio = <&gpio3 19 GPIO_ACTIVE_HIGH>;		/* gpio_83 */
++		reg = <0x1e>;
++	};
++
++	/* Gyroscope */
++	l3gd20h: l3gd20h@6a {
++		compatible = "l3gd20h_gyr";
++		int-gpio = <&gpio3 18 GPIO_ACTIVE_HIGH>;
++		reg = <0x6a>;
++	};
++};
++
++&mmc3 {
++	status = "disabled";
++};
++
++#include "omap-gpmc-smsc911x.dtsi"
++
++&gpmc {
++	ranges = <5 0 0x2c000000 0x1000000>;			/* CS5 */
++
++	ethernet@gpmc {
++		reg = <5 0 0xff>;
++		interrupt-parent = <&gpio2>;
++		interrupts = <12 IRQ_TYPE_LEVEL_LOW>;		/* gpio_44 */
++
++		phy-mode = "mii";
++
++		gpmc,cs-on-ns = <10>;
++		gpmc,cs-rd-off-ns = <50>;
++		gpmc,cs-wr-off-ns = <50>;
++		gpmc,adv-on-ns = <0>;
++		gpmc,adv-rd-off-ns = <10>;
++		gpmc,adv-wr-off-ns = <10>;
++		gpmc,oe-on-ns = <15>;
++		gpmc,oe-off-ns = <50>;
++		gpmc,we-on-ns = <15>;
++		gpmc,we-off-ns = <50>;
++		gpmc,rd-cycle-ns = <50>;
++		gpmc,wr-cycle-ns = <50>;
++		gpmc,access-ns = <50>;
++		gpmc,page-burst-access-ns = <0>;
++		gpmc,bus-turnaround-ns = <35>;
++		gpmc,cycle2cycle-delay-ns = <35>;
++		gpmc,wr-data-mux-bus-ns = <35>;
++		gpmc,wr-access-ns = <50>;
++
++		gpmc,mux-add-data = <2>;
++		gpmc,sync-read;
++		gpmc,sync-write;
++		gpmc,clk-activation-ns = <5>;
++		gpmc,sync-clk-ps = <20000>;
++	};
++};
++
++&dss {
++	status = "ok";
++};
++
++&hdmi {
++	status = "ok";
++	vdda-supply = <&vdac>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&dss_hdmi_pins>;
++
++	port {
++		hdmi_out: endpoint {
++			remote-endpoint = <&hdmi_connector_in>;
++		};
++	};
++};
++  /*new blank line at EOF.*/
+diff --git a/arch/arm/boot/dts/omap4-duovero.dtsi b/arch/arm/boot/dts/omap4-duovero.dtsi
+index 5e81691..7472530 100644
+--- a/arch/arm/boot/dts/omap4-duovero.dtsi
++++ b/arch/arm/boot/dts/omap4-duovero.dtsi
+@@ -12,10 +12,6 @@
+ 	model = "Gumstix Duovero";
+ 	compatible = "gumstix,omap4-duovero", "ti,omap4430", "ti,omap4";
+ 
+-	chosen {
+-		stdout-path = &uart3;
+-	};
+-
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x80000000 0x40000000>; /* 1 GB */
+@@ -43,7 +39,6 @@
+ 	hsusb1_phy: hsusb1_phy {
+ 		compatible = "usb-nop-xceiv";
+ 		reset-gpios = <&gpio2 30 GPIO_ACTIVE_LOW>;	/* gpio_62 */
+-		#phy-cells = <0>;
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&hsusb1phy_pins>;
+@@ -53,18 +48,16 @@
+ 		clock-frequency = <19200000>;
+ 	};
+ 
+-	/* regulator for w2cbw0015 on sdio5 */
+-	w2cbw0015_vmmc: w2cbw0015_vmmc {
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&w2cbw0015_pins>;
++	vbat: fixedregulator@0 {
++		compatible = "regulator-fixed";
++	};
++
++	wlcore_wl_en: fixedregulator@1 {
++		compatible = "regulator-fixed";
++	};
++
++	wlcore_bt_en: fixedregulator@2 {
+ 		compatible = "regulator-fixed";
+-		regulator-name = "w2cbw0015";
+-		regulator-min-microvolt = <3000000>;
+-		regulator-max-microvolt = <3000000>;
+-		gpio = <&gpio2 11 GPIO_ACTIVE_LOW>;		/* gpio_43 */
+-		startup-delay-us = <70000>;
+-		enable-active-high;
+-		regulator-boot-on;
+ 	};
+ };
+ 
+@@ -164,6 +157,17 @@
+ 			OMAP4_IOPAD(0x14e, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc5_dat1 */
+ 			OMAP4_IOPAD(0x150, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc5_dat2 */
+ 			OMAP4_IOPAD(0x152, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc5_dat3 */
++			OMAP4_IOPAD(0x066, PIN_OUTPUT_PULLUP | MUX_MODE3)	/* gpio_43 */
++			OMAP4_IOPAD(0x06e, PIN_OUTPUT_PULLUP | MUX_MODE3)	/* gpio_47 */
++			OMAP4_IOPAD(0x072, PIN_INPUT | MUX_MODE3)			/* gpio_49 */
++		>;
++	};
++	uart2_pins: pinmux_uart2 {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x118, PIN_INPUT_PULLUP | MUX_MODE0)    /* uart2_cts.uart2_cts */
++			OMAP4_IOPAD(0x11a, PIN_OUTPUT_PULLDOWN | MUX_MODE0) /* uart2_rts.uart2_rts */
++			OMAP4_IOPAD(0x11c, PIN_INPUT_PULLUP | MUX_MODE0)    /* uart2_rx.uart2_rx */
++			OMAP4_IOPAD(0x11e, PIN_OUTPUT_PULLDOWN | MUX_MODE0) /* uart2_tx.uart2_tx */
+ 		>;
+ 	};
+ };
+@@ -196,7 +200,6 @@
+ #include "twl6030.dtsi"
+ #include "twl6030_omap4.dtsi"
+ 
+-/* on-board bluetooth / WiFi module */
+ &i2c4 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c4_pins>;
+@@ -240,15 +243,63 @@
+ };
+ 
+ /* on-board WiFi module */
++&vbat {
++	regulator-name = "vbat";
++	regulator-min-microvolt = <5000000>;
++	regulator-max-microvolt = <5000000>;
++};
++
++&wlcore_wl_en {
++        regulator-name = "regulator-wlcore-wl-en";
++        regulator-min-microvolt = <3300000>;
++        regulator-max-microvolt = <3300000>;
++        vin-supply = <&vbat>;
++        gpio = <&gpio2 11 0>;   /* gpio_43: WL Enable */
++        /* WLAN card specific delay */
++        startup-delay-us = <70000>;
++        enable-active-high;
++};
++
++&wlcore_bt_en {
++        regulator-name = "regulator-wlcore-bt-en";
++        regulator-min-microvolt = <3300000>;
++        regulator-max-microvolt = <3300000>;
++        vin-supply = <&vbat>;
++        gpio = <&gpio2 15 0>;	/* gpio_47: BT Enable */
++        startup-delay-us = <70000>;
++};
++
+ &mmc5 {
++	/* Wifi & Bluetooth on MMC #5 */
++	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc5_pins>;
+-
+-	vmmc-supply = <&w2cbw0015_vmmc>;
+ 	ti,bus-width = <4>;
++	vmmc-supply = <&vmmc>;
++	vmmc_aux-supply = <&wlcore_wl_en>;
++	vqmmc-supply = <&wlcore_bt_en>;
+ 	ti,non-removable;
++	ti,needs-special-hs-handling;
+ 	cap-power-off-card;
+ 	keep-power-in-suspend;
++	ti,dual-volt;
++	max-frequency = <40000000>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	wlcore: wlcore@0 {
++		compatible = "ti,wl1831";
++		reg = <2>;
++		interrupt-parent = <&gpio2>;
++		interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
++	};
++};
++
++&uart2 {
++	/* Wilink8 Bluetooth */
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart2_pins>;
+ };
+ 
+ &twl_usb_comparator {
+-- 
+2.7.4
+

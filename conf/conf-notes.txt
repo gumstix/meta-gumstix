@@ -1,4 +1,4 @@
-The included meta-gumstix layer makes the "overo", "duovero", and "pepper"
+The included meta-gumstix layer makes the "overo", "duovero", "pepper" and "poblano"
 machines available.  By default, MACHINE=overo but this can readily
 overridden, for example:
 

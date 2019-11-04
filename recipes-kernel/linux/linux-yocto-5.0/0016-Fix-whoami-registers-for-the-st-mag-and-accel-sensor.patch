@@ -1,0 +1,39 @@
+From 39aa7beaf065508dd5a3de9b83473b63dc1841e5 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Sat, 5 Oct 2019 21:21:18 -0400
+Subject: [PATCH 17/24] Fix whoami registers for the st mag and accel sensors.
+
+---
+ drivers/iio/accel/st_accel_core.c       | 2 +-
+ drivers/iio/magnetometer/st_magn_core.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/iio/accel/st_accel_core.c b/drivers/iio/accel/st_accel_core.c
+index f7b4711..080e528 100644
+--- a/drivers/iio/accel/st_accel_core.c
++++ b/drivers/iio/accel/st_accel_core.c
+@@ -93,7 +93,7 @@ static const struct iio_chan_spec st_accel_16bit_channels[] = {
+ 
+ static const struct st_sensor_settings st_accel_sensors_settings[] = {
+ 	{
+-		.wai = 0x33,
++		.wai = 0x49,
+ 		.wai_addr = ST_SENSORS_DEFAULT_WAI_ADDRESS,
+ 		.sensors_supported = {
+ 			[0] = LIS3DH_ACCEL_DEV_NAME,
+diff --git a/drivers/iio/magnetometer/st_magn_core.c b/drivers/iio/magnetometer/st_magn_core.c
+index 5d056bd..5ec4a4d 100644
+--- a/drivers/iio/magnetometer/st_magn_core.c
++++ b/drivers/iio/magnetometer/st_magn_core.c
+@@ -184,7 +184,7 @@ static const struct st_sensor_settings st_magn_sensors_settings[] = {
+ 		.bootime = 2,
+ 	},
+ 	{
+-		.wai = 0x3c,
++		.wai = 0x49,
+ 		.wai_addr = ST_SENSORS_DEFAULT_WAI_ADDRESS,
+ 		.sensors_supported = {
+ 			[0] = LSM303DLHC_MAGN_DEV_NAME,
+-- 
+2.7.4
+

@@ -1,0 +1,24 @@
+From 5eef316abee302691b99ab03597116a827b1901d Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Tue, 15 Oct 2019 20:13:37 -0400
+Subject: [PATCH 23/24] parlor: fix HDMI color reverse problem
+
+---
+ arch/arm/boot/dts/omap4-duovero-parlor.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/omap4-duovero-parlor.dts b/arch/arm/boot/dts/omap4-duovero-parlor.dts
+index cfcac0d..228daf4 100644
+--- a/arch/arm/boot/dts/omap4-duovero-parlor.dts
++++ b/arch/arm/boot/dts/omap4-duovero-parlor.dts
+@@ -186,6 +186,7 @@
+ 
+ 	port {
+ 		hdmi_out: endpoint {
++			lanes = <1 0 3 2 5 4 7 6>;
+ 			remote-endpoint = <&hdmi_connector_in>;
+ 		};
+ 	};
+-- 
+2.7.4
+
