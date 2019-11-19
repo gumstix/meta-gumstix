@@ -14,6 +14,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:${THISDIR}/fragments:"
 SRC_URI += " \
     file://0001-Add-USB-wireless-driver-for-RTL8822BU-Fn-Link-6222D-.patch \
     file://0002-Add-gasket-and-apex-drivers-for-the-Google-Coral-TPU.patch \
+    file://0003-Change-the-default-log-level-for-the-Fn-Link-wifi-mo.patch \
 "
 
 SRC_URI_append = " \
