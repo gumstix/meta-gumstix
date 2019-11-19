@@ -1,0 +1,25 @@
+From b217c9065139e9697156b27b770e14b4fa38c509 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Tue, 19 Nov 2019 13:33:59 -0500
+Subject: [PATCH] Change the default log level for the Fn-Link wifi module.
+
+---
+ drivers/net/wireless/rtl8822bu/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/rtl8822bu/Makefile b/drivers/net/wireless/rtl8822bu/Makefile
+index 93e0c57..25c8450 100755
+--- a/drivers/net/wireless/rtl8822bu/Makefile
++++ b/drivers/net/wireless/rtl8822bu/Makefile
+@@ -85,7 +85,7 @@ CONFIG_IP_R_MONITOR = n #arp VOQ and high rate
+ CONFIG_RTW_DEBUG = y
+ # default log level is _DRV_INFO_ = 4,
+ # please refer to "How_to_set_driver_debug_log_level.doc" to set the available level.
+-CONFIG_RTW_LOG_LEVEL = 4
++CONFIG_RTW_LOG_LEVEL = 3
+ ######################## Wake On Lan ##########################
+ CONFIG_WOWLAN = n
+ #bit2: deauth, bit1: unicast, bit0: magic pkt.
+-- 
+2.7.4
+

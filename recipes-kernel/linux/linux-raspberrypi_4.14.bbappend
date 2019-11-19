@@ -9,6 +9,7 @@ SRC_URI += " \
     file://0007-Add-support-for-IMU-over-SPI.patch \
     file://0008-Update-mmc-frequency-for-wilink8-overlay.patch \
     file://0009-Add-driver-support-for-the-Fn-Link-6222D-UUB-wifi-BT.patch \
+    file://0010-Change-the-default-log-level-for-the-Fn-Link-wifi-mo.patch \
     file://fragment.cfg \
 "
 
