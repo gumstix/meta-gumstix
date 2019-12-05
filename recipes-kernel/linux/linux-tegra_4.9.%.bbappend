@@ -21,6 +21,7 @@ SRC_URI_append = " \
     file://enable_gasket.cfg \
     file://enable_6222D-UUB.cfg \
     file://enable_bmi055.cfg \
+    file://enable_SI7020.cfg \
 "
 
 #KERNEL_VERSION_SANITY_SKIP="1"
