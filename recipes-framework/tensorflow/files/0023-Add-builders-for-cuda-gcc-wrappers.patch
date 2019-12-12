@@ -1,0 +1,53 @@
+From b4162e6cf701717b8881011e7a719434716e419b Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Tue, 10 Dec 2019 14:00:08 -0500
+Subject: [PATCH] Add builders for cuda gcc wrappers.
+
+---
+ third_party/gpus/cuda_configure.bzl | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/third_party/gpus/cuda_configure.bzl b/third_party/gpus/cuda_configure.bzl
+index a53e899..d4d0621 100644
+--- a/third_party/gpus/cuda_configure.bzl
++++ b/third_party/gpus/cuda_configure.bzl
+@@ -1426,6 +1426,10 @@ def _create_local_cuda_repository(repository_ctx):
+     })
+     repository_ctx.file(
+         "crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc", "")
++    repository_ctx.file(
++        "crosstool/yocto/bin/crosstool_wrapper_driver_is_not_gcc", "")
++    repository_ctx.file(
++        "crosstool/yocto/bin/crosstool_wrapper_host_tf_framework", "")
+     repository_ctx.file("crosstool/windows/msvc_wrapper_for_nvcc.py", "")
+   else:
+     cuda_defines[
+@@ -1466,6 +1470,8 @@ def _create_local_cuda_repository(repository_ctx):
+             str(cc),
+         "%{cuda_version}":
+             cuda_config.cuda_version,
++        "%{cuda_toolkit_path}":
++            cuda_config.cuda_toolkit_path,
+         "%{nvcc_path}":
+             nvcc_path,
+         "%{gcc_host_compiler_path}":
+@@ -1483,6 +1489,16 @@ def _create_local_cuda_repository(repository_ctx):
+     )
+     _tpl(
+         repository_ctx,
++        "crosstool:yocto/bin/crosstool_wrapper_driver_is_not_gcc",
++        wrapper_defines,
++    )
++    _tpl(
++        repository_ctx,
++        "crosstool:yocto/bin/crosstool_wrapper_host_tf_framework",
++        wrapper_defines,
++    )
++    _tpl(
++        repository_ctx,
+         "crosstool:windows/msvc_wrapper_for_nvcc.py",
+         wrapper_defines,
+     )
+-- 
+2.7.4
+

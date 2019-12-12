@@ -1,0 +1,108 @@
+From dd303f745d159a2359c81922a2171a409998a71d Mon Sep 17 00:00:00 2001
+From: Hongxu Jia <hongxu.jia@windriver.com>
+Date: Thu, 31 Jan 2019 20:37:26 +0800
+Subject: [PATCH] add yocto toolchain to support cross compiling
+
+Upstream-Status: Inappropriate [oe specific]
+
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+---
+ WORKSPACE                   | 6 ++++++
+ tensorflow/BUILD            | 9 +++++++++
+ tensorflow/workspace.bzl    | 8 ++++++++
+ third_party/aws/BUILD.bazel | 3 +++
+ third_party/repo.bzl        | 1 +
+ 5 files changed, 27 insertions(+)
+
+diff --git a/WORKSPACE b/WORKSPACE
+index 7057d3f..869c180 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -53,6 +53,12 @@ android_configure(name="local_config_android")
+ load("@local_config_android//:android.bzl", "android_workspace")
+ android_workspace()
+ 
++new_local_repository(
++    name = "yocto_compiler",
++    path = "%%WORKDIR%%",
++    build_file = "//:BUILD.yocto_compiler",
++)
++
+ # Please add all new TensorFlow dependencies in workspace.bzl.
+ tf_workspace()
+ 
+diff --git a/tensorflow/BUILD b/tensorflow/BUILD
+index 823ad8f..6270301 100644
+--- a/tensorflow/BUILD
++++ b/tensorflow/BUILD
+@@ -100,6 +100,15 @@ config_setting(
+ )
+ 
+ config_setting(
++    name = "yocto_armeabi",
++    values = {
++        "crosstool_top": "@local_config_yocto_compiler//:toolchain",
++        "cpu": "armeabi",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
+     name = "android_arm",
+     values = {
+         "crosstool_top": "//external:android/crosstool",
+diff --git a/tensorflow/workspace.bzl b/tensorflow/workspace.bzl
+index aefab03..12c6fab 100755
+--- a/tensorflow/workspace.bzl
++++ b/tensorflow/workspace.bzl
+@@ -12,6 +12,7 @@ load("//third_party/sycl:sycl_configure.bzl", "sycl_configure")
+ load("//third_party/systemlibs:syslibs_configure.bzl", "syslibs_configure")
+ load("//third_party/toolchains/clang6:repo.bzl", "clang6_configure")
+ load("//third_party/toolchains/cpus/arm:arm_compiler_configure.bzl", "arm_compiler_configure")
++load("//third_party/toolchains/yocto:yocto_compiler_configure.bzl", "yocto_compiler_configure")
+ load("//third_party:repo.bzl", "tf_http_archive")
+ load("//third_party/clang_toolchain:cc_configure_clang.bzl", "cc_download_clang_toolchain")
+ load("@io_bazel_rules_closure//closure/private:java_import_external.bzl", "java_import_external")
+@@ -76,6 +77,13 @@ def tf_workspace(path_prefix = "", tf_repo_name = ""):
+         remote_config_repo = "../arm_compiler",
+     )
+ 
++    # Point //external/local_config_yocto_compiler to //external/yocto_compiler
++    yocto_compiler_configure(
++        name = "local_config_yocto_compiler",
++        build_file = clean_dep("//third_party/toolchains/yocto:BUILD"),
++        remote_config_repo = "../yocto_compiler",
++    )
++
+     mkl_repository(
+         name = "mkl_linux",
+         build_file = clean_dep("//third_party/mkl:mkl.BUILD"),
+diff --git a/third_party/aws/BUILD.bazel b/third_party/aws/BUILD.bazel
+index 5426f79..b106b12 100644
+--- a/third_party/aws/BUILD.bazel
++++ b/third_party/aws/BUILD.bazel
+@@ -24,6 +24,9 @@ cc_library(
+         "@org_tensorflow//tensorflow:raspberry_pi_armeabi": glob([
+             "aws-cpp-sdk-core/source/platform/linux-shared/*.cpp",
+         ]),
++        "@org_tensorflow//tensorflow:yocto_armeabi": glob([
++            "aws-cpp-sdk-core/source/platform/linux-shared/*.cpp",
++        ]),
+         "//conditions:default": [],
+     }) + glob([
+         "aws-cpp-sdk-core/include/**/*.h",
+diff --git a/third_party/repo.bzl b/third_party/repo.bzl
+index bad6d20..9823cab 100644
+--- a/third_party/repo.bzl
++++ b/third_party/repo.bzl
+@@ -16,6 +16,7 @@
+ 
+ _SINGLE_URL_WHITELIST = depset([
+     "arm_compiler",
++    "yocto_compiler",
+ ])
+ 
+ def _is_windows(ctx):
+-- 
+2.7.4
+
