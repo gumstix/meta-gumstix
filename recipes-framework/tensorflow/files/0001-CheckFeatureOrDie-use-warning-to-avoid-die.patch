@@ -1,0 +1,36 @@
+From 419877ee8785f6d5850cc1d3d432ab43e51f47b9 Mon Sep 17 00:00:00 2001
+From: Hongxu Jia <hongxu.jia@windriver.com>
+Date: Mon, 29 Apr 2019 08:54:57 +0000
+Subject: [PATCH] CheckFeatureOrDie: use warning to avoid die
+
+Run 32-bit tensorflow on qemux86-64, it broke at CheckFeatureOrDie,
+use warning to workaround.
+
+Upstream-Status: Inappropriate [oe specific]
+
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+---
+ tensorflow/core/platform/cpu_feature_guard.cc | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/tensorflow/core/platform/cpu_feature_guard.cc b/tensorflow/core/platform/cpu_feature_guard.cc
+index 2efe0c0876..75149177aa 100644
+--- a/tensorflow/core/platform/cpu_feature_guard.cc
++++ b/tensorflow/core/platform/cpu_feature_guard.cc
+@@ -29,13 +29,9 @@ namespace {
+ // If the CPU feature isn't present, log a fatal error.
+ void CheckFeatureOrDie(CPUFeature feature, const string& feature_name) {
+   if (!TestCPUFeature(feature)) {
+-#ifdef __ANDROID__
+     // Some Android emulators seem to indicate they don't support SSE, so to
+     // avoid crashes when testing, switch this to a warning.
+     LOG(WARNING)
+-#else
+-    LOG(FATAL)
+-#endif
+         << "The TensorFlow library was compiled to use " << feature_name
+         << " instructions, but these aren't available on your machine.";
+   }
+-- 
+2.17.1
+

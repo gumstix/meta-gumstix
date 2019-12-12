@@ -1,0 +1,46 @@
+From 951a9cba1bc08b47dc1758672f1b83fce185faa5 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Wed, 20 Nov 2019 10:59:49 -0500
+Subject: [PATCH] Configuration changes necessary to support cuda compiling.
+
+---
+ configure.py                        | 3 ++-
+ third_party/gpus/cuda_configure.bzl | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/configure.py b/configure.py
+index e443595..0d48a01 100644
+--- a/configure.py
++++ b/configure.py
+@@ -851,6 +851,7 @@ def set_tf_cuda_version(environ_cp):
+       cuda_rt_lib_paths = [
+           '%s/libcudart.so.%s' % (x, tf_cuda_version) for x in [
+               'lib64',
++              'lib',
+               'lib/powerpc64le-linux-gnu',
+               'lib/x86_64-linux-gnu',
+           ]
+@@ -912,7 +913,7 @@ def set_tf_cudnn_version(environ_cp):
+       cuda_dnn_lib_path = 'lib/x64/cudnn.lib'
+       cuda_dnn_lib_alt_path = 'lib/x64/cudnn.lib'
+     elif is_linux():
+-      cuda_dnn_lib_path = 'lib64/libcudnn.so.%s' % tf_cudnn_version
++      cuda_dnn_lib_path = 'lib/libcudnn.so.%s' % tf_cudnn_version
+       cuda_dnn_lib_alt_path = 'libcudnn.so.%s' % tf_cudnn_version
+     elif is_macos():
+       cuda_dnn_lib_path = 'lib/libcudnn.%s.dylib' % tf_cudnn_version
+diff --git a/third_party/gpus/cuda_configure.bzl b/third_party/gpus/cuda_configure.bzl
+index 8aa5b89..a53e899 100644
+--- a/third_party/gpus/cuda_configure.bzl
++++ b/third_party/gpus/cuda_configure.bzl
+@@ -48,6 +48,7 @@ _DEFAULT_CUDA_COMPUTE_CAPABILITIES = ["3.5", "5.2"]
+ CUDA_LIB_PATHS = [
+     "lib64/",
+     "lib64/stubs/",
++    "lib/stubs/",
+     "lib/powerpc64le-linux-gnu/",
+     "lib/x86_64-linux-gnu/",
+     "lib/x64/",
+-- 
+2.7.4
+

@@ -1,0 +1,52 @@
+From 1930f8aabbfe00debd2914f759cb5ac263215d49 Mon Sep 17 00:00:00 2001
+From: Hongxu Jia <hongxu.jia@windriver.com>
+Date: Sun, 24 Feb 2019 03:33:00 -0500
+Subject: [PATCH] fix build //tensorflow/lite/examples/label_image:label_image
+ failure
+
+It caused undefined reference neon_tensor_utils failure
+...
+|tensor_utils.cc:(.text._ZN6tflite12tensor_utils18ReductionSumVectorEPKfPfii+0x0):
+undefined reference to `tflite::tensor_utils::NeonReductionSumVector(float const*,
+float*, int, int)'
+...
+
+Define Yocto specific cpu `armeabi' for lite label_image
+Upstream-Status: Inappropriate [oe specific]
+
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+---
+ tensorflow/lite/kernels/internal/BUILD | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/tensorflow/lite/kernels/internal/BUILD b/tensorflow/lite/kernels/internal/BUILD
+index 4be3226..959a9f0 100644
+--- a/tensorflow/lite/kernels/internal/BUILD
++++ b/tensorflow/lite/kernels/internal/BUILD
+@@ -93,6 +93,13 @@ config_setting(
+ )
+ 
+ config_setting(
++    name = "armeabi",
++    values = {
++        "cpu": "armeabi",
++    },
++)
++
++config_setting(
+     name = "haswell",
+     values = {
+         "cpu": "haswell",
+@@ -504,6 +511,9 @@ cc_library(
+         ":armeabi-v7a": [
+             ":neon_tensor_utils",
+         ],
++        ":armeabi": [
++            ":neon_tensor_utils",
++        ],
+         ":armv7a": [
+             ":neon_tensor_utils",
+         ],
+-- 
+2.8.1
+

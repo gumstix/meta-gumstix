@@ -1,0 +1,49 @@
+From 02e58aa624aa6c330984474b9119c6b29a1ed77d Mon Sep 17 00:00:00 2001
+From: Hongxu Jia <hongxu.jia@windriver.com>
+Date: Thu, 14 Feb 2019 10:26:27 -0500
+Subject: [PATCH] support musl
+
+Build fails looking for `execinfo.h` when building against musl
+|In file included from ./tensorflow/core/platform/stacktrace.h:26,
+|                 from tensorflow/core/platform/stacktrace_handler.cc:34:
+|./tensorflow/core/platform/default/stacktrace.h:27:10: fatal error:
+execinfo.h: No such file or directory
+
+Upstream-Status: Pending
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+---
+ tensorflow/core/platform/default/stacktrace.h  | 3 ++-
+ tensorflow/core/platform/stacktrace_handler.cc | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tensorflow/core/platform/default/stacktrace.h b/tensorflow/core/platform/default/stacktrace.h
+index c8e297f..8fecf05 100644
+--- a/tensorflow/core/platform/default/stacktrace.h
++++ b/tensorflow/core/platform/default/stacktrace.h
+@@ -18,7 +18,8 @@ limitations under the License.
+ 
+ #include "tensorflow/core/platform/platform.h"
+ #if !defined(IS_MOBILE_PLATFORM) && defined(PLATFORM_POSIX) && \
+-    (defined(__clang__) || defined(__GNUC__))
++    (defined(__clang__) || defined(__GNUC__)) && \
++    defined(__GLIBC__)
+ #define TF_GENERATE_BACKTRACE
+ #endif
+ 
+diff --git a/tensorflow/core/platform/stacktrace_handler.cc b/tensorflow/core/platform/stacktrace_handler.cc
+index ff31c97..41d62f7 100644
+--- a/tensorflow/core/platform/stacktrace_handler.cc
++++ b/tensorflow/core/platform/stacktrace_handler.cc
+@@ -16,7 +16,8 @@ limitations under the License.
+ #include "tensorflow/core/platform/platform.h"
+ 
+ #if !defined(PLATFORM_GOOGLE) && !defined(IS_MOBILE_PLATFORM) && \
+-    defined(PLATFORM_POSIX) && (defined(__clang__) || defined(__GNUC__))
++    defined(PLATFORM_POSIX) && (defined(__clang__) || defined(__GNUC__)) && \
++    defined(__GLIBC__)
+ #define TF_GENERATE_STACKTRACE
+ #endif
+ 
+-- 
+2.8.1
+
