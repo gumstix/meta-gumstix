@@ -9,6 +9,7 @@ SRC_URI += " \
     file://0007-Add-support-for-IMU-over-SPI.patch \
     file://0008-Update-mmc-frequency-for-wilink8-overlay.patch \
     file://0009-Add-wlink8-and-sound-codec-overlays-to-the-default-b.patch \
+    file://0010-Add-properties-to-sdio-wlink8.patch \
     file://fragment.cfg \
 "
 
