@@ -1,0 +1,142 @@
+From df2c06fb0625b9eb340844957b2eb315ae021d28 Mon Sep 17 00:00:00 2001
+From: "Andrew C. Smith" <acsmith@gumstix.com>
+Date: Wed, 3 Jul 2019 21:32:21 -0400
+Subject: [PATCH] Add OV5640 camera support.
+
+---
+ arch/arm/boot/dts/overlays/Makefile                |   1 +
+ .../boot/dts/overlays/ov5640-gumstix-overlay.dts   | 110 +++++++++++++++++++++
+ 2 files changed, 111 insertions(+)
+ create mode 100644 arch/arm/boot/dts/overlays/ov5640-gumstix-overlay.dts
+
+diff --git a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
+index 2faeb11..10856e4 100644
+--- a/arch/arm/boot/dts/overlays/Makefile
++++ b/arch/arm/boot/dts/overlays/Makefile
+@@ -94,6 +94,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+ 	mmc.dtbo \
+ 	mpu6050.dtbo \
+ 	mz61581.dtbo \
++	ov5640-gumstix.dtbo \
+ 	ov5647.dtbo \
+ 	papirus.dtbo \
+ 	pi3-act-led.dtbo \
+diff --git a/arch/arm/boot/dts/overlays/ov5640-gumstix-overlay.dts b/arch/arm/boot/dts/overlays/ov5640-gumstix-overlay.dts
+new file mode 100644
+index 0000000..5a65156
+--- /dev/null
++++ b/arch/arm/boot/dts/overlays/ov5640-gumstix-overlay.dts
+@@ -0,0 +1,110 @@
++// Definitions for OV5640 camera module on VC I2C bus
++/dts-v1/;
++/plugin/;
++#include <dt-bindings/power/raspberrypi-power.h>
++#include <dt-bindings/clock/bcm2835.h>
++/{
++	compatible = "brcm,bcm2708";
++
++	fragment@0 {
++		target = <&soc>;
++		__overlay__ {
++			csi0: csi0@7e800000 {
++				compatible = "brcm,bcm2835-unicam";
++				reg = <0x7e800000 0x800>,
++				      <0x7e802000 0x4>;
++				interrupts = <2 6>;
++				clocks = <&clocks BCM2835_CLOCK_CAM0>;
++				clock-names = "lp";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				#clock-cells = <1>;
++
++				status = "disabled";
++			};
++
++			csi1: csi1@7e801000 {
++				compatible = "brcm,bcm2835-unicam";
++				reg = <0x7e801000 0x800>,
++				      <0x7e802004 0x4>;
++				interrupts = <2 7>;
++				clocks = <&clocks BCM2835_CLOCK_CAM1>;
++				clock-names = "lp";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				#clock-cells = <1>;
++
++				status = "disabled";
++				power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
++			};
++		};
++	};
++
++	fragment@1 {
++		target = <&i2c0>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "okay";
++			ov5640: ov5640@3c {
++				compatible = "ovti,ov5640";
++				reg = <0x3c>;
++				status = "okay";
++
++				pinctrl-names = "default";
++				pinctrl-0 = <&ov5640_default>;
++
++				powerdown-gpios = <&gpio 17 0>;
++				reset-gpios = <&gpio 16 1>;
++				clock-names = "xclk";
++				clocks = <&clocks 40>; //40 is BCM2835_CLOCK_GP2
++				clock-frequency = <24000000>;
++
++				port {
++					ov5640_0: endpoint {
++						remote-endpoint = <&csi1_ep>;
++						clock-lanes = <0>;
++						data-lanes = <1 2>;
++						clock-continuous;
++						link-frequencies =
++							/bits/ 64 <297000000>;
++					};
++				};
++			};
++		};
++	};
++
++	fragment@2 {
++		target = <&csi1>;
++		__overlay__ {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "okay";
++
++			port {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				csi1_ep: endpoint {
++					clock-lanes = <0>;
++					data-lanes = <1 2>;
++					remote-endpoint = <&ov5640_0>;
++				};
++			};
++		};
++	};
++
++	fragment@3 {
++		target = <&gpio>;
++		__overlay__ {
++			ov5640_default: pinmux_ov5640_default {
++				brcm,pins = <
++				6
++				16 /* gpio16.reset-gpios */
++				17 /* gpio17.powerdown-gpios */
++				>;
++				brcm,function = <4 0 0>;
++				brcm,pull = <0 2 1>;
++			};
++		};
++	};
++};
+-- 
+2.7.4
+

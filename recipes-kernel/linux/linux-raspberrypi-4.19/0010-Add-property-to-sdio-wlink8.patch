@@ -1,0 +1,12 @@
+diff --git a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
+index 09a45fda0aac..c884fe50ee41 100644
+--- a/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
++++ b/arch/arm/boot/dts/overlays/sdio-wlink8-overlay.dts
+@@ -13,6 +13,7 @@
+                         pinctrl-names = "default";
+                         pinctrl-0 = <&sdio_pins>;
+                         non-removable;
++                        cap-power-off-card;
+                         bus-width = <4>;
+                         brcm,overclock-50 = <0>;
+                         status = "okay";
