@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-4.19:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-4.19:${THISDIR}/fragments:"
 
 SRC_URI += " \
     file://0001-Add-OV5640-camera-support.patch \
