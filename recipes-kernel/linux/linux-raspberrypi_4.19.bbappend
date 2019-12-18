@@ -13,6 +13,13 @@ SRC_URI += " \
     file://fragment.cfg \
 "
 
+SRC_URI_append = " \
+    file://enable_6222D-UUB.cfg \
+    file://enable_SI7020.cfg \ 
+    file://enable_bme680.cfg \
+    file://enable_bmi055.cfg \
+"
+
 do_kernel_configme_append () {
     cat ${WORKDIR}/*.cfg >> ${WORKDIR}/defconfig
 }
