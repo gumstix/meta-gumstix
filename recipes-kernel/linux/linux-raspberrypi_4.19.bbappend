@@ -18,6 +18,7 @@ SRC_URI_append = " \
     file://enable_SI7020.cfg \ 
     file://enable_bme680.cfg \
     file://enable_bmi055.cfg \
+    file://enable_bmi160.cfg \
 "
 
 do_kernel_configme_append () {
