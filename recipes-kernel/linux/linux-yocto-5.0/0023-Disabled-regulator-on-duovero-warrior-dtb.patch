@@ -1,0 +1,65 @@
+From 7108ab0e3aa65fdd21c07e9d82a1aa0a7d5c7126 Mon Sep 17 00:00:00 2001
+From: Harry <harry.hu@gumstix.com>
+Date: Mon, 13 Jan 2020 12:42:57 -0800
+Subject: [PATCH] Disabled regulator in the device tree for making wilink work
+
+---
+ arch/arm/boot/dts/omap4-duovero.dtsi | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap4-duovero.dtsi b/arch/arm/boot/dts/omap4-duovero.dtsi
+index 7472530233ff..288b978b6181 100644
+--- a/arch/arm/boot/dts/omap4-duovero.dtsi
++++ b/arch/arm/boot/dts/omap4-duovero.dtsi
+@@ -52,9 +52,9 @@
+ 		compatible = "regulator-fixed";
+ 	};
+ 
+-	wlcore_wl_en: fixedregulator@1 {
+-		compatible = "regulator-fixed";
+-	};
++//	wlcore_wl_en: fixedregulator@1 {
++//		compatible = "regulator-fixed";
++//	};
+ 
+ 	wlcore_bt_en: fixedregulator@2 {
+ 		compatible = "regulator-fixed";
+@@ -249,16 +249,16 @@
+ 	regulator-max-microvolt = <5000000>;
+ };
+ 
+-&wlcore_wl_en {
+-        regulator-name = "regulator-wlcore-wl-en";
+-        regulator-min-microvolt = <3300000>;
+-        regulator-max-microvolt = <3300000>;
+-        vin-supply = <&vbat>;
+-        gpio = <&gpio2 11 0>;   /* gpio_43: WL Enable */
+-        /* WLAN card specific delay */
+-        startup-delay-us = <70000>;
+-        enable-active-high;
+-};
++//&wlcore_wl_en {
++//        regulator-name = "regulator-wlcore-wl-en";
++//        regulator-min-microvolt = <3300000>;
++//        regulator-max-microvolt = <3300000>;
++//        vin-supply = <&vbat>;
++//        gpio = <&gpio2 11 0>;   /* gpio_43: WL Enable */
++//        /* WLAN card specific delay */
++//        startup-delay-us = <70000>;
++//        enable-active-high;
++//};
+ 
+ &wlcore_bt_en {
+         regulator-name = "regulator-wlcore-bt-en";
+@@ -276,7 +276,7 @@
+ 	pinctrl-0 = <&mmc5_pins>;
+ 	ti,bus-width = <4>;
+ 	vmmc-supply = <&vmmc>;
+-	vmmc_aux-supply = <&wlcore_wl_en>;
++//	vmmc_aux-supply = <&wlcore_wl_en>;
+ 	vqmmc-supply = <&wlcore_bt_en>;
+ 	ti,non-removable;
+ 	ti,needs-special-hs-handling;
+-- 
+2.17.1
+
