@@ -1,0 +1,52 @@
+From d66e92317f7d4c936adf0ae6527bd1130795c0a1 Mon Sep 17 00:00:00 2001
+From: Harry <harry.hu@gumstix.com>
+Date: Tue, 14 Jan 2020 08:05:17 -0800
+Subject: [PATCH] Disabled regulator in the device tree of warrior duovero to
+ make wilink work properly.
+
+---
+ arch/arm/boot/dts/omap4-duovero.dtsi | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/arch/arm/boot/dts/omap4-duovero.dtsi b/arch/arm/boot/dts/omap4-duovero.dtsi
+index 7472530233ff..cb6aa47fa98f 100644
+--- a/arch/arm/boot/dts/omap4-duovero.dtsi
++++ b/arch/arm/boot/dts/omap4-duovero.dtsi
+@@ -52,9 +52,6 @@
+ 		compatible = "regulator-fixed";
+ 	};
+ 
+-	wlcore_wl_en: fixedregulator@1 {
+-		compatible = "regulator-fixed";
+-	};
+ 
+ 	wlcore_bt_en: fixedregulator@2 {
+ 		compatible = "regulator-fixed";
+@@ -249,16 +246,6 @@
+ 	regulator-max-microvolt = <5000000>;
+ };
+ 
+-&wlcore_wl_en {
+-        regulator-name = "regulator-wlcore-wl-en";
+-        regulator-min-microvolt = <3300000>;
+-        regulator-max-microvolt = <3300000>;
+-        vin-supply = <&vbat>;
+-        gpio = <&gpio2 11 0>;   /* gpio_43: WL Enable */
+-        /* WLAN card specific delay */
+-        startup-delay-us = <70000>;
+-        enable-active-high;
+-};
+ 
+ &wlcore_bt_en {
+         regulator-name = "regulator-wlcore-bt-en";
+@@ -276,7 +263,6 @@
+ 	pinctrl-0 = <&mmc5_pins>;
+ 	ti,bus-width = <4>;
+ 	vmmc-supply = <&vmmc>;
+-	vmmc_aux-supply = <&wlcore_wl_en>;
+ 	vqmmc-supply = <&wlcore_bt_en>;
+ 	ti,non-removable;
+ 	ti,needs-special-hs-handling;
+-- 
+2.17.1
+
