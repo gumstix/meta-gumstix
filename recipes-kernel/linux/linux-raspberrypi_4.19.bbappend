@@ -10,6 +10,8 @@ SRC_URI += " \
     file://0008-Update-mmc-frequency-for-wilink8-overlay.patch \
     file://0009-Add-wlink8-and-sound-codec-overlays-to-the-default-b.patch \
     file://0010-Add-property-to-sdio-wlink8.patch \
+    file://0011-Add-driver-support-for-the-Fn-Link-6222D-UUB-wifi-BT.patch \
+    file://0012-Change-the-default-log-level-for-the-Fn-Link-wifi-mo.patch \
     file://fragment.cfg \
 "
 
