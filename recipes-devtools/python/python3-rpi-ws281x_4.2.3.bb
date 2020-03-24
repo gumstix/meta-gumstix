@@ -11,12 +11,15 @@ SRC_URI[sha256sum] = "265a395410cc7199f779c4209ca3970b7211896b86dbaa4731bdc3569d
 PYPI_PACKAGE = "rpi_ws281x"
 inherit pypi setuptools3
 
-do_compile_prepend() {
+do_compile_library() {
 	SED_COMMAND="/cmdclass/d"
 	sed -i "${SED_COMMAND}" ${S}/setup.py
 	SED_COMMAND="s#gcc#\$(CC)#g"
 	SED_COMMAND="${SED_COMMAND}; s#ar#\$(AR)#g"
 	SED_COMMAND="${SED_COMMAND}; s#ranlib#\$(RANLIB)#g"
 	sed -i "${SED_COMMAND}" ${S}/Makefile
+	cd ${S}
 	oe_runmake
 }
+
+addtask compile_library after do_configure before do_compile
