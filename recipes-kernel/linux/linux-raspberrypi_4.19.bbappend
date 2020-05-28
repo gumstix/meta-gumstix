@@ -11,6 +11,7 @@ SRC_URI += " \
     file://0009-Add-wlink8-and-sound-codec-overlays-to-the-default-b.patch \
     file://0010-Add-property-to-sdio-wlink8.patch \
     file://0011-Add-driver-for-Fn-Link-6222D-UUB.patch \
+    file://0013-Add-rtk-hciattach-tool-for-bluetooth-initialization.patch \
     file://fragment.cfg \
     file://fragments \
 "
@@ -19,6 +20,3 @@ do_configure_append() {
     ${S}/scripts/kconfig/merge_config.sh -m -O ${B} ${B}/.config ${WORKDIR}/fragment.cfg
     ${S}/scripts/kconfig/merge_config.sh -m -O ${B} ${B}/.config ${WORKDIR}/fragments/*.cfg
 }
-
-# Set contiguous memory allocation size for video streaming
-PITFT_PARAMS_append = "\n# Uncomment and add inline to optimize memory for streaming video\n# cma=64M"
