@@ -242,3 +242,7 @@ CONF_VERSION = "1"
 
 # Use bluez5 rather than bluez4
 DISTRO_FEATURES_append = " bluez5"
+
+KERNEL_DEVICETREE_append = " overlays/sdio.dtbo"
+RPI_EXTRA_CONFIG += '\n#For SDIO Interface:\ndtoverlay=sdio,poll_once=off'
+
