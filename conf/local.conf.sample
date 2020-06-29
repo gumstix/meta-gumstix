@@ -246,3 +246,5 @@ DISTRO_FEATURES_append = " bluez5"
 KERNEL_DEVICETREE_append = " overlays/sdio.dtbo"
 RPI_EXTRA_CONFIG += '\n#For SDIO Interface:\ndtoverlay=sdio,poll_once=off'
 
+IMAGE_INSTALL_append = " rtk-bluetooth "
+SERIAL_CONSOLES_rpi = "115200;ttyS0"
