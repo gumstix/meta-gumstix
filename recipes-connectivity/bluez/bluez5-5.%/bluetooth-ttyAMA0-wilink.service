@@ -1,8 +1,12 @@
 [Unit]
-Description=Attach WiLink8 Bluetooth Adapter hardwired to ttyO1
-Wants=bluetooth.service
+Description=Attach WiLink8 Bluetooth Adapter hardwired to ttyAMA0
+Requires=bluetooth.service
+After=bluetooth.service
+BindsTo=bluetooth.service
 
 [Service]
+Type=simple
+ExecStartPre=/bin/sleep 1
 ExecStart=/usr/bin/hciattach -n ttyAMA0 texas
 # is UIM needed?
 
