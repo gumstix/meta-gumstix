@@ -1,0 +1,27 @@
+# udev rules for bluetooth via UART devices
+#
+# Some bluetooth devices communicate with the host system using a
+# serial port. To be clear: not serial-over-bluetooth a la RFCOMM.
+# As the bluetooth chip is not easily discoverable via a serial port
+# a user typically has to manually establish a serial connection e.g.
+#
+#  $ hciattach /dev/ttyS1 csr
+#
+# before being able to use bluetooth.  Some wireless modules combine a
+# bluetooth-over-uart chip with a wifi-over-sdio chip i.e. the
+# presence of a specific SDIO device also indicates that a bluetooth
+# device is present.
+#
+# Add rules that attach the appropriate bluetooth device based on the
+# wifi chip as they are configured on the Gumstix Overo COMs.
+# To add:
+#   $ udevadm info -a -p /sys/class/net/wlan0
+# To test:
+#   $ udevadm test /sys/class/net/wlan0
+
+SUBSYSTEM!="net", GOTO="bluetooth_via_uart_rules_end"
+
+# Bluetooth on the FnLink chip
+ATTRS{device}=="0xc822", ATTRS{vendor}=="0x024c", DRIVERS=="rtl88x2cs", TAG+="systemd" ENV{SYSTEMD_WANTS}="bluetooth-ttyAMA0-fnlink.service"
+
+LABEL="bluetooth_via_uart_rules_end"
