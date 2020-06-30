@@ -1,0 +1,9 @@
+[Unit]
+Description=Attach Fnlink Bluetooth Adapter hardwired to ttyAMA0
+Wants=bluetooth.service
+
+[Service]
+ExecStart=rtk_hciattach -n -s 115200 ttyAMA0 rtk_h5 &
+
+#[Install]
+#WantedBy=multi-user.target

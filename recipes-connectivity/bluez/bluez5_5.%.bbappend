@@ -7,12 +7,14 @@ SRC_URI += " \
     file://99-bluetooth-via-uart-colibri.rules \
     file://99-bluetooth-via-uart-scm.rules \
     file://99-bluetooth-via-uart-rpicm3.rules \
+    file://99-bluetooth-via-uart-rpicm3-2.rules \
     file://bluetooth-ttyO1-csr.service \
     file://bluetooth-ttyO1-wilink.service \
     file://bluetooth-ttyO3-wilink.service \
     file://bluetooth-ttymxc1-wilink.service \
     file://bluetooth-ttymxc4-wilink.service \
     file://bluetooth-ttyAMA0-wilink.service \
+    file://bluetooth-ttyAMA0-fnlink.service \
 "
 
 def get_service(machine):
@@ -53,7 +55,9 @@ do_install_append() {
 
         "raspberrypi-cm3")
             install -m 0644 ${WORKDIR}/bluetooth-ttyAMA0-wilink.service ${D}${systemd_unitdir}/system
-            install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-rpicm3.rules ${D}${sysconfdir}/udev/rules.d ;;
+            install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-rpicm3.rules ${D}${sysconfdir}/udev/rules.d
+            install -m 0644 ${WORKDIR}/bluetooth-ttyAMA0-fnlink.service ${D}${systemd_unitdir}/system
+            install -m 0644 ${WORKDIR}/99-bluetooth-via-uart-rpicm3-2.rules ${D}${sysconfdir}/udev/rules.d ;;
 
         *)
             install -m 0644 ${WORKDIR}/bluetooth-ttyO1*.service ${D}${systemd_unitdir}/system
