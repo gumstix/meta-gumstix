@@ -1,0 +1,25 @@
+From e92af2f8c2edae710237294c9f677412778676f2 Mon Sep 17 00:00:00 2001
+From: Sasquatch <sasquatch@gumstix.com>
+Date: Thu, 2 Jul 2020 08:25:06 -0700
+Subject: [PATCH] Updated cuda_configure to check nvcc using native path.
+
+---
+ third_party/gpus/cuda_configure.bzl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/third_party/gpus/cuda_configure.bzl b/third_party/gpus/cuda_configure.bzl
+index d4d06213df..305e01cab5 100644
+--- a/third_party/gpus/cuda_configure.bzl
++++ b/third_party/gpus/cuda_configure.bzl
+@@ -487,7 +487,7 @@ def _cuda_version(repository_ctx, cuda_toolkit_path, cpu_value):
+ 
+   # Run nvcc --version and find the line containing the CUDA version.
+   nvcc_path = repository_ctx.path("%s/bin/nvcc%s" % (
+-      cuda_toolkit_path,
++      cuda_toolkit_path.replace("recipe-sysroot","recipe-sysroot-native"),
+       ".exe" if cpu_value == "Windows" else "",
+   ))
+   if not nvcc_path.exists:
+-- 
+2.17.1
+

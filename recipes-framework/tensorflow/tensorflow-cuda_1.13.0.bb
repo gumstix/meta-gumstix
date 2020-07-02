@@ -19,6 +19,7 @@ SRC_URI = "git://github.com/tensorflow/tensorflow.git;branch=r1.13 \
            file://0021-Fix-convert_nodes-issue-with-TENSORRT-versions.patch \
            file://0022-Remove-grpc-glibc-patch-it-causes-compile-errors.patch \
            file://0023-Add-builders-for-cuda-gcc-wrappers.patch \
+           file://0024-Updated-cuda_configure-to-check-nvcc-using-native-pa.patch \
            file://BUILD.cuda \
            file://BUILD.yocto_compiler \
            file://CROSSTOOL.tpl.cuda \
