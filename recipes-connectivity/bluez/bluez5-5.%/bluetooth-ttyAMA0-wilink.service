@@ -6,7 +6,7 @@ BindsTo=bluetooth.service
 
 [Service]
 Type=simple
-ExecStartPre=/bin/sleep 1
+ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/hciattach -n ttyAMA0 texas
 # is UIM needed?
 
