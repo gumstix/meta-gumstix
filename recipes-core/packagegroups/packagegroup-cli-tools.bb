@@ -34,8 +34,6 @@ RDEPENDS_${PN}-debug = "\
     gdb \
     procps \
     pxaregs \
-    s3c24xx-gpio \
-    s3c64xx-gpio \
     serial-forward \
     strace \
 "
