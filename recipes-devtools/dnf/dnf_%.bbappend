@@ -7,6 +7,8 @@ SRC_URI += "file://gumstix.key \
             file://gumstix-key.service \
             file://gumstix-key.sh"
 
+RDEPENDS_${PN} += "bash"
+
 FILES_${PN} += "${datadir}/gumstixkey/* \
                 ${systemd_unitdir}/system/gumstix-key.*"
 
