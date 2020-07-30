@@ -25,9 +25,3 @@ SRC_URI_append = " \
 "
 
 #KERNEL_VERSION_SANITY_SKIP="1"
-
-do_configure_append () {
-    ${S}/scripts/kconfig/merge_config.sh -m -O ${WORKDIR}/build ${WORKDIR}/build/.config ${WORKDIR}/*.cfg
-    yes '' | make oldconfig
-}
-
