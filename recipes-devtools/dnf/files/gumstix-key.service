@@ -1,8 +1,0 @@
-[Unit]
-Description=Import gumstix RPM key
-
-[Service]
-ExecStart=/usr/share/gumstixkey/gumstix-key.sh
-
-[Install]
-Alias=multi-user.target.wants/gumstix-key.service
