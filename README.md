@@ -8,7 +8,7 @@ This repository is developed in the environment provided by the
 This layer depends on:
 
 URI: git://git.yoctoproject.org/poky.git
-branch: warrior
+branch: dunfell
 revision: HEAD
 
 Layer maintainer: 
