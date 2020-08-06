@@ -24,4 +24,7 @@ SRC_URI_append = " \
     file://enable_SI7020.cfg \
 "
 
-#KERNEL_VERSION_SANITY_SKIP="1"
+do_configure_append() {
+    ${S}/scripts/kconfig/merge_config.sh -m -O ${B} ${B}/.config ${WORKDIR}/*.cfg
+    yes '' | make oldconfig
+}
