@@ -1,0 +1,33 @@
+From c83e0b7b09d85b551ffc7d6cbf6d41b1ea4311e2 Mon Sep 17 00:00:00 2001
+From: Yoruio <zeleidu@gmail.com>
+Date: Fri, 7 Aug 2020 09:54:14 -0700
+Subject: [PATCH] Disabling hardware acceleration
+
+---
+ chrome/browser/gpu/gpu_mode_manager.cc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/chrome/browser/gpu/gpu_mode_manager.cc b/chrome/browser/gpu/gpu_mode_manager.cc
+index 19bb596f9..759ec2cc9 100644
+--- a/chrome/browser/gpu/gpu_mode_manager.cc
++++ b/chrome/browser/gpu/gpu_mode_manager.cc
+@@ -35,13 +35,13 @@ void SetPreviousGpuModePref(bool enabled) {
+ // static
+ void GpuModeManager::RegisterPrefs(PrefRegistrySimple* registry) {
+   registry->RegisterBooleanPref(
+-      prefs::kHardwareAccelerationModeEnabled, true);
++      prefs::kHardwareAccelerationModeEnabled, false);
+   registry->RegisterBooleanPref(
+-      prefs::kHardwareAccelerationModePrevious, true);
++      prefs::kHardwareAccelerationModePrevious, false);
+ }
+ 
+ GpuModeManager::GpuModeManager()
+-    : initial_gpu_mode_pref_(true) {
++    : initial_gpu_mode_pref_(false) {
+   if (g_browser_process->local_state()) {  // Skip for unit tests
+     pref_registrar_.Init(g_browser_process->local_state());
+     // Do nothing when the pref changes. It takes effect after
+-- 
+2.17.1
+

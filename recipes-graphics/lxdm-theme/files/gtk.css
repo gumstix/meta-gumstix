@@ -1,0 +1,25 @@
+#lxdm {
+	background-image: url("background.png");
+	background-repeat: no-repeat;
+	background-size: auto;
+}
+
+#bottom_pane {
+	background-color: #f1828d;
+}
+
+#time {
+	font: Sans 12;
+	color: #ffffff;
+}
+
+#prompt {
+	font: Sans 14;
+	color: #000000;
+}
+
+#bottom_pane label,
+#bottom_pane GtkLabel {
+	font: Sans 12;
+	color: #f1828d;
+}
