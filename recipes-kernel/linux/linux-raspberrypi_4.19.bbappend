@@ -12,6 +12,7 @@ SRC_URI += " \
     file://0010-Add-property-to-sdio-wlink8.patch \
     file://0011-Add-driver-for-Fn-Link-6222D-UUB.patch \
     file://0012-Adding-RTL8822CS-Driver.patch \
+    file://0013-Changing-boot-raspberries-to-gumstix-gears.patch \
     file://fragment.cfg \
     file://fragments \
 "
