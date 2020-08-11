@@ -3,5 +3,6 @@ do_compile_prepend(){
     sed -i     -e 's,# session=.*,session=/usr/bin/startlxqt,g' \
         -e 's,# autologin.*,autologin=gumstix,g' \
 	-e 's,^theme=.*,theme=Gumstix,g' \
+	-e 's,^black=.*,black= root,g' \
         ${S}/data/lxdm.conf.in
 }
