@@ -1,0 +1,33 @@
+From f1322b5c7174a4fc5e0c25afe4300abd754f5bcb Mon Sep 17 00:00:00 2001
+From: HarryHu1 <harry.hu@gumstix.com>
+Date: Wed, 19 Feb 2020 15:29:51 -0800
+Subject: [PATCH 08/12] Add wlink8 and sound codec overlays to the default
+ build.
+
+---
+ arch/arm/boot/dts/overlays/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
+index 20fe3cd1741b..b5ffb9d032a9 100644
+--- a/arch/arm/boot/dts/overlays/Makefile
++++ b/arch/arm/boot/dts/overlays/Makefile
+@@ -161,6 +161,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+ 	sc16is752-spi1.dtbo \
+ 	sdhost.dtbo \
+ 	sdio.dtbo \
++	sdio-wlink8.dtbo \
+ 	seeed-can-fd-hat-v1.dtbo \
+ 	seeed-can-fd-hat-v2.dtbo \
+ 	sh1106-spi.dtbo \
+@@ -194,6 +195,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+ 	tc358743.dtbo \
+ 	tc358743-audio.dtbo \
+ 	tinylcd35.dtbo \
++	tlv320aic3x-simple.dtbo \
+ 	tpm-slb9670.dtbo \
+ 	uart0.dtbo \
+ 	uart1.dtbo \
+-- 
+2.17.1
+
