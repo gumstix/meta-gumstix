@@ -5,8 +5,14 @@ HOMEPAGE = "https://github.com/rpi-ws281x/rpi-ws281x-python"
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=9dcf340793a1d73c5211edc8238767dc"
 
-SRC_URI[md5sum] = "17a714941043621e81f592e6a137dd92"
-SRC_URI[sha256sum] = "265a395410cc7199f779c4209ca3970b7211896b86dbaa4731bdc3569d2e595f"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+SRC_URI += "file://Makefile;subdir=rpi_ws281x-${PV} \
+            file://Add_CM4_hwver.patch;subdir=rpi_ws281x-${PV};patchdir=lib \
+"
+
+SRC_URI[md5sum] = "c93318b33630df8e8bb704de40df76fa"
+SRC_URI[sha256sum] = "f025d9d4886d478e8d0167d6abfa49e66119758590822941d9a9afd8d088b153"
 
 PYPI_PACKAGE = "rpi_ws281x"
 inherit pypi setuptools3
